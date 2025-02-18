@@ -5,6 +5,7 @@ import {
   Search,
   ShoppingCart,
   CircleUserRound,
+  ChevronLeft,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -18,6 +19,7 @@ import { JobsComponent } from './components/jobs/jobs.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { CommunitymarketComponent } from './components/communitymarket/communitymarket.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -30,12 +32,18 @@ import { CommunitymarketComponent } from './components/communitymarket/community
     HomeComponent,
     LoginComponent,
     CommunitymarketComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    LucideAngularModule.pick({ Search, ShoppingCart, CircleUserRound }),
-    ReactiveFormsModule
+    LucideAngularModule.pick({
+      Search,
+      ShoppingCart,
+      CircleUserRound,
+      ChevronLeft,
+    }),
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
