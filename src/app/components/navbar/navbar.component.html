@@ -1,0 +1,26 @@
+<nav
+  class="bg-orange-300 h-12 border-t-2 flex items-center justify-between relative"
+>
+  <ul
+    class="flex gap-4 text-xl font-[600] leading-none absolute left-1/2 transform -translate-x-1/2"
+  >
+    <li><a routerLink="/home">Home</a></li>
+    <li><a routerLink="/services">Jobs/Services</a></li>
+    <li><a routerLink="/market">Community Market</a></li>
+    <li><a routerLink="/products">Products</a></li>
+    <li><a routerLink="/forum">Forum</a></li>
+    <lucide-icon name="search" class="cursor-pointer"></lucide-icon>
+  </ul>
+  <div class="flex gap-3 flex-1 justify-end pr-3">
+    <lucide-icon
+      name="shopping-cart"
+      routerLink="/cart"
+      class="cursor-pointer"
+    ></lucide-icon>
+    <lucide-icon
+      name="circle-user-round"
+      routerLink="/login"
+      class="cursor-pointer"
+    ></lucide-icon>
+  </div>
+</nav>
