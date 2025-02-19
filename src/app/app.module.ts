@@ -20,7 +20,6 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { CommunitymarketComponent } from './components/communitymarket/communitymarket.component';
 import { SignupComponent } from './components/signup/signup.component';
-
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 
 @NgModule({
