@@ -6,7 +6,6 @@ import { LoginComponent } from './components/login/login.component';
 import { CommunitymarketComponent } from './components/communitymarket/communitymarket.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
-import { BannerComponent } from './components/banner/banner.component';
 
 const routes: Routes = [
   {
