@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const cors = require("cors");
 const userRoute = require("../backend/routes/user.route");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 mongoose
@@ -30,8 +32,9 @@ app.use((req, res, next) => {
   next();
 });
 
-//login--------------------------------------------------------------------------------------------
+//signup--------------------------------------------------------------------------------------------
 app.use("/api/signup", userRoute);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});

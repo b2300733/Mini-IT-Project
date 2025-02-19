@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SignupService } from '../../../../backend/services/signup.service';
 
 @Component({
   selector: 'app-signup',
@@ -19,14 +20,13 @@ export class SignupComponent {
   termsAccepted = false;
   errorMessage = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private signupService: SignupService) {}
 
-  nextStep() {
+  submit() {
     if (this.currentStep === 1 && this.validateFirstForm()) {
       this.currentStep++;
     } else if (this.currentStep === 2 && this.validateSecondForm()) {
-      console.log('Form submitted successfully');
-      this.router.navigate(['/login']);
+      this.registerUser();
     }
   }
 
@@ -66,5 +66,27 @@ export class SignupComponent {
     }
     this.errorMessage = '';
     return true;
+  }
+
+  registerUser() {
+    const user = {
+      username: this.username,
+      email: this.email,
+      password: this.password,
+      contactNumber: this.contactNo,
+      address: this.address,
+      gender: this.gender,
+    };
+
+    this.signupService.signup(user).subscribe(
+      (response) => {
+        console.log('User registered successfully', response);
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.error('Error registering user', error);
+        this.errorMessage = 'Failed to register user. Please try again.';
+      }
+    );
   }
 }
