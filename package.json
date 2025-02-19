@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "backend": "nodemon server.js",
+    "frontend": "ng serve",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "private": true,
   "dependencies": {
@@ -20,9 +23,11 @@
     "@angular/router": "^19.1.0",
     "@tailwindcss/postcss": "^4.0.6",
     "body-parser": "^1.20.3",
+    "concurrently": "^9.1.2",
     "express": "^4.21.2",
     "lucide-angular": "^0.475.0",
     "mongoose": "^8.10.1",
+    "nodemon": "^3.1.9",
     "postcss": "^8.5.2",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.6",

@@ -6,7 +6,7 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://Admin:$$112233@database1.bz4vv.mongodb.net/?retryWrites=true&w=majority&appName=Database1"
+    "mongodb+srv://Admin:$$112233@database1.bz4vv.mongodb.net/L-B-DB?retryWrites=true&w=majority&appName=Database1"
   )
   .then(() => {
     console.log("connected to database");
