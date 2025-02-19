@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+app.use(express.json());
+
 mongoose
   .connect(
     "mongodb+srv://Admin:$$112233@database1.bz4vv.mongodb.net/L-B-DB?retryWrites=true&w=majority&appName=Database1"
@@ -14,6 +16,22 @@ mongoose
   .catch(() => {
     console.log("connection failed");
   });
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+  );
+  next();
+});
+
+//login--------------------------------------------------------------------------------------------
+app.post("/api/signup", async (req, res) => {});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
