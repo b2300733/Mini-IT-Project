@@ -19,12 +19,14 @@ export class SignupComponent {
   address = '';
   termsAccepted = false;
   errorMessage = '';
+  alertMessage = '';
+  alertType: 'success' | 'error' = 'success';
 
   constructor(private router: Router, private signupService: SignupService) {}
 
   submit() {
     if (this.currentStep === 1 && this.validateFirstForm()) {
-      this.currentStep++;
+      this.checkUserExists();
     } else if (this.currentStep === 2 && this.validateSecondForm()) {
       this.registerUser();
     }
@@ -68,6 +70,17 @@ export class SignupComponent {
     return true;
   }
 
+  checkUserExists() {
+    this.signupService.checkUserExists(this.username, this.email).subscribe(
+      (response) => {
+        this.currentStep++;
+      },
+      (error) => {
+        this.errorMessage = 'Username or email already exists.';
+      }
+    );
+  }
+
   registerUser() {
     const user = {
       username: this.username,
@@ -81,12 +94,26 @@ export class SignupComponent {
     this.signupService.signup(user).subscribe(
       (response) => {
         console.log('User registered successfully', response);
-        this.router.navigate(['/login']);
+        this.showAlert('success', 'Signup successful! 🎉');
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       (error) => {
         console.error('Error registering user', error);
         this.errorMessage = 'Failed to register user. Please try again.';
+        this.showAlert('error', 'Signup failed! Please try again 😢');
       }
     );
+  }
+
+  showAlert(type: 'success' | 'error', message: string) {
+    this.alertType = type;
+    this.alertMessage = message;
+
+    setTimeout(() => {
+      this.alertMessage = '';
+    }, 2000);
   }
 }

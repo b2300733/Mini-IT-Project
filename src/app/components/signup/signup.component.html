@@ -154,6 +154,27 @@
           </div>
         </div>
       </div>
+      <!-- Alert Overlay -->
+      <div
+        *ngIf="alertMessage"
+        class="fixed inset-0 flex items-center justify-center transition-opacity duration-300 animate-fade"
+      >
+        <div
+          class="p-6 rounded-lg shadow-lg text-white text-center transform transition-all duration-300 scale-95 animate-fadeIn"
+          [ngClass]="{
+            'bg-green-500': alertType === 'success',
+            'bg-red-500': alertType === 'error'
+          }"
+        >
+          <p class="text-lg font-semibold">{{ alertMessage }}</p>
+          <button
+            class="mt-4 px-4 py-2 bg-white text-black rounded-lg"
+            (click)="alertMessage = ''"
+          >
+            OK
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </section>
