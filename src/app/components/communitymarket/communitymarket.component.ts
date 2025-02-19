@@ -46,4 +46,11 @@ export class CommunitymarketComponent {
       this.listingForm.reset();
     }
   }
+
+  products = [
+    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
+    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
+    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
+    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
+  ];
 }
