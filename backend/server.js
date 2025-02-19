@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const bodyParser = require("body-parser");
+const userRoute = require("../backend/routes/user.route");
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 //login--------------------------------------------------------------------------------------------
-app.post("/api/signup", async (req, res) => {});
+app.use("/api/signup", userRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
