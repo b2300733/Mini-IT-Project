@@ -8,8 +8,9 @@ import {
   ChevronLeft,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -49,6 +50,7 @@ import { ProductpageComponent } from './components/productpage/productpage.compo
       ChevronLeft,
     }),
     ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
