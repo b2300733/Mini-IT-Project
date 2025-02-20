@@ -10,6 +10,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -38,7 +39,7 @@ import { ProductpageComponent } from './components/productpage/productpage.compo
     SignupComponent,
 
     ForgotpasswordComponent,
-      ProductpageComponent,
+    ProductpageComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +52,7 @@ import { ProductpageComponent } from './components/productpage/productpage.compo
     }),
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

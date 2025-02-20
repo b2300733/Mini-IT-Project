@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SignupService } from '../../../../backend/services/signup.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,15 +19,16 @@ export class SignupComponent {
   address = '';
   termsAccepted = false;
   errorMessage = '';
+  alertMessage = '';
+  alertType: 'success' | 'error' = 'success';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private signupService: SignupService) {}
 
-  nextStep() {
+  submit() {
     if (this.currentStep === 1 && this.validateFirstForm()) {
-      this.currentStep++;
+      this.checkUserExists();
     } else if (this.currentStep === 2 && this.validateSecondForm()) {
-      console.log('Form submitted successfully');
-      this.router.navigate(['/login']);
+      this.registerUser();
     }
   }
 
@@ -66,5 +68,52 @@ export class SignupComponent {
     }
     this.errorMessage = '';
     return true;
+  }
+
+  checkUserExists() {
+    this.signupService.checkUserExists(this.username, this.email).subscribe(
+      (response) => {
+        this.currentStep++;
+      },
+      (error) => {
+        this.errorMessage = 'Username or email already exists.';
+      }
+    );
+  }
+
+  registerUser() {
+    const user = {
+      username: this.username,
+      email: this.email,
+      password: this.password,
+      contactNumber: this.contactNo,
+      address: this.address,
+      gender: this.gender,
+    };
+
+    this.signupService.signup(user).subscribe(
+      (response) => {
+        console.log('User registered successfully', response);
+        this.showAlert('success', 'Signup successful! 🎉');
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      },
+      (error) => {
+        console.error('Error registering user', error);
+        this.errorMessage = 'Failed to register user. Please try again.';
+        this.showAlert('error', 'Signup failed! Please try again 😢');
+      }
+    );
+  }
+
+  showAlert(type: 'success' | 'error', message: string) {
+    this.alertType = type;
+    this.alertMessage = message;
+
+    setTimeout(() => {
+      this.alertMessage = '';
+    }, 2000);
   }
 }

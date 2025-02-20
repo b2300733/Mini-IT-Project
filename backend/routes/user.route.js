@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { addUser } = require("../controllers/user.controller");
-const bcrypt = require("bcrypt");
+const { addUser, checkUserExists } = require("../controllers/user.controller");
 
-router.get("/", addUser);
+router.post("/", addUser);
+router.post("/check", checkUserExists);
 
 module.exports = router;
