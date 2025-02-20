@@ -1,1 +1,101 @@
 <app-banner></app-banner>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Left Column - Product Image -->
+    <div class="lg:w-3/5">
+      <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+        <img [src]="product.image" 
+             [alt]="product.title"
+             class="w-full h-[500px] object-cover"
+             (error)="handleImageError($event)">
+      </div>
+    </div>
+
+    <!-- Right Column - Product Details -->
+    <div class="lg:w-2/5 space-y-6">
+      <!-- Product Title and Price -->
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <h1 class="text-2xl font-semibold text-gray-900">{{ product.title }}</h1>
+        <p class="text-3xl font-bold text-gray-900 mt-2">${{ product.price }}</p>
+        
+        <!-- Action Buttons -->
+        <div class="flex gap-4 mt-6">
+          <button (click)="makeOffer()" 
+                  class="flex-1 bg-red-500 text-white py-3 rounded-lg font-medium hover:bg-red-600 transition-colors">
+            Make Offer
+          </button>
+          <button (click)="startChat()" 
+                  class="flex-1 bg-white text-red-500 py-3 rounded-lg font-medium border-2 border-red-500 hover:bg-red-50 transition-colors">
+            Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Delivery Information -->
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">Delivery</h2>
+        <ul class="space-y-2">
+          <li *ngFor="let option of product.deliveryOptions" 
+              class="flex items-center text-gray-700">
+            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            {{ option }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Product Details -->
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">Item Details</h2>
+        <div class="space-y-4">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Condition</span>
+            <span class="text-gray-900">{{ product.condition }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Size</span>
+            <span class="text-gray-900">{{ product.size }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Category</span>
+            <span class="text-gray-900">{{ product.category }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seller Profile -->
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <img [src]="seller.avatar" 
+                 [alt]="seller.name"
+                 class="w-12 h-12 rounded-full"
+                 (error)="handleAvatarError($event)">
+            <div>
+              <h3 class="font-semibold">{{ seller.name }}</h3>
+              <p class="text-sm text-gray-500">{{ seller.username }}</p>
+            </div>
+          </div>
+          <button (click)="buyNow()" 
+                  class="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">
+            Buy Now
+          </button>
+        </div>
+        <div class="text-sm text-gray-600 space-y-2">
+          <p>{{ seller.joinDate }}</p>
+          <p>{{ seller.responseTime }}</p>
+        </div>
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+          <div class="flex items-center text-sm text-gray-700">
+            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            Protection against fake items and non-delivery
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
