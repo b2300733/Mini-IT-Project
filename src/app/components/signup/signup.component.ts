@@ -116,4 +116,12 @@ export class SignupComponent {
       this.alertMessage = '';
     }, 2000);
   }
+
+  validateNumberInput(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
 }

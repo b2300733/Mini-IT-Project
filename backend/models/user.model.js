@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     gender: { type: String, required: true },
     contactNumber: { type: Number, required: true },
     address: { type: String, required: true },
+    profilePicture: { type: String, default: "/profilePics/default_user.png" },
     isAdmin: { type: Boolean, default: false },
   },
   { timestamps: true }

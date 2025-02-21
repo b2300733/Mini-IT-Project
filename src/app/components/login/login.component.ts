@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginService } from '../../../../backend/services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -10,14 +11,27 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   email = '';
   password = '';
+  rememberMe = false;
   errorMessage = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private loginService: LoginService) {}
 
   submit() {
     if (this.validateForm()) {
-      console.log('Form submitted successfully');
-      this.router.navigate(['/home']);
+      this.loginService.login(this.email, this.password).subscribe(
+        (response) => {
+          console.log('Login successful', response);
+          const storage = this.rememberMe ? localStorage : sessionStorage;
+          storage.setItem('authToken', response.token);
+          storage.setItem('username', response.user.username);
+          storage.setItem('avatar', response.user.avatar);
+          this.router.navigate(['/home']);
+        },
+        (error) => {
+          console.error('Login failed', error);
+          this.errorMessage = 'Invalid email or password.';
+        }
+      );
     }
   }
 
