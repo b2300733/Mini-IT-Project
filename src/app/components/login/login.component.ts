@@ -43,4 +43,12 @@ export class LoginComponent {
     this.errorMessage = '';
     return true;
   }
+
+  // facebookLogin() {
+  //   window.location.href = 'http://localhost:3000/auth/facebook';
+  // }
+
+  googleLogin() {
+    window.location.href = 'http://localhost:3000/auth/google';
+  }
 }

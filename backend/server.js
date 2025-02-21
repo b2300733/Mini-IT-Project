@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
+const session = require("express-session");
 const signupRoute = require("../backend/routes/signup.route");
 const loginRoute = require("../backend/routes/login.route");
+const passport = require("../backend/controllers/auth.controller");
+const authRoutes = require("../backend/routes/auth.route");
 
 const app = express();
 
@@ -38,6 +41,15 @@ app.use("/api/signup", signupRoute);
 
 //login--------------------------------------------------------------------------------------------
 app.use("/api/login", loginRoute);
+
+//microsoft&google auth--------------------------------------------------------------------------------------------
+app.use(
+  session({ secret: "your_secret_key", resave: false, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(authRoutes);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

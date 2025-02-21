@@ -59,15 +59,23 @@
           </div>
 
           <div class="flex w-full gap-5">
-            <button
+            <!-- <button
               class="border-2 border-blue-800 w-full h-10 cursor-pointer rounded-sm flex justify-center items-center hover:bg-blue-800 ease-in-out duration-300"
+              (click)="facebookLogin()"
             >
               <img src="/microsoft_logo.png" alt="Microsoft Logo" width="25" />
-            </button>
+            </button> -->
             <button
-              class="border-2 border-blue-800 w-full h-10 cursor-pointer rounded-sm flex justify-center items-center hover:bg-blue-800 ease-in-out duration-300"
+              class="border-2 border-blue-800 w-full h-10 cursor-pointer rounded-sm flex justify-center items-center hover:bg-blue-800 hover:text-gray-100 ease-in-out duration-300"
+              (click)="googleLogin()"
             >
-              <img src="/google_logo.png" alt="Google Logo" width="25" />
+              <img
+                src="/google_logo.png"
+                alt="Google Logo"
+                width="25"
+                class="bg-white rounded-sm"
+              />
+              <span class="pl-2">Continue with Google</span>
             </button>
           </div>
           <div
