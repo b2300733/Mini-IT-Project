@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 interface Product {
   id: string;
@@ -28,28 +29,49 @@ interface Seller {
 })
 export class ProductpageComponent implements OnInit {
   product: Product = {
-    id: '1',
-    title: 'Nike Air Max 2023 - Limited Edition',
-    price: 159.99,
-    image: '/product-1.jpg',
-    condition: 'Like new',
-    size: 'UK 9 / US 10 / EU 44',
-    category: 'Men\'s Shoes',
-    description: 'Original Nike Air Max, barely used. Complete with original box.',
+    id: '',
+    title: '',
+    price: 0,
+    image: '',
+    condition: '',
+    size: '',
+    category: '',
+    description: '',
     deliveryOptions: ['Meetup', 'Delivery available']
   };
 
   seller: Seller = {
-    name: 'John Store',
-    username: '@johnstore',
+    name: '',
+    username: '',
     avatar: 'assets/seller-avatar.jpg',
     joinDate: 'Joined 2 years ago',
     responseTime: 'Typically responds within 1 hour'
   };
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.product = {
+        id: params['id'] || '',
+        title: params['name'] || '',
+        price: Number(params['price']) || 0, // Ensure price is parsed as a number
+        image: params['img'] || '',
+        condition: params['condition'] || '',
+        size: params['size'] || '',
+        category: params['category'] || '',
+        description: params['description'] || '',
+        deliveryOptions: params['deliveryOptions'] ? params['deliveryOptions'].split(',') : ['Meetup', 'Delivery available']
+      };
+      
+      this.seller = {
+        name: params['user'] || '',
+        username: `@${params['user']?.toLowerCase() || 'user'}`,
+        joinDate: 'Joined 2 years ago',
+        responseTime: 'Typically responds within 1 hour'
+      };
+    });
+  }
 
   makeOffer(): void {
     console.log('Make offer clicked');
@@ -68,6 +90,6 @@ export class ProductpageComponent implements OnInit {
   }
 
   handleAvatarError(event: Event) {
-    (event.target as HTMLImageElement).src = '/product-1.jpg';
+    (event.target as HTMLImageElement).src = 'assets/placeholder.jpg';
   }
 }

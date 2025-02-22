@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
-interface Listing {
-  id: number;
-  itemName: string;
-  description: string;
+interface Product {
+  id: string;
+  img: string;
+  name: string;
   price: number;
-  sellerName: string;
-  date: Date;
+  user: string;
+  condition: string;
+  size?: string;
+  category?: string;
+  description?: string;
+  deliveryOptions?: string[];
 }
 
 @Component({
@@ -19,10 +23,10 @@ interface Listing {
 })
 export class CommunitymarketComponent {
   listingForm: FormGroup;
-  listings: Listing[] = [];
+  listings: Product[] = [];
   nextId = 1;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.listingForm = this.fb.group({
       itemName: ['', Validators.required],
       description: ['', Validators.required],
@@ -47,10 +51,22 @@ export class CommunitymarketComponent {
     }
   }
 
-  products = [
-    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
-    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
-    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
-    { img: '/product-1.jpg', name: 'Red Printed T-Shirt', price: '$50.00', user: 'Titus', condition: 'Like New' },
+  navigateToProduct(product: Product) {
+    this.router.navigate(['/product'], {
+      queryParams: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        condition: product.condition,
+        img: product.img,
+        user: product.user
+      }
+    });
+  }
+
+  products: Product[] = [
+    { id: '1', img: '/catbowl.jpg', name: 'Cat Bowl', price: 50.00, user: 'Titus', condition: 'Like New' },
+    { id: '2', img: '/dogchair.jpg', name: 'Dog Chair', price: 75.00, user: 'Alex', condition: 'New' },
+    { id: '3', img: '/dogpillow.jpg', name: 'Dog Pillow', price: 120.00, user: 'John', condition: 'Used' }
   ];
 }
