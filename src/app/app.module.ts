@@ -6,6 +6,8 @@ import {
   ShoppingCart,
   CircleUserRound,
   ChevronLeft,
+  Eye,
+  EyeOff,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +27,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { ProductpageComponent } from './components/productpage/productpage.component';
 import { AuthCallbackComponent } from '../../backend/auth-callback.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import { AuthCallbackComponent } from '../../backend/auth-callback.component';
     ForgotpasswordComponent,
     ProductpageComponent,
     AuthCallbackComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +54,8 @@ import { AuthCallbackComponent } from '../../backend/auth-callback.component';
       ShoppingCart,
       CircleUserRound,
       ChevronLeft,
+      Eye,
+      EyeOff,
     }),
     ReactiveFormsModule,
     FormsModule,

@@ -13,13 +13,17 @@ export class AuthCallbackComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       const token = params['token'];
       const username = params['username'];
+      const email = params['email'];
       const avatar = params['avatar'];
 
       if (token && username && avatar) {
         localStorage.setItem('authToken', token);
         localStorage.setItem('username', username);
+        localStorage.setItem('email', email);
         localStorage.setItem('avatar', avatar);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']).then(() => {
+          window.location.reload();
+        });
       } else {
         this.router.navigate(['/login']);
       }
