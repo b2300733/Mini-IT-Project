@@ -8,6 +8,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { ProductpageComponent } from './components/productpage/productpage.component';
 import { AuthCallbackComponent } from '../../backend/auth-callback.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -36,8 +37,8 @@ const routes: Routes = [
     component: ForgotpasswordComponent,
   },
   {
-    path: 'market',
-    component: CommunitymarketComponent,
+    path: 'profile',
+    component: ProfileComponent,
   },
   {
     path: 'product',
@@ -50,6 +51,10 @@ const routes: Routes = [
   {
     path: 'auth/callback',
     component: AuthCallbackComponent,
+  },
+  {
+    path: 'market',
+    component: CommunitymarketComponent,
   },
 ];
 
