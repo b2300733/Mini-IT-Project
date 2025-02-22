@@ -27,7 +27,7 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     const user = req.user;
-    const frontendUrl = `http://localhost:4200/auth/callback?token=${user._id}&username=${user.username}&avatar=${user.profilePicture}`;
+    const frontendUrl = `http://localhost:4200/auth/callback?token=${user._id}&username=${user.username}&email=${user.email}&avatar=${user.profilePicture}`;
     res.redirect(frontendUrl);
   }
 );

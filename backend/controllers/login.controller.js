@@ -25,6 +25,9 @@ const login = async (req, res) => {
         email: user.email,
         username: user.username,
         avatar: user.profilePicture,
+        gender: user.gender,
+        contactNo: user.contactNumber,
+        address: user.address,
       },
     });
   } catch (error) {

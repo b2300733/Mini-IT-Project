@@ -1,182 +1,180 @@
-<section>
-  <div class="flex justify-center items-center pt-20">
-    <form
-      class="border-1 border-gray-400 rounded-xl w-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
-    >
-      <div class="relative py-6">
-        <button
-          *ngIf="currentStep === 2"
-          type="button"
-          (click)="previousStep()"
-          class="absolute ml-10 top-1/2 transform -translate-y-1/2 cursor-pointer"
-        >
-          <lucide-icon name="chevron-left"></lucide-icon>
-        </button>
-        <h1 class="text-3xl font-bold text-center">Sign Up</h1>
-      </div>
-
-      <!--First Form------------------------------------------------------------------------------------->
-      <div *ngIf="currentStep === 1" class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="username">Username</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter your username"
-            [(ngModel)]="username"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-3">
-          <label for="email">Email</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            [(ngModel)]="email"
-            required
-          />
-        </div>
-
-        <div class="flex flex-col gap-3">
-          <label for="password">Password</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-            [(ngModel)]="password"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-3">
-          <label for="confirmPassword">Confirm Password</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="password"
-            id="password"
-            name="confirmPassword"
-            placeholder="Enter your password"
-            [(ngModel)]="confirmPassword"
-            required
-          />
-        </div>
-        <div class="flex flex-col justify-center items-center gap-3">
-          <button
-            class="border-2 border-orange-700 w-full h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
-            type="button"
-            (click)="submit()"
-          >
-            Next
-          </button>
-          <!-- Error Message -->
-          <div *ngIf="errorMessage" class="text-red-500 text-center">
-            {{ errorMessage }}
-          </div>
-        </div>
-      </div>
-
-      <!--Second Form------------------------------------------------------------------------------------->
-      <div *ngIf="currentStep === 2" class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="gender">Gender</label>
-          <select
-            class="border-1 rounded-sm h-10 px-3"
-            name="gender"
-            [(ngModel)]="gender"
-            required
-          >
-            <option selected disabled value="">Select your gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-3">
-          <label for="contactNo">Contact No</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3 [-moz-appearance:textfield]"
-            type="number"
-            id="contactNo"
-            name="contactNo"
-            placeholder="Enter your contact number +60"
-            [(ngModel)]="contactNo"
-            (keypress)="validateNumberInput($event)"
-            maxlength="10"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-3">
-          <label for="address">Full Address</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="text"
-            id="address"
-            name="address"
-            placeholder="Enter your full address"
-            [(ngModel)]="address"
-            required
-          />
-        </div>
-
-        <div class="flex text-sm">
-          <input
-            class="mx-1"
-            type="checkbox"
-            name="termsAccepted"
-            [(ngModel)]="termsAccepted"
-            required
-          />
-          <label
-            >Yes, I have read and I accept the
-            <a
-              routerLink="/login"
-              class="cursor-pointer font-bold text-orange-700"
-            >
-              Terms and Conditions.</a
-            >
-          </label>
-        </div>
-
-        <div class="flex flex-col justify-center items-center gap-3">
-          <button
-            class="border-2 border-orange-700 w-full h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
-            type="submit"
-            (click)="submit()"
-          >
-            Sign Up
-          </button>
-          <!-- Error Message -->
-          <div *ngIf="errorMessage" class="text-red-500 text-center">
-            {{ errorMessage }}
-          </div>
-        </div>
-      </div>
-      <!-- Alert Overlay -->
-      <div
-        *ngIf="alertMessage"
-        class="fixed inset-0 flex items-center justify-center transition-opacity duration-300 animate-fade"
+<section class="flex justify-center items-center pt-20">
+  <form
+    class="border-1 border-gray-400 rounded-xl w-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+  >
+    <div class="relative py-6">
+      <button
+        *ngIf="currentStep === 2"
+        type="button"
+        (click)="previousStep()"
+        class="absolute ml-10 top-1/2 transform -translate-y-1/2 cursor-pointer"
       >
-        <div
-          class="p-6 rounded-lg shadow-lg text-white text-center transform transition-all duration-300 scale-95 animate-fadeIn"
-          [ngClass]="{
-            'bg-green-500': alertType === 'success',
-            'bg-red-500': alertType === 'error'
-          }"
+        <lucide-icon name="chevron-left"></lucide-icon>
+      </button>
+      <h1 class="text-3xl font-bold text-center">Sign Up</h1>
+    </div>
+
+    <!--First Form------------------------------------------------------------------------------------->
+    <div *ngIf="currentStep === 1" class="flex flex-col px-10 py-5 gap-5">
+      <div class="flex flex-col gap-3">
+        <label for="username">Username</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Enter your username"
+          [(ngModel)]="username"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="email">Email</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          [(ngModel)]="email"
+          required
+        />
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <label for="password">Password</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          [(ngModel)]="password"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="password"
+          id="password"
+          name="confirmPassword"
+          placeholder="Enter your password"
+          [(ngModel)]="confirmPassword"
+          required
+        />
+      </div>
+      <div class="flex flex-col justify-center items-center gap-3">
+        <button
+          class="border-2 border-orange-700 w-full h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
+          type="button"
+          (click)="submit()"
         >
-          <p class="text-lg font-semibold">{{ alertMessage }}</p>
-          <button
-            class="mt-4 px-4 py-2 bg-white text-black rounded-lg"
-            (click)="alertMessage = ''"
-          >
-            OK
-          </button>
+          Next
+        </button>
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="text-red-500 text-center">
+          {{ errorMessage }}
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+
+    <!--Second Form------------------------------------------------------------------------------------->
+    <div *ngIf="currentStep === 2" class="flex flex-col px-10 py-5 gap-5">
+      <div class="flex flex-col gap-3">
+        <label for="gender">Gender</label>
+        <select
+          class="border-1 rounded-sm h-10 px-3"
+          name="gender"
+          [(ngModel)]="gender"
+          required
+        >
+          <option selected disabled value="">Select your gender</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="contactNo">Contact No</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3 [-moz-appearance:textfield]"
+          type="number"
+          id="contactNo"
+          name="contactNo"
+          placeholder="Enter your contact number +60"
+          [(ngModel)]="contactNo"
+          (keypress)="validateNumberInput($event)"
+          maxlength="10"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="address">Full Address</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="text"
+          id="address"
+          name="address"
+          placeholder="Enter your full address"
+          [(ngModel)]="address"
+          required
+        />
+      </div>
+
+      <div class="flex text-sm">
+        <input
+          class="mx-1"
+          type="checkbox"
+          name="termsAccepted"
+          [(ngModel)]="termsAccepted"
+          required
+        />
+        <label
+          >Yes, I have read and I accept the
+          <a
+            routerLink="/login"
+            class="cursor-pointer font-bold text-orange-700"
+          >
+            Terms and Conditions.</a
+          >
+        </label>
+      </div>
+
+      <div class="flex flex-col justify-center items-center gap-3">
+        <button
+          class="border-2 border-orange-700 w-full h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
+          type="submit"
+          (click)="submit()"
+        >
+          Sign Up
+        </button>
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="text-red-500 text-center">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+    <!-- Alert Overlay -->
+    <div
+      *ngIf="alertMessage"
+      class="fixed inset-0 flex items-center justify-center transition-opacity duration-300 animate-fade"
+    >
+      <div
+        class="p-6 rounded-lg shadow-lg text-white text-center transform transition-all duration-300 scale-95 animate-fadeIn"
+        [ngClass]="{
+          'bg-green-500': alertType === 'success',
+          'bg-red-500': alertType === 'error'
+        }"
+      >
+        <p class="text-lg font-semibold">{{ alertMessage }}</p>
+        <button
+          class="mt-4 px-4 py-2 bg-white text-black rounded-lg"
+          (click)="alertMessage = ''"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </form>
 </section>
