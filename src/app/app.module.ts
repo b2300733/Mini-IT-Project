@@ -24,6 +24,7 @@ import { CommunitymarketComponent } from './components/communitymarket/community
 import { SignupComponent } from './components/signup/signup.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { ProductpageComponent } from './components/productpage/productpage.component';
+import { AuthCallbackComponent } from '../../backend/auth-callback.component';
 
 @NgModule({
   declarations: [
@@ -37,9 +38,9 @@ import { ProductpageComponent } from './components/productpage/productpage.compo
     LoginComponent,
     CommunitymarketComponent,
     SignupComponent,
-
     ForgotpasswordComponent,
     ProductpageComponent,
+    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,

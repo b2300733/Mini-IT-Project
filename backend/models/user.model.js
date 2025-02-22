@@ -4,10 +4,13 @@ const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    gender: { type: String, required: true },
-    contactNumber: { type: Number, required: true },
-    address: { type: String, required: true },
+    password: { type: String, required: false },
+    gender: { type: String, required: false },
+    contactNumber: { type: Number, required: false },
+    address: { type: String, required: false },
+    profilePicture: { type: String, default: "/profilePics/default_user.png" },
+    oauthProvider: { type: String, required: false },
+    oauthId: { type: String, required: false, unique: true },
     isAdmin: { type: Boolean, default: false },
   },
   { timestamps: true }

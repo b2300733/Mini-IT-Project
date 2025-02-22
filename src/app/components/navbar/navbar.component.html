@@ -17,10 +17,48 @@
       routerLink="/cart"
       class="cursor-pointer"
     ></lucide-icon>
-    <lucide-icon
-      name="circle-user-round"
-      routerLink="/login"
-      class="cursor-pointer"
-    ></lucide-icon>
+    <div class="relative dropdown-menu" (click)="toggleDropdown($event)">
+      <ng-container *ngIf="isLoggedIn(); else loginIcon">
+        <img
+          [src]="avatar"
+          alt="User Image"
+          class="cursor-pointer w-6 h-6 rounded-full"
+        />
+      </ng-container>
+      <ng-template #loginIcon>
+        <lucide-icon
+          name="circle-user-round"
+          routerLink="/login"
+          class="cursor-pointer w-6 h-6"
+        ></lucide-icon>
+      </ng-template>
+      <div
+        *ngIf="dropdownOpen"
+        class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-100"
+      >
+        <ul class="py-1">
+          <li>
+            <span class="border-b-1 block px-4 py-1 text-gray-800 text-center"
+              >Welcome, {{ username }}</span
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/profile"
+              class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >Profile</a
+            >
+          </li>
+          <li>
+            <button
+              class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+              (click)="logout()"
+            >
+              Logout
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </nav>

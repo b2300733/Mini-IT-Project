@@ -1,4 +1,4 @@
-<section class="">
+<section>
   <div class="flex justify-center items-center pt-20">
     <form
       class="border-1 border-gray-400 rounded-xl w-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
@@ -103,8 +103,10 @@
             type="number"
             id="contactNo"
             name="contactNo"
-            placeholder="Enter your contact number"
+            placeholder="Enter your contact number +60"
             [(ngModel)]="contactNo"
+            (keypress)="validateNumberInput($event)"
+            maxlength="10"
             required
           />
         </div>
