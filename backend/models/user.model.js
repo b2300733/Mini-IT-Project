@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     address: { type: String, required: false },
     profilePicture: { type: String, default: "/profilePics/default_user.png" },
     oauthProvider: { type: String, required: false },
-    oauthId: { type: String, required: false, unique: true },
+    oauthId: { type: String, required: false, unique: true, sparse: true },
     isAdmin: { type: Boolean, default: false },
   },
   { timestamps: true }

@@ -1,99 +1,95 @@
-<section class="">
-  <div class="flex justify-center items-center pt-20">
-    <form
-      class="border-1 border-gray-400 rounded-xl w-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
-    >
-      <h1 class="text-3xl font-bold py-6 text-center">Login</h1>
-      <div class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="email">Email</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            [(ngModel)]="email"
-            required
-          />
+<section class="flex justify-center items-center pt-20">
+  <form
+    class="border-1 border-gray-400 rounded-xl w-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+  >
+    <h1 class="text-3xl font-bold py-6 text-center">Login</h1>
+    <div class="flex flex-col px-10 py-5 gap-5">
+      <div class="flex flex-col gap-3">
+        <label for="email">Email</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          [(ngModel)]="email"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="password">Password</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          [(ngModel)]="password"
+          required
+        />
+      </div>
+      <div class="flex text-sm font-semibold">
+        <input
+          class="mx-1"
+          type="checkbox"
+          name="rememberMe"
+          [(ngModel)]="rememberMe"
+          required
+        />
+        <label>Remember me</label>
+      </div>
+      <div class="flex flex-col justify-center items-center gap-3">
+        <button
+          class="border-2 border-orange-700 w-full h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
+          type="submit"
+          (click)="submit()"
+        >
+          Login
+        </button>
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="text-red-500 text-center">
+          {{ errorMessage }}
         </div>
-        <div class="flex flex-col gap-3">
-          <label for="password">Password</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-            [(ngModel)]="password"
-            required
-          />
-        </div>
-        <div class="flex text-sm font-semibold">
-          <input
-            class="mx-1"
-            type="checkbox"
-            name="rememberMe"
-            [(ngModel)]="rememberMe"
-            required
-          />
-          <label>Remember me</label>
-        </div>
-        <div class="flex flex-col justify-center items-center gap-3">
-          <button
-            class="border-2 border-orange-700 w-full h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
-            type="submit"
-            (click)="submit()"
-          >
-            Login
-          </button>
-          <!-- Error Message -->
-          <div *ngIf="errorMessage" class="text-red-500 text-center">
-            {{ errorMessage }}
-          </div>
 
-          <div class="flex items-center gap-2 w-full">
-            <hr class="flex-1 border-gray-300" />
-            <p class="text-gray-700 font-semibold">OR</p>
-            <hr class="flex-1 border-gray-300" />
-          </div>
+        <div class="flex items-center gap-2 w-full">
+          <hr class="flex-1 border-gray-300" />
+          <p class="text-gray-700 font-semibold">OR</p>
+          <hr class="flex-1 border-gray-300" />
+        </div>
 
-          <div class="flex w-full gap-5">
-            <!-- <button
+        <div class="flex w-full gap-5">
+          <!-- <button
               class="border-2 border-blue-800 w-full h-10 cursor-pointer rounded-sm flex justify-center items-center hover:bg-blue-800 ease-in-out duration-300"
               (click)="facebookLogin()"
             >
               <img src="/microsoft_logo.png" alt="Microsoft Logo" width="25" />
             </button> -->
-            <button
-              class="border-2 border-blue-800 w-full h-10 cursor-pointer rounded-sm flex justify-center items-center hover:bg-blue-800 hover:text-gray-100 ease-in-out duration-300"
-              (click)="googleLogin()"
-            >
-              <img
-                src="/google_logo.png"
-                alt="Google Logo"
-                width="25"
-                class="bg-white rounded-sm"
-              />
-              <span class="pl-2">Continue with Google</span>
-            </button>
-          </div>
-          <div
-            class="flex flex-row justify-between items-center w-full text-sm text-orange-700 font-[600]"
+          <button
+            class="border-2 border-blue-800 w-full h-10 cursor-pointer rounded-sm flex justify-center items-center hover:bg-blue-800 hover:text-gray-100 ease-in-out duration-300"
+            (click)="googleLogin()"
           >
-            <a
-              routerLink="/signup"
-              class="hover:text-orange-800 hover:underline"
-              >Sign Up</a
-            >
-            <a
-              routerLink="/forgotpassword"
-              class="hover:text-orange-800 hover:underline"
-              >Forgot Password?</a
-            >
-          </div>
+            <img
+              src="/google_logo.png"
+              alt="Google Logo"
+              width="25"
+              class="bg-white rounded-sm"
+            />
+            <span class="pl-2">Continue with Google</span>
+          </button>
+        </div>
+        <div
+          class="flex flex-row justify-between items-center w-full text-sm text-orange-700 font-[600]"
+        >
+          <a routerLink="/signup" class="hover:text-orange-800 hover:underline"
+            >Sign Up</a
+          >
+          <a
+            routerLink="/forgotpassword"
+            class="hover:text-orange-800 hover:underline"
+            >Forgot Password?</a
+          >
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </section>

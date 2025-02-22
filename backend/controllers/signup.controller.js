@@ -1,5 +1,40 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+// Configure Nodemailer SMTP
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false, // Use `true` for 465, `false` for 587
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+// Function to send welcome email
+const sendWelcomeEmail = async (email, username) => {
+  try {
+    await transporter.sendMail({
+      from: `"L&B Pet Service" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Welcome to L&B Pet Service!",
+      html: `
+        <p>Dear <strong>${username}</strong>,</p>
+        <p>Welcome to L&B Pet Service! 🐾</p>
+        <p>We are thrilled to have you onboard. Explore our platform for pet sitting services, pet accessories marketplace, and more.</p>
+        <p>Have fun and enjoy your time with us! ❤️</p>
+        <p>Best regards,</p>
+        <p><strong>L&B Pet Service Team</strong></p>
+      `,
+    });
+    console.log("✅ Welcome email sent successfully!");
+  } catch (error) {
+    console.error("❌ Error sending welcome email:", error);
+  }
+};
 
 const addUser = async (req, res) => {
   try {
@@ -20,8 +55,14 @@ const addUser = async (req, res) => {
       updatedAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
     });
 
-    res.status(200).json(user);
+    // Send Welcome Email
+    await sendWelcomeEmail(email, username);
+
+    res
+      .status(200)
+      .json({ message: "User registered successfully, welcome email sent!" });
   } catch (error) {
+    console.error("Signup Error:", error);
     res.status(500).json({ message: error.message });
   }
 };

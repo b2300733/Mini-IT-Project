@@ -25,7 +25,13 @@ export class LoginComponent {
           storage.setItem('authToken', response.token);
           storage.setItem('username', response.user.username);
           storage.setItem('avatar', response.user.avatar);
-          this.router.navigate(['/home']);
+          storage.setItem('email', response.user.email);
+          storage.setItem('gender', response.user.gender);
+          storage.setItem('contactNo', response.user.contactNo);
+          storage.setItem('address', response.user.address);
+          this.router.navigate(['/home']).then(() => {
+            window.location.reload();
+          });
         },
         (error) => {
           console.error('Login failed', error);
