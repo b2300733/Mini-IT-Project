@@ -14,7 +14,7 @@ export class SignupService {
     return this.http.post(this.baseUrl, user);
   }
 
-  checkUserExists(username: string, email: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/check`, { username, email });
+  checkUserExists(email: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/check`, { email });
   }
 }

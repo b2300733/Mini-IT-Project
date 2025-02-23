@@ -71,12 +71,12 @@ export class SignupComponent {
   }
 
   checkUserExists() {
-    this.signupService.checkUserExists(this.username, this.email).subscribe(
+    this.signupService.checkUserExists(this.email).subscribe(
       (response) => {
         this.currentStep++;
       },
       (error) => {
-        this.errorMessage = 'Username or email already exists.';
+        this.errorMessage = 'Email already exists.';
       }
     );
   }
@@ -86,7 +86,7 @@ export class SignupComponent {
       username: this.username,
       email: this.email,
       password: this.password,
-      contactNumber: this.contactNo,
+      contactNo: this.contactNo,
       address: this.address,
       gender: this.gender,
     };

@@ -81,4 +81,19 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { requestPasswordReset, resetPassword };
+const updateProfile = async (req, res) => {
+  try {
+    const { email, newData } = req.body; // Get user email & updated data from request body
+
+    const user = await User.findOneAndUpdate({ email }, newData, { new: true });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    console.error("❌ Error updating profile:", error);
+    res.status(500).json({ message: "Error updating profile" });
+  }
+};
+
+module.exports = { requestPasswordReset, resetPassword, updateProfile };

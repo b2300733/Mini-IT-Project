@@ -29,7 +29,7 @@ export class LoginComponent {
           storage.setItem('gender', response.user.gender);
           storage.setItem('contactNo', response.user.contactNo);
           storage.setItem('address', response.user.address);
-          this.router.navigate(['/home']).then(() => {
+          this.router.navigate(['/profile']).then(() => {
             window.location.reload();
           });
         },

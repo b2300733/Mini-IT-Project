@@ -35,6 +35,22 @@ mongoose
     // } catch (error) {
     //   console.error("Error dropping index:", error.message);
     // }
+
+    // try {
+    //   const collection = mongoose.connection.db.collection("users");
+    //   const indexes = await collection.indexes();
+
+    //   // Find and drop the unique index on username
+    //   const usernameIndex = indexes.find(
+    //     (index) => index.name === "username_1"
+    //   );
+    //   if (usernameIndex) {
+    //     await collection.dropIndex("username_1");
+    //     console.log("🚀 Dropped unique index on username.");
+    //   }
+    // } catch (error) {
+    //   console.error("❌ Error dropping index:", error.message);
+    // }
   })
   .catch(() => {
     console.log("connection failed");

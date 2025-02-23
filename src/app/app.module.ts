@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   Eye,
   EyeOff,
+  Camera,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -56,6 +57,7 @@ import { ProfileComponent } from './components/profile/profile.component';
       ChevronLeft,
       Eye,
       EyeOff,
+      Camera,
     }),
     ReactiveFormsModule,
     FormsModule,
