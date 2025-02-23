@@ -67,6 +67,7 @@ export class CommunitymarketComponent {
   products: Product[] = [
     { id: '1', img: '/catbowl.jpg', name: 'Cat Bowl', price: 50.00, user: 'Titus', condition: 'Like New' },
     { id: '2', img: '/dogchair.jpg', name: 'Dog Chair', price: 75.00, user: 'Alex', condition: 'New' },
-    { id: '3', img: '/dogpillow.jpg', name: 'Dog Pillow', price: 120.00, user: 'John', condition: 'Used' }
+    { id: '3', img: '/dogpillow.jpg', name: 'Dog Pillow', price: 120.00, user: 'John', condition: 'Used' },
+    { id: '4', img: '/dogbone.jpg', name: 'Dog Bone Toy', price: 100.00, user: 'Ash', condition: 'Used' }
   ];
 }

@@ -86,10 +86,12 @@ export class ProductpageComponent implements OnInit {
   }
 
   handleImageError(event: Event) {
-    (event.target as HTMLImageElement).src = 'assets/placeholder.jpg';
+    (event.target as HTMLImageElement).src = '/product-1.jpg';
   }
 
   handleAvatarError(event: Event) {
-    (event.target as HTMLImageElement).src = 'assets/placeholder.jpg';
+    (event.target as HTMLImageElement).src = '/product-1.jpg';
   }
 }
+
+//assets/placeholder
