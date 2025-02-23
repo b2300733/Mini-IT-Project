@@ -4,24 +4,60 @@
   >
     <h1 class="text-4xl font-bold py-3 text-center underline">Profile</h1>
     <div>
-      <div class="flex justify-center items-center gap-2">
-        <img
-          [src]="avatar"
-          alt="user img"
-          class="rounded-full h-35 w-35 mt-2"
-        />
+      <div class="flex justify-center items-center gap-2 relative">
+        <label class="relative cursor-pointer group">
+          <img
+            [src]="avatar"
+            alt="user img"
+            class="rounded-full h-35 w-35 mt-2 object-cover border border-gray-300"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            class="hidden"
+            (change)="onImageSelected($event)"
+          />
+          <div
+            class="absolute inset-0 h-35 w-35 mt-2 bg-gray-500/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            <lucide-icon name="camera" class="text-white w-8 h-8"></lucide-icon>
+          </div>
+        </label>
       </div>
-      <div class="flex justify-center items-center mt-2 text-xl">
+
+      <div class="flex justify-center items-center my-2 text-xl">
         <h1>
           Welcome, <span class="font-bold text-2xl">{{ username }}</span>
         </h1>
       </div>
+      <div class="flex flex-col justify-center items-center py-10 border-t-1">
+        <div class="w-full flex justify-center items-center font-[600] text-xl">
+          <button
+            class="h-10 w-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
+            (click)="selectedTab = 'account'"
+          >
+            Account
+          </button>
+        </div>
+        <div class="w-full flex justify-center items-center font-[600] text-xl">
+          <button
+            class="h-10 w-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
+            (click)="selectedTab = 'listings'"
+          >
+            Listings
+          </button>
+        </div>
+      </div>
     </div>
   </form>
   <form
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2"
+    *ngIf="selectedTab === 'account'"
+    class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2"
   >
-    <div class="pt-5">
+    <div class="absolute w-full text-center">
+      <h1 class="font-bold text-2xl pt-3">Account</h1>
+    </div>
+    <div class="pt-10">
       <div class="flex flex-col px-10 py-5 gap-5">
         <div class="flex flex-col gap-3">
           <label for="username">Username</label>
@@ -38,29 +74,22 @@
         <div class="flex flex-col gap-3">
           <label for="email">Email</label>
           <input
-            class="border-1 rounded-sm h-10 px-3"
+            class="border-1 rounded-sm h-10 px-3 bg-gray-200"
             type="email"
             id="email"
             name="email"
             placeholder="Enter your email"
             [(ngModel)]="email"
-            required
+            disabled=""
           />
         </div>
 
         <div class="flex flex-col gap-3">
-          <label for="password">Password</label>
-          <div>
-            <input
-              class="border-1 rounded-sm h-10 w-full px-3 pr-9.5"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              required
-            />
-            <div class="flex justify-center items-center gap-2">
+          <label for="password">Change Password</label>
+          <div class="flex">
+            <div class="flex justify-center items-center">
               <button
-                class="bg-orange-700 w-40 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
+                class="border-1 border-orange-700 w-40 h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
                 (click)="openChangePasswordModal()"
                 type="button"
               >
@@ -71,7 +100,7 @@
         </div>
       </div>
     </div>
-    <div class="pt-5">
+    <div class="pt-10">
       <div class="flex flex-col px-10 py-5 gap-5">
         <div class="flex flex-col gap-3">
           <label for="gender">Gender</label>
@@ -112,17 +141,38 @@
         </div>
       </div>
     </div>
-    <div class="col-span-2 flex justify-center items-center gap-2">
+    <div class="col-span-2 flex flex-col justify-center items-center gap-2">
       <button
         class="bg-orange-700 w-30 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
+        (click)="saveProfile()"
       >
         Save
       </button>
-      <button
-        class="border-2 border-orange-700 w-30 h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
-      >
-        Cancel
-      </button>
+
+      <p *ngIf="errorMessage" class="text-red-600 text-sm">
+        {{ errorMessage }}
+      </p>
+    </div>
+  </form>
+  <form
+    *ngIf="selectedTab === 'listings'"
+    class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+  >
+    <div class="absolute w-full text-center">
+      <h1 class="font-bold text-2xl pt-3">Listings</h1>
+    </div>
+    <div
+      class="pt-20 px-10 grid grid-cols-[repeat(_auto-fill,minmax(min(150px,100%),1fr))] gap-4"
+    >
+      <div class="h-40 w-40 bg-gray-300"></div>
+      <div class="h-40 w-40 bg-blue-300"></div>
+      <div class="h-40 w-40 bg-orange-300"></div>
+      <div class="h-40 w-40 bg-red-300"></div>
+      <div class="h-40 w-40 bg-pink-300"></div>
+      <div class="h-40 w-40 bg-purple-300"></div>
+      <div class="h-40 w-40 bg-teal-300"></div>
+      <div class="h-40 w-40 bg-green-300"></div>
+      <div class="h-40 w-40 bg-cyan-300"></div>
     </div>
   </form>
 </section>

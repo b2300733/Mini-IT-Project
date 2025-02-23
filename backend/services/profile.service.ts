@@ -25,4 +25,8 @@ export class ProfileService {
       newPassword,
     });
   }
+
+  updateProfile(email: string, newData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update-profile`, { email, newData });
+  }
 }

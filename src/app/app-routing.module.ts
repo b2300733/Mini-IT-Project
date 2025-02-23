@@ -45,10 +45,6 @@ const routes: Routes = [
     component: ProductpageComponent,
   },
   {
-    path: 'product',
-    component: ProductpageComponent
-  },
-  {
     path: 'auth/callback',
     component: AuthCallbackComponent,
   },

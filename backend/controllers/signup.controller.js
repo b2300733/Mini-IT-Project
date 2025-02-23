@@ -38,8 +38,7 @@ const sendWelcomeEmail = async (email, username) => {
 
 const addUser = async (req, res) => {
   try {
-    const { username, email, password, gender, contactNumber, address } =
-      req.body;
+    const { username, email, password, gender, contactNo, address } = req.body;
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -49,7 +48,7 @@ const addUser = async (req, res) => {
       email,
       password: hashedPassword,
       gender,
-      contactNumber,
+      contactNo,
       address,
       createdAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
       updatedAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
@@ -71,17 +70,15 @@ const checkUserExists = async (req, res) => {
   try {
     const { username, email } = req.body;
 
-    const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
-    });
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({
-        message: "Username or email already exists.",
+        message: "email already exists.",
       });
     }
 
-    res.status(200).json({ message: "Username and email are available." });
+    res.status(200).json({ message: "Email are available." });
   } catch (error) {
     res.status(500).json({ message: "Server error, please try again." });
   }
