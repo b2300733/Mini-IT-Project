@@ -32,25 +32,18 @@
         </div>
       </div>
 
-      <!-- Product Description - Replacing Delivery Information -->
-      <div class="bg-white rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold mb-4">Description</h2>
-        <p class="text-gray-700 whitespace-pre-line">
-          {{ product.description || 'No description available' }}
-        </p>
-      </div>
-
       <!-- Delivery Information -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold mb-4">Delivery Options</h2>
-        <div class="space-y-2">
-          <div *ngFor="let option of product.deliveryOptions" class="flex items-center text-gray-700">
+        <h2 class="text-lg font-semibold mb-4">Delivery</h2>
+        <ul class="space-y-2">
+          <li *ngFor="let option of product.deliveryOptions" 
+              class="flex items-center text-gray-700">
             <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
-            <span>{{ option }}</span>
-          </div>
-        </div>
+            {{ option }}
+          </li>
+        </ul>
       </div>
 
       <!-- Product Details -->
