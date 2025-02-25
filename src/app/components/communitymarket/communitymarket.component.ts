@@ -45,6 +45,10 @@ export class CommunitymarketComponent {
   selectedSubcategory: string | null = null;
   isContentHidden = false;
 
+  deliveryOptions = [
+    { value: 'meetup', label: 'Meet Up' },
+    { value: 'delivery', label: 'Delivery Available' }
+  ];
 
   // Define categories and conditions
   mainCategories = [
@@ -74,7 +78,8 @@ export class CommunitymarketComponent {
       description: [''],
       condition: ['', Validators.required],
       priceType: ['sale', Validators.required],
-      price: [null, [Validators.required, Validators.min(0.01)]]
+      price: [null, [Validators.required, Validators.min(0.01)]],
+      deliveryOptions: [[], Validators.required] // Add this new form control
     });
 
     // Set up validators that depend on other fields
@@ -90,10 +95,10 @@ export class CommunitymarketComponent {
 
     // Initialize products
     this.products = [
-      { id: '1', img: '/catbowl.jpg', name: 'Cat Bowl', price: 50.00, user: 'Titus', condition: 'Like New', category: 'cat', subcategory: 'accessories' },
-      { id: '2', img: '/dogchair.jpg', name: 'Dog Chair', price: 75.00, user: 'Alex', condition: 'New', category: 'dog', subcategory: 'accessories' },
-      { id: '3', img: '/dogpillow.jpg', name: 'Dog Pillow', price: 120.00, user: 'John', condition: 'Used', category: 'dog', subcategory: 'accessories' },
-      { id: '4', img: '/dogbone.jpg', name: 'Dog Bone Toy', price: 100.00, user: 'Ash', condition: 'Used', category: 'dog', subcategory: 'toys' }
+      { id: '1', img: '/catbowl.jpg', name: 'Cat Bowl', price: 50.00, user: 'Titus', condition: 'Like New', category: 'cat', subcategory: 'accessories', description: 'A beautiful cat bowl made of porcelain.', deliveryOptions: ['Meetup'] },
+      { id: '2', img: '/dogchair.jpg', name: 'Dog Chair', price: 75.00, user: 'Alex', condition: 'New', category: 'dog', subcategory: 'accessories', description: 'A comfortable chair for your furry friend.', deliveryOptions: ['Delivery available'] },
+      { id: '3', img: '/dogpillow.jpg', name: 'Dog Pillow', price: 120.00, user: 'John', condition: 'Used', category: 'dog', subcategory: 'accessories', description: 'A soft pillow for your dog to rest on.', deliveryOptions: ['Meetup', 'Delivery available'] },
+      { id: '4', img: '/dogbone.jpg', name: 'Dog Bone Toy', price: 100.00, user: 'Ash', condition: 'Used', category: 'dog', subcategory: 'toys', description: 'A chewable toy for your dog.', deliveryOptions: ['Meetup'] },
     ];
 
     this.originalProducts = [...this.products];
@@ -113,7 +118,11 @@ export class CommunitymarketComponent {
         price: product.price,
         condition: product.condition,
         img: product.img,
-        user: product.user
+        user: product.user,
+        description: product.description,
+        category: product.category,
+        size: product.size,
+        deliveryOptions: product.deliveryOptions?.join(',') // Add this line to pass delivery options
       }
     });
   }
@@ -244,6 +253,19 @@ export class CommunitymarketComponent {
   setCondition(condition: string) {
     this.listingForm.patchValue({ condition });
   }
+
+  toggleDeliveryOption(option: string) {
+    const deliveryOptions = this.listingForm.get('deliveryOptions')?.value || [];
+    const index = deliveryOptions.indexOf(option);
+    
+    if (index === -1) {
+      deliveryOptions.push(option);
+    } else {
+      deliveryOptions.splice(index, 1);
+    }
+    
+    this.listingForm.patchValue({ deliveryOptions });
+  }
   
   // Submit listing
   submitListing() {
@@ -258,7 +280,8 @@ export class CommunitymarketComponent {
         condition: this.listingForm.value.condition,
         category: this.selectedCategory,
         subcategory: this.selectedSubcategory,
-        description: this.listingForm.value.description || ''
+        description: this.listingForm.value.description || '',
+        deliveryOptions: this.listingForm.value.deliveryOptions
       };
       
       // Add to products list
