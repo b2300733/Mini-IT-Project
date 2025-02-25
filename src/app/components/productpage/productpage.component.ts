@@ -61,7 +61,7 @@ export class ProductpageComponent implements OnInit {
         size: params['size'] || '',
         category: params['category'] || '',
         description: params['description'] || '',
-        deliveryOptions: params['deliveryOptions'] ? params['deliveryOptions'].split(',') : ['Meetup', 'Delivery available']
+        deliveryOptions: params['deliveryOptions'] ? params['deliveryOptions'].split(',') : []
       };
       
       this.seller = {
