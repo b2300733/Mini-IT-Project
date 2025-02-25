@@ -44,6 +44,7 @@ export class CommunitymarketComponent {
   selectedCategory: string | null = null;
   selectedSubcategory: string | null = null;
   isContentHidden = false;
+  activeSubcategories: string[] = [];
 
   deliveryOptions = [
      {value: 'meetup', Label: 'Meetup' },
@@ -123,7 +124,6 @@ export class CommunitymarketComponent {
         user: product.user,
         description: product.description,
         category: product.category,
-        size: product.size,
         deliveryOptions: product.deliveryOptions?.join(',')
       }
     });
@@ -158,18 +158,38 @@ export class CommunitymarketComponent {
     
     // Set active filters
     this.activeCategory = category;
-    this.activeSubcategory = subcategory;
     
-    // Filter products
-    this.products = this.products.filter((product: Product) => {
-      return product.category === category && product.subcategory === subcategory;
+    // Handle multiple subcategories
+    if (!this.activeSubcategories.includes(subcategory)) {
+      this.activeSubcategories.push(subcategory);
+    }
+
+    // Filter products based on category and any of the selected subcategories
+    this.products = this.originalProducts.filter((product: Product) => {
+      return product.category === category && 
+             this.activeSubcategories.includes(product.subcategory || '');
     });
   }
   
   clearFilters() {
     this.activeCategory = null;
-    this.activeSubcategory = null;
+    this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+  }
+
+  removeSubcategory(subcategory: string) {
+    this.activeSubcategories = this.activeSubcategories.filter(s => s !== subcategory);
+    
+    if (this.activeSubcategories.length === 0) {
+      // If no subcategories left, clear all filters
+      this.clearFilters();
+    } else {
+      // Reapply filter with remaining subcategories
+      this.products = this.originalProducts.filter((product: Product) => {
+        return product.category === this.activeCategory && 
+               this.activeSubcategories.includes(product.subcategory || '');
+      });
+    }
   }
 
   // Listing form methods

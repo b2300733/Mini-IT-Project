@@ -7,7 +7,6 @@ interface Product {
   price: number;
   image: string;
   condition: string;
-  size: string;
   category: string;
   description: string;
   deliveryOptions: string[];
@@ -34,7 +33,6 @@ export class ProductpageComponent implements OnInit {
     price: 0,
     image: '',
     condition: '',
-    size: '',
     category: '',
     description: '',
     deliveryOptions: ['Meetup', 'Delivery available']
@@ -58,7 +56,6 @@ export class ProductpageComponent implements OnInit {
         price: Number(params['price']) || 0, // Ensure price is parsed as a number
         image: params['img'] || '',
         condition: params['condition'] || '',
-        size: params['size'] || '',
         category: params['category'] || '',
         description: params['description'] || '',
         deliveryOptions: params['deliveryOptions'] ? params['deliveryOptions'].split(',') : []
