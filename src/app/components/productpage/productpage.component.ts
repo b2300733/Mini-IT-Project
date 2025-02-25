@@ -7,7 +7,6 @@ interface Product {
   price: number;
   image: string;
   condition: string;
-  size: string;
   category: string;
   description: string;
   deliveryOptions: string[];
@@ -34,7 +33,6 @@ export class ProductpageComponent implements OnInit {
     price: 0,
     image: '',
     condition: '',
-    size: '',
     category: '',
     description: '',
     deliveryOptions: ['Meetup', 'Delivery available']
@@ -58,7 +56,6 @@ export class ProductpageComponent implements OnInit {
         price: Number(params['price']) || 0, // Ensure price is parsed as a number
         image: params['img'] || '',
         condition: params['condition'] || '',
-        size: params['size'] || '',
         category: params['category'] || '',
         description: params['description'] || '',
         deliveryOptions: params['deliveryOptions'] ? params['deliveryOptions'].split(',') : []
@@ -91,6 +88,34 @@ export class ProductpageComponent implements OnInit {
 
   handleAvatarError(event: Event) {
     (event.target as HTMLImageElement).src = '/product-1.jpg';
+  }
+
+  getConditionLabel(condition: string): string {
+    const conditionMap: { [key: string]: string } = {
+      'brandNew': 'Brand New',
+      'likeNew': 'Like New',
+      'lightlyUsed': 'Lightly Used',
+      'wellUsed': 'Well Used',
+      'heavilyUsed': 'Heavily Used'
+    };
+    return conditionMap[condition] || condition || 'Not Specified';
+  }
+
+  getCategoryLabel(category: string): string {
+    // Match the categories from CommunityMarketComponent
+    const mainCategories: { [key: string]: string } = {
+      'dog': 'Dog',
+      'cat': 'Cat',
+      'other': 'Other'
+    };
+
+    const subcategories: { [key: string]: string } = {
+      'accessories': 'Accessories',
+      'toys': 'Toys',
+      'clothes': 'Clothes'
+    };
+
+    return (mainCategories[category] || subcategories[category] || category || 'Not Specified');
   }
 }
 
