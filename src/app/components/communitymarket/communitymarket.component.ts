@@ -168,8 +168,6 @@ export class CommunitymarketComponent {
     // Reset the form when opening it
     this.currentStep = 1;
     this.resetListingForm();
-    // Scroll to the top of the page to show the form below the banner
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   }
   
