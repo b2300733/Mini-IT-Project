@@ -54,7 +54,7 @@ const sendWelcomeEmail = async (email, username) => {
 //           user = new User({
 //             username: profile.displayName,
 //             email: profile.emails[0].value,
-//             profilePicture:
+//             avatar:
 //               profile.photos[0].value || "/profilePics/default_user.png",
 //             oauthProvider: "Facebook",
 //             oauthId: profile.id,
@@ -101,15 +101,14 @@ passport.use(
           user = new User({
             username: profile.displayName,
             email: profile.emails[0].value,
-            profilePicture:
-              profile.photos[0].value || "/profilePics/default_user.png",
+            avatar: profile.photos[0].value || "/profilePics/default_user.png",
             oauthProvider: "Google",
             oauthId: profile.id,
           });
           await user.save();
 
           // Send Welcome Email to New User
-          // await sendWelcomeEmail(user.email, user.username);
+          // await sendWelcomeEmail(user.email, user.username); ////////////////////////////////////////
         }
         return done(null, user);
       } catch (error) {

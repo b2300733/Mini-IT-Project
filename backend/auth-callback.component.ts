@@ -18,17 +18,27 @@ export class AuthCallbackComponent implements OnInit {
       const email = params['email'];
       const avatar = params['avatar'];
       const contactNo = params['contactNo'] || '';
-      const address = params['address'] || '';
       const gender = params['gender'] || '';
+      const address1 = params['address1'] || '';
+      const address2 = params['address2'] || '';
+      const city = params['city'] || '';
+      const state = params['address1'] || '';
+      const country = params['country'] || '';
+      const zip = params['zip'] || '';
 
-      if (token && username && avatar) {
+      if (token && username) {
         localStorage.setItem('authToken', token);
         localStorage.setItem('username', username);
         localStorage.setItem('email', email);
         localStorage.setItem('avatar', avatar);
         localStorage.setItem('contactNo', contactNo);
-        localStorage.setItem('address', address);
         localStorage.setItem('gender', gender);
+        localStorage.setItem('address1', address1);
+        localStorage.setItem('address2', address2);
+        localStorage.setItem('city', city);
+        localStorage.setItem('state', state);
+        localStorage.setItem('country', country);
+        localStorage.setItem('zip', zip);
         this.router.navigate(['/profile']).then(() => {
           window.location.reload();
         });

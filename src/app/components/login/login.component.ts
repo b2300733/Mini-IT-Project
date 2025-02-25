@@ -28,7 +28,12 @@ export class LoginComponent {
           storage.setItem('email', response.user.email);
           storage.setItem('gender', response.user.gender);
           storage.setItem('contactNo', response.user.contactNo);
-          storage.setItem('address', response.user.address);
+          storage.setItem('address1', response.user.address1);
+          storage.setItem('address2', response.user.address2);
+          storage.setItem('city', response.user.city);
+          storage.setItem('state', response.user.state);
+          storage.setItem('country', response.user.country);
+          storage.setItem('zip', response.user.zip);
           this.router.navigate(['/profile']).then(() => {
             window.location.reload();
           });

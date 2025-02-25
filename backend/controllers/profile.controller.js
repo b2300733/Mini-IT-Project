@@ -85,6 +85,8 @@ const updateProfile = async (req, res) => {
   try {
     const { email, newData } = req.body; // Get user email & updated data from request body
 
+    newData.updatedAt = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
+
     const user = await User.findOneAndUpdate({ email }, newData, { new: true });
 
     if (!user) return res.status(404).json({ message: "User not found" });

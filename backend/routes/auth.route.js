@@ -12,7 +12,7 @@ const passport = require("../controllers/auth.controller");
 //   passport.authenticate("facebook", { failureRedirect: "/" }),
 //   (req, res) => {
 //     const user = req.user;
-//     const frontendUrl = `http://localhost:4200/auth/callback?token=${user._id}&username=${user.username}&avatar=${user.profilePicture}`;
+//     const frontendUrl = `http://localhost:4200/auth/callback?token=${user._id}&username=${user.username}&avatar=${user.avatar}`;
 //     res.redirect(frontendUrl);
 //   }
 // );
@@ -30,9 +30,13 @@ router.get(
     const frontendUrl = `http://localhost:4200/auth/callback?token=${
       user._id
     }&username=${user.username}&email=${user.email}&avatar=${
-      user.profilePicture
-    }&contactNo=${user.contactNo || ""}&address=${user.address || ""}&gender=${
-      user.gender || ""
+      user.avatar
+    }&contactNo=${user.contactNo || ""}&gender=${user.gender || ""}&address1=${
+      user.address1 || ""
+    }&address2=${user.address2 || ""}&city=${user.city || ""}&state=${
+      user.state || ""
+    }&country=${user.country || ""}&zip=${user.zip || ""}&authToken=${
+      user.authToken || ""
     }`;
     res.redirect(frontendUrl);
   }
