@@ -1,7 +1,7 @@
 <app-banner></app-banner>
-<div class="min-h-screen p-5" >
+<div class="min-h-screen p-5" *ngIf="!isContentHidden">
   <!-- Enhanced Horizontal Dropdown Menu -->
-<div class="relative mb-8 w-full" *ngIf="!isContentHidden">
+<div class="relative mb-8 w-full" >
   <h3 class="text-xl font-bold mb-6 text-gray-800 border-b-2 border-red-500 pb-2 inline-block">Browse by Category</h3>
   
   <div class="flex flex-wrap gap-4 w-full">
@@ -300,6 +300,31 @@
                       class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" 
                       rows="4"
                       placeholder="Describe your item, include details that would be helpful for buyers"></textarea>
+          </div>
+        </div>
+
+        <!-- Delivery Options Section -->
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-4">Delivery Options</h3>
+          <div class="space-y-3">
+            <div *ngFor="let option of deliveryOptions" 
+                 [ngClass]="{'border-red-500 bg-red-50': listingForm.get('deliveryOptions')?.value?.includes(option.value)}"
+                 class="border-2 rounded-lg p-4 cursor-pointer hover:border-red-300 transition-colors flex items-center justify-between"
+                 (click)="toggleDeliveryOption(option.value)">
+              <span class="flex items-center">
+                <span class="mr-3">{{ option.label }}</span>
+              </span>
+              <svg *ngIf="listingForm.get('deliveryOptions')?.value?.includes(option.value)" 
+                   class="w-6 h-6 text-red-500" 
+                   fill="none" 
+                   stroke="currentColor" 
+                   viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+          </div>
+          <div *ngIf="showValidationError('deliveryOptions')" class="text-red-500 text-sm mt-1">
+            Please select at least one delivery option
           </div>
         </div>
         
