@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValueChangeEvent } from '@angular/forms';
 import { Router } from '@angular/router';
 
 interface Product {
@@ -44,11 +44,14 @@ export class CommunitymarketComponent {
   selectedCategory: string | null = null;
   selectedSubcategory: string | null = null;
   isContentHidden = false;
+  activeSubcategories: string[] = [];
+  searchQuery: string = '';
 
   deliveryOptions = [
-    { value: 'meetup', label: 'Meet Up' },
-    { value: 'delivery', label: 'Delivery Available' }
+     {value: 'meetup', Label: 'Meetup' },
+     {value: 'delivery', Label: 'Delivery Available' },
   ];
+
 
   // Define categories and conditions
   mainCategories = [
@@ -71,6 +74,7 @@ export class CommunitymarketComponent {
   ];
 
   private originalProducts: Product[] = [];
+  products: Product[] = [];
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.listingForm = this.fb.group({
@@ -79,7 +83,7 @@ export class CommunitymarketComponent {
       condition: ['', Validators.required],
       priceType: ['sale', Validators.required],
       price: [null, [Validators.required, Validators.min(0.01)]],
-      deliveryOptions: [[], Validators.required] // Add this new form control
+      deliveryOptions: [[], Validators.required]
     });
 
     // Set up validators that depend on other fields
@@ -121,8 +125,7 @@ export class CommunitymarketComponent {
         user: product.user,
         description: product.description,
         category: product.category,
-        size: product.size,
-        deliveryOptions: product.deliveryOptions?.join(',') // Add this line to pass delivery options
+        deliveryOptions: product.deliveryOptions?.join(',')
       }
     });
   }
@@ -156,18 +159,38 @@ export class CommunitymarketComponent {
     
     // Set active filters
     this.activeCategory = category;
-    this.activeSubcategory = subcategory;
     
-    // Filter products
-    this.products = this.products.filter((product: Product) => {
-      return product.category === category && product.subcategory === subcategory;
+    // Handle multiple subcategories
+    if (!this.activeSubcategories.includes(subcategory)) {
+      this.activeSubcategories.push(subcategory);
+    }
+
+    // Filter products based on category and any of the selected subcategories
+    this.products = this.originalProducts.filter((product: Product) => {
+      return product.category === category && 
+             this.activeSubcategories.includes(product.subcategory || '');
     });
   }
   
   clearFilters() {
     this.activeCategory = null;
-    this.activeSubcategory = null;
+    this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+  }
+
+  removeSubcategory(subcategory: string) {
+    this.activeSubcategories = this.activeSubcategories.filter(s => s !== subcategory);
+    
+    if (this.activeSubcategories.length === 0) {
+      // If no subcategories left, clear all filters
+      this.clearFilters();
+    } else {
+      // Reapply filter with remaining subcategories
+      this.products = this.originalProducts.filter((product: Product) => {
+        return product.category === this.activeCategory && 
+               this.activeSubcategories.includes(product.subcategory || '');
+      });
+    }
   }
 
   // Listing form methods
@@ -177,8 +200,6 @@ export class CommunitymarketComponent {
     // Reset the form when opening it
     this.currentStep = 1;
     this.resetListingForm();
-    // Scroll to the top of the page to show the form below the banner
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   }
   
@@ -257,14 +278,14 @@ export class CommunitymarketComponent {
   toggleDeliveryOption(option: string) {
     const deliveryOptions = this.listingForm.get('deliveryOptions')?.value || [];
     const index = deliveryOptions.indexOf(option);
-    
     if (index === -1) {
       deliveryOptions.push(option);
     } else {
       deliveryOptions.splice(index, 1);
     }
-    
-    this.listingForm.patchValue({ deliveryOptions });
+    if (deliveryOptions) {
+      this.listingForm.patchValue({ deliveryOptions });
+    }
   }
   
   // Submit listing
@@ -296,6 +317,38 @@ export class CommunitymarketComponent {
       alert('Your item has been listed successfully!');
     }
   }
-  
-  products: Product[] = [];
+
+  searchProducts(event: any) {
+    const query = event.target.value.toLowerCase();
+    this.searchQuery = query;
+    
+    if (query === '') {
+      // If search is empty and there are active filters, show filtered results
+      if (this.activeCategory && this.activeSubcategories.length > 0) {
+        this.products = this.originalProducts.filter((product: Product) => {
+          return product.category === this.activeCategory && 
+                 this.activeSubcategories.includes(product.subcategory || '');
+        });
+      } else {
+        // If no filters, show all products
+        this.products = [...this.originalProducts];
+      }
+    } else {
+      // Filter products based on search query and any active filters
+      this.products = this.originalProducts.filter((product: Product) => {
+        const matchesSearch = product.name.toLowerCase().includes(query);
+        
+        if (this.activeCategory && this.activeSubcategories.length > 0) {
+          // Apply both search and category filters
+          return matchesSearch && 
+                 product.category === this.activeCategory && 
+                 this.activeSubcategories.includes(product.subcategory || '');
+        }
+        
+        // Apply only search filter
+        return matchesSearch;
+      });
+    }
+  }
 }
+

@@ -58,16 +58,16 @@
         <h2 class="text-lg font-semibold mb-4">Item Details</h2>
         <div class="space-y-4">
           <div class="flex justify-between">
-            <span class="text-gray-600">Condition</span>
-            <span class="text-gray-900">{{ product.condition }}</span>
+            <span class="text-gray-600">Condition:</span>
+            <span class="text-gray-900">
+              {{ getConditionLabel(product.condition) }}
+            </span>
           </div>
           <div class="flex justify-between">
-            <span class="text-gray-600">Size</span>
-            <span class="text-gray-900">{{ product.size }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-600">Category</span>
-            <span class="text-gray-900">{{ product.category }}</span>
+            <span class="text-gray-600">Category:</span>
+            <span class="text-gray-900">
+              {{ getCategoryLabel(product.category) }}
+            </span>
           </div>
         </div>
       </div>
