@@ -45,6 +45,7 @@ export class CommunitymarketComponent {
   selectedSubcategory: string | null = null;
   isContentHidden = false;
   activeSubcategories: string[] = [];
+  searchQuery: string = '';
 
   deliveryOptions = [
      {value: 'meetup', Label: 'Meetup' },
@@ -314,6 +315,39 @@ export class CommunitymarketComponent {
       
       // Show a success message (in a real app, this would be a more sophisticated notification)
       alert('Your item has been listed successfully!');
+    }
+  }
+
+  searchProducts(event: any) {
+    const query = event.target.value.toLowerCase();
+    this.searchQuery = query;
+    
+    if (query === '') {
+      // If search is empty and there are active filters, show filtered results
+      if (this.activeCategory && this.activeSubcategories.length > 0) {
+        this.products = this.originalProducts.filter((product: Product) => {
+          return product.category === this.activeCategory && 
+                 this.activeSubcategories.includes(product.subcategory || '');
+        });
+      } else {
+        // If no filters, show all products
+        this.products = [...this.originalProducts];
+      }
+    } else {
+      // Filter products based on search query and any active filters
+      this.products = this.originalProducts.filter((product: Product) => {
+        const matchesSearch = product.name.toLowerCase().includes(query);
+        
+        if (this.activeCategory && this.activeSubcategories.length > 0) {
+          // Apply both search and category filters
+          return matchesSearch && 
+                 product.category === this.activeCategory && 
+                 this.activeSubcategories.includes(product.subcategory || '');
+        }
+        
+        // Apply only search filter
+        return matchesSearch;
+      });
     }
   }
 }
