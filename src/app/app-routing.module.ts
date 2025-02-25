@@ -9,6 +9,8 @@ import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassw
 import { ProductpageComponent } from './components/productpage/productpage.component';
 import { AuthCallbackComponent } from '../../backend/auth-callback.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ShoppageComponent } from './components/shoppage/shoppage.component';
+import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
 
 const routes: Routes = [
   {
@@ -51,6 +53,14 @@ const routes: Routes = [
   {
     path: 'market',
     component: CommunitymarketComponent,
+  },
+  {
+    path: 'products',
+    component: ShoppageComponent,
+  },
+  {
+    path: 'shopproduct',
+    component: ShopproductpageComponent,
   },
 ];
 

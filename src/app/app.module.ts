@@ -29,6 +29,8 @@ import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassw
 import { ProductpageComponent } from './components/productpage/productpage.component';
 import { AuthCallbackComponent } from '../../backend/auth-callback.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ShoppageComponent } from './components/shoppage/shoppage.component';
+import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     ProductpageComponent,
     AuthCallbackComponent,
     ProfileComponent,
+    ShoppageComponent,
+    ShopproductpageComponent,
   ],
   imports: [
     BrowserModule,
