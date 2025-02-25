@@ -1,24 +1,27 @@
 <section class="flex flex-row gap-10 justify-center items-center pt-20">
+  <!--Side Profile-------------------------------------------------------------------------------------------------------->
   <form
     class="border-1 border-gray-400 h-140 w-65 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
   >
     <h1 class="text-4xl font-bold py-3 text-center underline">Profile</h1>
     <div>
       <div class="flex justify-center items-center gap-2 relative">
-        <label class="relative cursor-pointer group">
+        <label class="relative group">
           <img
             [src]="avatar"
             alt="user img"
-            class="rounded-full h-35 w-35 mt-2 object-cover border border-gray-300"
+            class="rounded-full h-35 w-35 mt-2 object-cover border border-gray-300 text-center"
           />
           <input
             type="file"
             accept="image/*"
             class="hidden"
             (change)="onImageSelected($event)"
+            [disabled]="authToken"
           />
           <div
-            class="absolute inset-0 h-35 w-35 mt-2 bg-gray-500/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            *ngIf="authToken === null"
+            class="absolute inset-0 h-35 w-35 mt-2 bg-gray-500/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
           >
             <lucide-icon name="camera" class="text-white w-8 h-8"></lucide-icon>
           </div>
@@ -33,7 +36,7 @@
       <div class="flex flex-col justify-center items-center py-10 border-t-1">
         <div class="w-full flex justify-center items-center font-[600] text-xl">
           <button
-            class="h-10 w-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
+            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'account'"
           >
             Account
@@ -41,7 +44,15 @@
         </div>
         <div class="w-full flex justify-center items-center font-[600] text-xl">
           <button
-            class="h-10 w-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300"
+            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
+            (click)="selectedTab = 'myPet'"
+          >
+            My Pet
+          </button>
+        </div>
+        <div class="w-full flex justify-center items-center font-[600] text-xl">
+          <button
+            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'listings'"
           >
             Listings
@@ -50,6 +61,8 @@
       </div>
     </div>
   </form>
+
+  <!--First Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'account'"
     class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2"
@@ -57,8 +70,10 @@
     <div class="absolute w-full text-center">
       <h1 class="font-bold text-2xl pt-3">Account</h1>
     </div>
+
+    <!--First col------------------------------------------------------------->
     <div class="pt-10">
-      <div class="flex flex-col px-10 py-5 gap-5">
+      <div class="flex flex-col px-10 my-5 gap-5 border-r-1 border-dashed">
         <div class="flex flex-col gap-3">
           <label for="username">Username</label>
           <input
@@ -83,64 +98,153 @@
             disabled=""
           />
         </div>
-
+        <div class="flex flex-row gap-5">
+          <div class="flex flex-col gap-3 w-50">
+            <label for="gender">Gender</label>
+            <select
+              class="border-1 rounded-sm h-10 px-3"
+              name="gender"
+              required
+              [(ngModel)]="gender"
+            >
+              <option selected disabled value="">Select your gender</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-3">
+            <label for="contactNo">Contact No</label>
+            <input
+              class="border-1 rounded-sm h-10 px-3 w-50"
+              type="text"
+              id="contactNo"
+              name="contactNo"
+              placeholder="Enter your contact number +60"
+              [(ngModel)]="contactNo"
+              required
+            />
+          </div>
+        </div>
         <div class="flex flex-col gap-3">
           <label for="password">Change Password</label>
+
           <div class="flex">
-            <div class="flex justify-center items-center">
-              <button
-                class="border-1 border-orange-700 w-40 h-10 text-orange-700 cursor-pointer rounded-sm hover:bg-orange-700 hover:text-gray-100 ease-in-out duration-300"
-                (click)="openChangePasswordModal()"
-                type="button"
+            <button
+              class="border-1 border-orange-700 w-40 h-10 text-orange-700 rounded-sm ease-in-out duration-300"
+              [ngClass]="{
+                'hover:bg-orange-700 hover:text-gray-100 cursor-pointer':
+                  !authToken,
+                'bg-gray-200 ': authToken
+              }"
+              (click)="openChangePasswordModal()"
+              type="button"
+              [disabled]="authToken"
+            >
+              Change Password
+            </button>
+          </div>
+          <h1 *ngIf="authToken" class="text-gray-500 text-xs">
+            ⚠ Changing
+            <span class="font-bold text-black">Password/Profile Picture</span>
+            is disabled for Google login.
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <!--Second col------------------------------------------------------------>
+    <div class="pt-10">
+      <div class="flex flex-col px-10 my-5 gap-5">
+        <div class="flex flex-col gap-3">
+          <label for="address1">Address line 1</label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="text"
+            id="address1"
+            name="address1"
+            placeholder="Enter your address line 1"
+            [(ngModel)]="address1"
+            required
+          />
+        </div>
+        <div class="flex flex-col gap-3">
+          <label for="address2">Address line 2 (optional) </label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="text"
+            id="address2"
+            name="address2"
+            placeholder="Enter your address line 2"
+            [(ngModel)]="address2"
+            required
+          />
+        </div>
+        <div class="flex flex-row gap-5">
+          <div class="flex flex-col gap-3">
+            <label for="city">City</label>
+            <input
+              class="border-1 rounded-sm h-10 px-3 w-50"
+              type="text"
+              id="city"
+              name="city"
+              placeholder="City"
+              [(ngModel)]="city"
+              required
+            />
+          </div>
+          <div class="flex flex-col gap-3">
+            <label for="state">State</label>
+            <input
+              class="border-1 rounded-sm h-10 px-3 w-50"
+              type="text"
+              id="state"
+              name="state"
+              placeholder="State"
+              [(ngModel)]="state"
+              required
+            />
+          </div>
+        </div>
+        <div class="flex flex-row gap-5">
+          <div class="flex flex-col">
+            <div class="flex flex-col gap-3">
+              <label for="country">Country</label>
+              <select
+                class="border-1 rounded-sm h-10 px-3 w-50"
+                name="country"
+                [(ngModel)]="country"
+                required
               >
-                Change Password
-              </button>
+                <option selected disabled value="">Select your country</option>
+                <option value="Malaysia">Malaysia</option>
+              </select>
             </div>
+            <div class="flex flex-row gap-1 px-2">
+              <span class="text-xs">⚠</span>
+              <p class="text-xs leading-3.5 text-gray-500">
+                L&B Pet Service only
+                <span class="font-bold text-black">available in Malaysia</span>
+                right now
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3">
+            <label for="zip">ZIP/Postcode</label>
+            <input
+              class="border-1 rounded-sm h-10 px-3 w-50"
+              type="text"
+              id="zip"
+              name="zip"
+              placeholder="ZIP"
+              [(ngModel)]="zip"
+              required
+            />
           </div>
         </div>
       </div>
     </div>
-    <div class="pt-10">
-      <div class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="gender">Gender</label>
-          <select
-            class="border-1 rounded-sm h-10 px-3"
-            name="gender"
-            required
-            [(ngModel)]="gender"
-          >
-            <option selected disabled value="">Select your gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-3">
-          <label for="contactNo">Contact No</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="text"
-            id="contactNo"
-            name="contactNo"
-            placeholder="Enter your contact number +60"
-            [(ngModel)]="contactNo"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-3">
-          <label for="address">Address</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="address"
-            id="address"
-            name="address"
-            placeholder="Enter your address"
-            [(ngModel)]="address"
-            required
-          />
-        </div>
-      </div>
-    </div>
+
+    <!--Third col------------------------------------------------------------>
     <div class="col-span-2 flex flex-col justify-center items-center gap-2">
       <button
         class="bg-orange-700 w-30 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
@@ -154,6 +258,88 @@
       </p>
     </div>
   </form>
+
+  <!--Second Tabs-------------------------------------------------------------------------------------------------------->
+  <form
+    *ngIf="selectedTab === 'myPet'"
+    class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2"
+  >
+    <div class="absolute w-full text-center">
+      <h1 class="font-bold text-2xl pt-3">My Pet</h1>
+    </div>
+    <div class="pt-10">
+      <div class="flex flex-col px-10 py-5 gap-5">
+        <div class="flex flex-col gap-3">
+          <label for="petName">Pet Name</label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="text"
+            id="petName"
+            name="petName"
+            placeholder="Enter your pet name"
+            required
+          />
+        </div>
+        <div class="flex flex-col gap-3">
+          <label for="description">Description</label>
+          <textarea
+            class="border-1 rounded-sm h-34 px-3 resize-none"
+            type="text"
+            id="description"
+            name="description"
+            placeholder="Enter description"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="pt-10">
+      <div class="flex flex-col px-10 py-5 gap-5">
+        <div class="flex flex-col gap-3">
+          <label for="gender">Gender</label>
+          <select class="border-1 rounded-sm h-10 px-3" name="gender" required>
+            <option selected disabled value="">Select pet gender</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-3">
+          <label for="contactNo">Contact No</label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="text"
+            id="contactNo"
+            name="contactNo"
+            placeholder="Enter your contact number +60"
+            required
+          />
+        </div>
+        <div class="flex flex-col gap-3">
+          <label for="address">Address</label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="address"
+            id="address"
+            name="address"
+            placeholder="Enter your address"
+            required
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-span-2 flex flex-col justify-center items-center gap-2">
+      <button
+        class="bg-orange-700 w-30 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
+      >
+        Save
+      </button>
+
+      <p *ngIf="errorMessage" class="text-red-600 text-sm">
+        {{ errorMessage }}
+      </p>
+    </div>
+  </form>
+
+  <!--Third Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'listings'"
     class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"

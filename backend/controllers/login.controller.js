@@ -24,10 +24,15 @@ const login = async (req, res) => {
         id: user._id,
         email: user.email,
         username: user.username,
-        avatar: user.profilePicture,
+        avatar: user.avatar,
         gender: user.gender,
         contactNo: user.contactNo,
-        address: user.address,
+        address1: user.address1,
+        address2: user.address2,
+        city: user.city,
+        state: user.state,
+        country: user.country,
+        zip: user.zip,
       },
     });
   } catch (error) {

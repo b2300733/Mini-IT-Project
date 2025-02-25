@@ -16,7 +16,12 @@ export class SignupComponent {
   confirmPassword = '';
   gender = '';
   contactNo = '';
-  address = '';
+  address1 = '';
+  address2 = '';
+  city = '';
+  state = '';
+  country = '';
+  zip = '';
   termsAccepted = false;
   errorMessage = '';
   alertMessage = '';
@@ -60,7 +65,10 @@ export class SignupComponent {
     if (
       !this.gender ||
       !this.contactNo ||
-      !this.address ||
+      !this.address1 ||
+      !this.city ||
+      !this.state ||
+      !this.zip ||
       !this.termsAccepted
     ) {
       this.errorMessage = 'Please fill in all the fields and accept the terms.';
@@ -86,9 +94,15 @@ export class SignupComponent {
       username: this.username,
       email: this.email,
       password: this.password,
-      contactNo: this.contactNo,
-      address: this.address,
       gender: this.gender,
+      contactNo: this.contactNo,
+      address1: this.address1,
+      address2: this.address2,
+      city: this.city,
+      state: this.state,
+      country: this.country,
+      zip: this.zip,
+      termsAccepted: this.termsAccepted,
     };
 
     this.signupService.signup(user).subscribe(
@@ -98,7 +112,7 @@ export class SignupComponent {
 
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 2000);
+        }, 1000);
       },
       (error) => {
         console.error('Error registering user', error);

@@ -16,8 +16,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   gender = localStorage.getItem('gender') || sessionStorage.getItem('gender');
   contactNo =
     localStorage.getItem('contactNo') || sessionStorage.getItem('contactNo');
-  address =
-    localStorage.getItem('address') || sessionStorage.getItem('address');
+  address1 =
+    localStorage.getItem('address1') || sessionStorage.getItem('address1');
+  address2 =
+    localStorage.getItem('address2') || sessionStorage.getItem('address2');
+  city = localStorage.getItem('city') || sessionStorage.getItem('city');
+  state = localStorage.getItem('state') || sessionStorage.getItem('state');
+  country =
+    localStorage.getItem('country') || sessionStorage.getItem('country');
+  zip = localStorage.getItem('zip') || sessionStorage.getItem('zip');
+
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -61,11 +69,30 @@ export class NavbarComponent implements OnInit, OnDestroy {
       (localStorage.getItem('contactNo') ||
         sessionStorage.getItem('contactNo')) ??
       '';
-    const address =
-      (localStorage.getItem('address') || sessionStorage.getItem('address')) ??
+    const address1 =
+      (localStorage.getItem('address1') ||
+        sessionStorage.getItem('address1')) ??
       '';
+    const city =
+      (localStorage.getItem('city') || sessionStorage.getItem('city')) ?? '';
+    const state =
+      (localStorage.getItem('state') || sessionStorage.getItem('state')) ?? '';
+    const country =
+      (localStorage.getItem('country') || sessionStorage.getItem('country')) ??
+      '';
+    const zip =
+      (localStorage.getItem('zip') || sessionStorage.getItem('zip')) ?? '';
 
-    return !!(username && gender && contactNo && address);
+    return !!(
+      username &&
+      gender &&
+      contactNo &&
+      address1 &&
+      city &&
+      state &&
+      country &&
+      zip
+    );
   }
 
   logout() {
@@ -75,7 +102,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     localStorage.removeItem('email');
     localStorage.removeItem('gender');
     localStorage.removeItem('contactNo');
-    localStorage.removeItem('address');
+    localStorage.removeItem('address1');
+    localStorage.removeItem('address2');
+    localStorage.removeItem('city');
+    localStorage.removeItem('state');
+    localStorage.removeItem('country');
+    localStorage.removeItem('zip');
 
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('username');
@@ -83,7 +115,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('gender');
     sessionStorage.removeItem('contactNo');
-    sessionStorage.removeItem('address');
+    sessionStorage.removeItem('address1');
+    sessionStorage.removeItem('address2');
+    sessionStorage.removeItem('city');
+    sessionStorage.removeItem('state');
+    sessionStorage.removeItem('country');
+    sessionStorage.removeItem('zip');
     this.dropdownOpen = false;
     this.router.navigate(['/login']);
   }

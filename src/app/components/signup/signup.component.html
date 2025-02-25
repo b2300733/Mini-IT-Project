@@ -110,14 +110,80 @@
         />
       </div>
       <div class="flex flex-col gap-3">
-        <label for="address">Full Address</label>
+        <label for="address">Address line 1</label>
         <input
           class="border-1 rounded-sm h-10 px-3"
           type="text"
-          id="address"
-          name="address"
-          placeholder="Enter your full address"
-          [(ngModel)]="address"
+          id="address1"
+          name="address1"
+          placeholder="Address line 1"
+          [(ngModel)]="address1"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="address">Address line 2 (optional)</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="text"
+          id="address2"
+          name="address2"
+          placeholder="Address line 2"
+          [(ngModel)]="address2"
+          required
+        />
+      </div>
+      <div class="flex flex-row gap-6">
+        <div class="flex flex-col gap-3 w-full">
+          <label for="city">City</label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="text"
+            id="city"
+            name="city"
+            placeholder="City"
+            [(ngModel)]="city"
+            required
+          />
+        </div>
+        <div class="flex flex-col gap-3 w-full">
+          <label for="state">State</label>
+          <input
+            class="border-1 rounded-sm h-10 px-3"
+            type="text"
+            id="state"
+            name="state"
+            placeholder="State"
+            [(ngModel)]="state"
+            required
+          />
+        </div>
+      </div>
+      <div class="flex flex-col gap-3">
+        <label for="country">Country</label>
+        <select
+          class="border-1 rounded-sm h-10 px-3"
+          name="country"
+          [(ngModel)]="country"
+          required
+        >
+          <option selected disabled value="">Select your country</option>
+          <option value="Malaysia">Malaysia</option>
+        </select>
+        <p class="text-xs px-3 leading-0.5">
+          ⚠ L&B Pet Service only available in Malaysia right now
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 [-moz-appearance:textfield]">
+        <label for="zip">ZIP/Postcode</label>
+        <input
+          class="border-1 rounded-sm h-10 px-3"
+          type="number"
+          id="zip"
+          name="zip"
+          placeholder="ZIP/Postcode"
+          [(ngModel)]="zip"
           required
         />
       </div>

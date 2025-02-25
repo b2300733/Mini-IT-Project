@@ -38,7 +38,19 @@ const sendWelcomeEmail = async (email, username) => {
 
 const addUser = async (req, res) => {
   try {
-    const { username, email, password, gender, contactNo, address } = req.body;
+    const {
+      username,
+      email,
+      password,
+      gender,
+      contactNo,
+      address1,
+      address2,
+      city,
+      state,
+      country,
+      zip,
+    } = req.body;
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -49,13 +61,18 @@ const addUser = async (req, res) => {
       password: hashedPassword,
       gender,
       contactNo,
-      address,
+      address1,
+      address2,
+      city,
+      state,
+      country,
+      zip,
       createdAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
       updatedAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
     });
 
     // Send Welcome Email
-    await sendWelcomeEmail(email, username);
+    //await sendWelcomeEmail(email, username); ////////////////////////////////////////////////////////////////////
 
     res
       .status(200)
