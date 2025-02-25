@@ -49,570 +49,605 @@
               <span class="text-blue-500 mr-2">🔸</span>
               <span>Accessories</span>
             </div>
-            <div
-              class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('dog', 'toys')"
-            >
-              <span class="text-blue-500 mr-2">🔸</span>
-              <span>Toys</span>
-            </div>
-            <div
-              class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('dog', 'clothes')"
-            >
-              <span class="text-blue-500 mr-2">🔸</span>
-              <span>Clothes</span>
-            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Cat Category - Enhanced -->
-      <div class="relative group">
-        <button
-          class="flex items-center bg-gradient-to-r from-purple-100 to-purple-200 hover:from-purple-200 hover:to-purple-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
-          (click)="toggleCategory('cat')"
-        >
-          <span class="flex items-center">
-            <span class="text-2xl mr-2">🐱</span>
-            <span class="text-gray-800">Cat</span>
-          </span>
-          <svg
-            class="w-5 h-5 ml-2 transform transition-transform"
-            [ngClass]="{ 'rotate-180': isCatExpanded }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <!-- Cat Category - Enhanced -->
+        <div class="relative group">
+          <button
+            class="flex items-center bg-gradient-to-r from-purple-100 to-purple-200 hover:from-purple-200 hover:to-purple-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
+            (click)="toggleCategory('cat')"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            ></path>
-          </svg>
-        </button>
-        <div
-          class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
-          [ngClass]="{
-            'opacity-100 scale-100': isCatExpanded,
-            'opacity-0 scale-95 pointer-events-none': !isCatExpanded
-          }"
-        >
-          <div class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]">
-            <div
-              class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('cat', 'accessories')"
-            >
-              <span class="text-purple-500 mr-2">🔸</span>
-              <span>Accessories</span>
-            </div>
-            <div
-              class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('cat', 'toys')"
-            >
-              <span class="text-purple-500 mr-2">🔸</span>
-              <span>Toys</span>
-            </div>
-            <div
-              class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('cat', 'clothes')"
-            >
-              <span class="text-purple-500 mr-2">🔸</span>
-              <span>Clothes</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Other Category - Enhanced -->
-      <div class="relative group">
-        <button
-          class="flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
-          (click)="toggleCategory('other')"
-        >
-          <span class="flex items-center">
-            <span class="text-2xl mr-2">🐾</span>
-            <span class="text-gray-800">Other</span>
-          </span>
-          <svg
-            class="w-5 h-5 ml-2 transform transition-transform"
-            [ngClass]="{ 'rotate-180': isOtherExpanded }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            ></path>
-          </svg>
-        </button>
-        <div
-          class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
-          [ngClass]="{
-            'opacity-100 scale-100': isOtherExpanded,
-            'opacity-0 scale-95 pointer-events-none': !isOtherExpanded
-          }"
-        >
-          <div class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]">
-            <div
-              class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('other', 'accessories')"
-            >
-              <span class="text-green-500 mr-2">🔸</span>
-              <span>Accessories</span>
-            </div>
-            <div
-              class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('other', 'toys')"
-            >
-              <span class="text-green-500 mr-2">🔸</span>
-              <span>Toys</span>
-            </div>
-            <div
-              class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
-              (click)="selectSubcategoryFilter('other', 'clothes')"
-            >
-              <span class="text-green-500 mr-2">🔸</span>
-              <span>Clothes</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Active Filter Indicator -->
-    <div *ngIf="activeCategory" class="mt-4 flex items-center text-sm">
-      <span class="text-gray-600">Browsing:</span>
-      <span class="ml-2 bg-gray-200 px-3 py-1 rounded-full flex items-center">
-        {{ activeCategory }} > {{ activeSubcategory }}
-        <button
-          class="ml-1 text-gray-500 hover:text-red-500"
-          (click)="clearFilters()"
-        >
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
-          </svg>
-        </button>
-      </span>
-    </div>
-  </div>
-
-  <!-- Recommend, search and sell Section -->
-  <div class="container mx-auto" *ngIf="!isContentHidden">
-    <div class="flex items-center justify-between mb-4">
-      <p class="text-left pl-6 text-lg font-semibold">Recommended For You</p>
-      <div class="flex space-x-2">
-        <!-- Search Container -->
-        <div class="relative flex-grow">
-          <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-          >
-            <!-- Search Icon -->
+            <span class="flex items-center">
+              <span class="text-2xl mr-2">🐱</span>
+              <span class="text-gray-800">Cat</span>
+            </span>
             <svg
-              class="w-5 h-5 text-gray-500"
+              class="w-5 h-5 ml-2 transform transition-transform"
+              [ngClass]="{ 'rotate-180': isCatExpanded }"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                d="M19 9l-7 7-7-7"
               ></path>
             </svg>
+          </button>
+          <div
+            class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
+            [ngClass]="{
+              'opacity-100 scale-100': isCatExpanded,
+              'opacity-0 scale-95 pointer-events-none': !isCatExpanded
+            }"
+          >
+            <div
+              class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]"
+            >
+              <div
+                class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('cat', 'accessories')"
+              >
+                <span class="text-purple-500 mr-2">🔸</span>
+                <span>Accessories</span>
+              </div>
+              <div
+                class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('cat', 'toys')"
+              >
+                <span class="text-purple-500 mr-2">🔸</span>
+                <span>Toys</span>
+              </div>
+              <div
+                class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('cat', 'clothes')"
+              >
+                <span class="text-purple-500 mr-2">🔸</span>
+                <span>Clothes</span>
+              </div>
+            </div>
           </div>
-          <input
-            type="text"
-            placeholder="Search items..."
-            class="w-96 pl-10 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <!-- Sell Button -->
-        <button
-          class="bg-red-500 text-white rounded-lg px-4 py-2 hover:bg-red-600 transition-colors"
-          (click)="toggleContent()"
-        >
-          Sell
-        </button>
-      </div>
-    </div>
-
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
-      *ngIf="!isContentHidden"
-    >
-      <!-- Product Item -->
-      <div
-        *ngFor="let product of products"
-        class="rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-        (click)="navigateToProduct(product)"
-      >
-        <img
-          class="w-full h-48 object-cover"
-          [src]="product?.img"
-          [alt]="product?.name"
-        />
-        <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
-          {{ product?.name }}
-        </h3>
-        <p class="text-gray-600 text-left">${{ product?.price }}</p>
-        <p class="text-black text-left">{{ product?.user }}</p>
-        <p class="text-gray-600 text-left">{{ product?.condition }}</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Item Listing Section - Only shown when sell button is clicked -->
-<div class="container mx-auto mt-4" *ngIf="isContentHidden">
-  <div
-    class="bg-white rounded-lg w-full max-w-4xl mx-auto p-6 shadow-lg relative"
-  >
-    <!-- Close Button -->
-    <button
-      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-      (click)="toggleContent()"
-    >
-      <svg
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"
-        ></path>
-      </svg>
-    </button>
-
-    <!-- Form Header -->
-    <h2 class="text-2xl font-bold mb-6 text-center">List an Item</h2>
-
-    <!-- Progress Indicator -->
-    <div class="mb-8">
-      <div class="flex justify-between mb-2">
-        <span
-          [ngClass]="{
-            'font-bold text-red-500': currentStep === 1,
-            'text-gray-500': currentStep !== 1
-          }"
-          >Upload Photos</span
-        >
-        <span
-          [ngClass]="{
-            'font-bold text-red-500': currentStep === 2,
-            'text-gray-500': currentStep !== 2
-          }"
-          >Select Category</span
-        >
-        <span
-          [ngClass]="{
-            'font-bold text-red-500': currentStep === 3,
-            'text-gray-500': currentStep !== 3
-          }"
-          >Item Details</span
-        >
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2">
-        <div
-          class="bg-red-500 h-2 rounded-full"
-          [style.width]="(currentStep / 3) * 100 + '%'"
-        ></div>
-      </div>
-    </div>
-
-    <!-- Step 1: Photo Upload -->
-    <div *ngIf="currentStep === 1" class="mb-6">
-      <h3 class="text-lg font-semibold mb-4">Upload Photos (Required)</h3>
-      <p class="text-gray-600 mb-4">
-        Please upload at least one photo to continue (maximum 10)
-      </p>
-
-      <div class="grid grid-cols-5 gap-4">
-        <!-- Upload Box -->
-        <div
-          *ngIf="uploadedPhotos.length < 10"
-          class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-red-500 transition-colors"
-          (click)="triggerFileInput()"
-        >
-          <svg
-            class="w-8 h-8 text-gray-400 mb-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            ></path>
-          </svg>
-          <span class="text-sm text-gray-500">Add Photo</span>
-          <input
-            type="file"
-            #fileInput
-            hidden
-            accept="image/*"
-            (change)="onFileSelected($event)"
-            multiple
-          />
         </div>
 
-        <!-- Uploaded Photos -->
-        <div
-          *ngFor="let photo of uploadedPhotos; let i = index"
-          class="relative h-32 rounded-lg overflow-hidden"
-        >
-          <img
-            [src]="photo.url"
-            alt="Uploaded photo"
-            class="w-full h-full object-cover"
-          />
+        <!-- Other Category - Enhanced -->
+        <div class="relative group">
           <button
-            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-            (click)="removePhoto(i)"
+            class="flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
+            (click)="toggleCategory('other')"
           >
-            ✕
+            <span class="flex items-center">
+              <span class="text-2xl mr-2">🐾</span>
+              <span class="text-gray-800">Other</span>
+            </span>
+            <svg
+              class="w-5 h-5 ml-2 transform transition-transform"
+              [ngClass]="{ 'rotate-180': isOtherExpanded }"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </button>
+          <div
+            class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
+            [ngClass]="{
+              'opacity-100 scale-100': isOtherExpanded,
+              'opacity-0 scale-95 pointer-events-none': !isOtherExpanded
+            }"
+          >
+            <div
+              class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]"
+            >
+              <div
+                class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('other', 'accessories')"
+              >
+                <span class="text-green-500 mr-2">🔸</span>
+                <span>Accessories</span>
+              </div>
+              <div
+                class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('other', 'toys')"
+              >
+                <span class="text-green-500 mr-2">🔸</span>
+                <span>Toys</span>
+              </div>
+              <div
+                class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('other', 'clothes')"
+              >
+                <span class="text-green-500 mr-2">🔸</span>
+                <span>Clothes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Filter Indicator -->
+      <div *ngIf="activeCategory" class="mt-4 flex items-center text-sm">
+        <span class="text-gray-600">Browsing:</span>
+        <span class="ml-2 bg-gray-200 px-3 py-1 rounded-full flex items-center">
+          {{ activeCategory }} > {{ activeSubcategory }}
+          <button
+            class="ml-1 text-gray-500 hover:text-red-500"
+            (click)="clearFilters()"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Recommend, search and sell Section -->
+    <div class="container mx-auto" *ngIf="!isContentHidden">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-left pl-6 text-lg font-semibold">Recommended For You</p>
+        <div class="flex space-x-2">
+          <!-- Search Container -->
+          <div class="relative flex-grow">
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            >
+              <!-- Search Icon -->
+              <svg
+                class="w-5 h-5 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search items..."
+              class="w-96 pl-10 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <!-- Sell Button -->
+          <button
+            class="bg-red-500 text-white rounded-lg px-4 py-2 hover:bg-red-600 transition-colors"
+            (click)="toggleContent()"
+          >
+            Sell
           </button>
         </div>
       </div>
 
-      <div class="mt-6 flex justify-between">
-        <span></span>
-        <!-- Spacer for alignment -->
-        <button
-          [disabled]="uploadedPhotos.length === 0"
-          [ngClass]="{
-            'bg-red-500 hover:bg-red-600': uploadedPhotos.length > 0,
-            'bg-gray-300 cursor-not-allowed': uploadedPhotos.length === 0
-          }"
-          class="px-6 py-2 rounded-lg text-white transition-colors"
-          (click)="nextStep()"
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+        *ngIf="!isContentHidden"
+      >
+        <!-- Product Item -->
+        <div
+          *ngFor="let product of products"
+          class="rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+          (click)="navigateToProduct(product)"
         >
-          Next
-        </button>
+          <img
+            class="w-full h-48 object-cover"
+            [src]="product?.img"
+            [alt]="product?.name"
+          />
+          <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
+            {{ product?.name }}
+          </h3>
+          <p class="text-gray-600 text-left">${{ product?.price }}</p>
+          <p class="text-black text-left">{{ product?.user }}</p>
+          <p class="text-gray-600 text-left">{{ product?.condition }}</p>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Step 2: Category Selection -->
-    <div *ngIf="currentStep === 2" class="mb-6">
-      <h3 class="text-lg font-semibold mb-4">Select Category</h3>
-
-      <!-- Main Categories -->
-      <div class="grid grid-cols-3 gap-4 mb-6">
-        <div
-          *ngFor="let category of mainCategories"
-          [ngClass]="{
-            'border-red-500 bg-red-50': selectedCategory === category.value,
-            'border-gray-200': selectedCategory !== category.value
-          }"
-          class="border-2 rounded-lg p-4 flex flex-col items-center cursor-pointer hover:border-red-300 transition-colors"
-          (click)="selectCategory(category.value)"
+  <!-- Item Listing Section - Only shown when sell button is clicked -->
+  <div class="container mx-auto mt-4" *ngIf="isContentHidden">
+    <div
+      class="bg-white rounded-lg w-full max-w-4xl mx-auto p-6 shadow-lg relative"
+    >
+      <!-- Close Button -->
+      <button
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        (click)="toggleContent()"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <span class="text-2xl mb-2">{{ category.icon }}</span>
-          <span class="font-medium">{{ category.label }}</span>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+
+      <!-- Form Header -->
+      <h2 class="text-2xl font-bold mb-6 text-center">List an Item</h2>
+
+      <!-- Progress Indicator -->
+      <div class="mb-8">
+        <div class="flex justify-between mb-2">
+          <span
+            [ngClass]="{
+              'font-bold text-red-500': currentStep === 1,
+              'text-gray-500': currentStep !== 1
+            }"
+            >Upload Photos</span
+          >
+          <span
+            [ngClass]="{
+              'font-bold text-red-500': currentStep === 2,
+              'text-gray-500': currentStep !== 2
+            }"
+            >Select Category</span
+          >
+          <span
+            [ngClass]="{
+              'font-bold text-red-500': currentStep === 3,
+              'text-gray-500': currentStep !== 3
+            }"
+            >Item Details</span
+          >
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div
+            class="bg-red-500 h-2 rounded-full"
+            [style.width]="(currentStep / 3) * 100 + '%'"
+          ></div>
         </div>
       </div>
 
-      <!-- Subcategories (only shown when main category is selected) -->
-      <div *ngIf="selectedCategory">
-        <h4 class="text-md font-medium mb-3">Select Subcategory</h4>
-        <div class="grid grid-cols-3 gap-4">
+      <!-- Step 1: Photo Upload -->
+      <div *ngIf="currentStep === 1" class="mb-6">
+        <h3 class="text-lg font-semibold mb-4">Upload Photos (Required)</h3>
+        <p class="text-gray-600 mb-4">
+          Please upload at least one photo to continue (maximum 10)
+        </p>
+
+        <div class="grid grid-cols-5 gap-4">
+          <!-- Upload Box -->
           <div
-            *ngFor="let subcategory of subcategories"
-            [ngClass]="{
-              'border-red-500 bg-red-50':
-                selectedSubcategory === subcategory.value,
-              'border-gray-200': selectedSubcategory !== subcategory.value
-            }"
-            class="border-2 rounded-lg p-3 text-center cursor-pointer hover:border-red-300 transition-colors"
-            (click)="selectSubcategory(subcategory.value)"
+            *ngIf="uploadedPhotos.length < 10"
+            class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-red-500 transition-colors"
+            (click)="triggerFileInput()"
           >
-            {{ subcategory.label }}
+            <svg
+              class="w-8 h-8 text-gray-400 mb-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              ></path>
+            </svg>
+            <span class="text-sm text-gray-500">Add Photo</span>
+            <input
+              type="file"
+              #fileInput
+              hidden
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              multiple
+            />
+          </div>
+
+          <!-- Uploaded Photos -->
+          <div
+            *ngFor="let photo of uploadedPhotos; let i = index"
+            class="relative h-32 rounded-lg overflow-hidden"
+          >
+            <img
+              [src]="photo.url"
+              alt="Uploaded photo"
+              class="w-full h-full object-cover"
+            />
+            <button
+              class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+              (click)="removePhoto(i)"
+            >
+              ✕
+            </button>
           </div>
         </div>
+
+        <div class="mt-6 flex justify-between">
+          <span></span>
+          <!-- Spacer for alignment -->
+          <button
+            [disabled]="uploadedPhotos.length === 0"
+            [ngClass]="{
+              'bg-red-500 hover:bg-red-600': uploadedPhotos.length > 0,
+              'bg-gray-300 cursor-not-allowed': uploadedPhotos.length === 0
+            }"
+            class="px-6 py-2 rounded-lg text-white transition-colors"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+        </div>
       </div>
 
-      <div class="mt-6 flex justify-between">
-        <button
-          class="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
-          (click)="previousStep()"
-        >
-          Back
-        </button>
-        <button
-          [disabled]="!selectedCategory || !selectedSubcategory"
-          [ngClass]="{
-            'bg-red-500 hover:bg-red-600':
-              selectedCategory && selectedSubcategory,
-            'bg-gray-300 cursor-not-allowed':
-              !selectedCategory || !selectedSubcategory
-          }"
-          class="px-6 py-2 rounded-lg text-white transition-colors"
-          (click)="nextStep()"
-        >
-          Next
-        </button>
-      </div>
-    </div>
+      <!-- Step 2: Category Selection -->
+      <div *ngIf="currentStep === 2" class="mb-6">
+        <h3 class="text-lg font-semibold mb-4">Select Category</h3>
 
-    <!-- Step 3: Item Details -->
-    <div *ngIf="currentStep === 3" class="mb-6">
-      <form [formGroup]="listingForm" (ngSubmit)="submitListing()">
-        <!-- Condition Section -->
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-4">Condition</h3>
-          <div class="grid grid-cols-5 gap-3">
+        <!-- Main Categories -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div
+            *ngFor="let category of mainCategories"
+            [ngClass]="{
+              'border-red-500 bg-red-50': selectedCategory === category.value,
+              'border-gray-200': selectedCategory !== category.value
+            }"
+            class="border-2 rounded-lg p-4 flex flex-col items-center cursor-pointer hover:border-red-300 transition-colors"
+            (click)="selectCategory(category.value)"
+          >
+            <span class="text-2xl mb-2">{{ category.icon }}</span>
+            <span class="font-medium">{{ category.label }}</span>
+          </div>
+        </div>
+
+        <!-- Subcategories (only shown when main category is selected) -->
+        <div *ngIf="selectedCategory">
+          <h4 class="text-md font-medium mb-3">Select Subcategory</h4>
+          <div class="grid grid-cols-3 gap-4">
             <div
-              *ngFor="let condition of conditions"
+              *ngFor="let subcategory of subcategories"
               [ngClass]="{
                 'border-red-500 bg-red-50':
-                  listingForm.get('condition')?.value === condition.value,
-                'border-gray-200':
-                  listingForm.get('condition')?.value !== condition.value
+                  selectedSubcategory === subcategory.value,
+                'border-gray-200': selectedSubcategory !== subcategory.value
               }"
               class="border-2 rounded-lg p-3 text-center cursor-pointer hover:border-red-300 transition-colors"
-              (click)="setCondition(condition.value)"
+              (click)="selectSubcategory(subcategory.value)"
             >
-              {{ condition.label }}
-            </div>
-          </div>
-          <div
-            *ngIf="showValidationError('condition')"
-            class="text-red-500 text-sm mt-1"
-          >
-            Please select a condition
-          </div>
-        </div>
-
-        <!-- Item Details Section -->
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-4">Item Details</h3>
-
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" for="title"
-              >Listing Title*</label
-            >
-            <input
-              type="text"
-              id="title"
-              formControlName="title"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              placeholder="What are you selling?"
-            />
-            <div
-              *ngIf="showValidationError('title')"
-              class="text-red-500 text-sm mt-1"
-            >
-              Please enter a title for your listing
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" for="description"
-              >Description (Optional)</label
-            >
-            <textarea
-              id="description"
-              formControlName="description"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              rows="4"
-              placeholder="Describe your item, include details that would be helpful for buyers"
-            ></textarea>
-          </div>
-        </div>
-
-        <!-- Price Section -->
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-4">Price</h3>
-
-          <div class="mb-4 flex items-center">
-            <label class="inline-flex items-center mr-6">
-              <input
-                type="radio"
-                formControlName="priceType"
-                value="sale"
-                class="form-radio h-5 w-5 text-red-500"
-              />
-              <span class="ml-2">For Sale</span>
-            </label>
-            <label class="inline-flex items-center">
-              <input
-                type="radio"
-                formControlName="priceType"
-                value="free"
-                class="form-radio h-5 w-5 text-red-500"
-              />
-              <span class="ml-2">For Free</span>
-            </label>
-          </div>
-
-          <div
-            *ngIf="listingForm.get('priceType')?.value === 'sale'"
-            class="mb-4"
-          >
-            <label class="block text-gray-700 mb-2" for="price"
-              >Price ($)*</label
-            >
-            <input
-              type="number"
-              id="price"
-              formControlName="price"
-              min="0.01"
-              step="0.01"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              placeholder="0.00"
-            />
-            <div
-              *ngIf="showValidationError('price')"
-              class="text-red-500 text-sm mt-1"
-            >
-              Please enter a valid price
+              {{ subcategory.label }}
             </div>
           </div>
         </div>
 
-        <div class="flex justify-between">
+        <div class="mt-6 flex justify-between">
           <button
-            type="button"
             class="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
             (click)="previousStep()"
           >
             Back
           </button>
           <button
-            type="submit"
-            [disabled]="listingForm.invalid"
+            [disabled]="!selectedCategory || !selectedSubcategory"
             [ngClass]="{
-              'bg-red-500 hover:bg-red-600': listingForm.valid,
-              'bg-gray-300 cursor-not-allowed': listingForm.invalid
+              'bg-red-500 hover:bg-red-600':
+                selectedCategory && selectedSubcategory,
+              'bg-gray-300 cursor-not-allowed':
+                !selectedCategory || !selectedSubcategory
             }"
             class="px-6 py-2 rounded-lg text-white transition-colors"
+            (click)="nextStep()"
           >
-            List Item
+            Next
           </button>
         </div>
-      </form>
+      </div>
+
+      <!-- Step 3: Item Details -->
+      <div *ngIf="currentStep === 3" class="mb-6">
+        <form [formGroup]="listingForm" (ngSubmit)="submitListing()">
+          <!-- Condition Section -->
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-4">Condition</h3>
+            <div class="grid grid-cols-5 gap-3">
+              <div
+                *ngFor="let condition of conditions"
+                [ngClass]="{
+                  'border-red-500 bg-red-50':
+                    listingForm.get('condition')?.value === condition.value,
+                  'border-gray-200':
+                    listingForm.get('condition')?.value !== condition.value
+                }"
+                class="border-2 rounded-lg p-3 text-center cursor-pointer hover:border-red-300 transition-colors"
+                (click)="setCondition(condition.value)"
+              >
+                {{ condition.label }}
+              </div>
+            </div>
+            <div
+              *ngIf="showValidationError('condition')"
+              class="text-red-500 text-sm mt-1"
+            >
+              Please select a condition
+            </div>
+          </div>
+
+          <!-- Item Details Section -->
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-4">Item Details</h3>
+
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2" for="title"
+                >Listing Title*</label
+              >
+              <input
+                type="text"
+                id="title"
+                formControlName="title"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="What are you selling?"
+              />
+              <div
+                *ngIf="showValidationError('title')"
+                class="text-red-500 text-sm mt-1"
+              >
+                Please enter a title for your listing
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2" for="description"
+                >Description (Optional)</label
+              >
+              <textarea
+                id="description"
+                formControlName="description"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                rows="4"
+                placeholder="Describe your item, include details that would be helpful for buyers"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Delivery Options Section -->
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-4">Delivery Options</h3>
+            <div class="space-y-3">
+              <div
+                *ngFor="let option of deliveryOptions"
+                [ngClass]="{
+                  'border-red-500 bg-red-50': listingForm
+                    .get('deliveryOptions')
+                    ?.value?.includes(option.value)
+                }"
+                class="border-2 rounded-lg p-4 cursor-pointer hover:border-red-300 transition-colors flex items-center justify-between"
+                (click)="toggleDeliveryOption(option.value)"
+              >
+                <span class="flex items-center">
+                  <span class="mr-3">{{ option.label }}</span>
+                </span>
+                <svg
+                  *ngIf="
+                    listingForm
+                      .get('deliveryOptions')
+                      ?.value?.includes(option.value)
+                  "
+                  class="w-6 h-6 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div
+              *ngIf="showValidationError('deliveryOptions')"
+              class="text-red-500 text-sm mt-1"
+            >
+              Please select at least one delivery option
+            </div>
+          </div>
+
+          <!-- Price Section -->
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-4">Price</h3>
+
+            <div class="mb-4 flex items-center">
+              <label class="inline-flex items-center mr-6">
+                <input
+                  type="radio"
+                  formControlName="priceType"
+                  value="sale"
+                  class="form-radio h-5 w-5 text-red-500"
+                />
+                <span class="ml-2">For Sale</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  formControlName="priceType"
+                  value="free"
+                  class="form-radio h-5 w-5 text-red-500"
+                />
+                <span class="ml-2">For Free</span>
+              </label>
+            </div>
+
+            <div
+              *ngIf="listingForm.get('priceType')?.value === 'sale'"
+              class="mb-4"
+            >
+              <label class="block text-gray-700 mb-2" for="price"
+                >Price ($)*</label
+              >
+              <input
+                type="number"
+                id="price"
+                formControlName="price"
+                min="0.01"
+                step="0.01"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="0.00"
+              />
+              <div
+                *ngIf="showValidationError('price')"
+                class="text-red-500 text-sm mt-1"
+              >
+                Please enter a valid price
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <button
+              type="button"
+              class="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
+              (click)="previousStep()"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              [disabled]="listingForm.invalid"
+              [ngClass]="{
+                'bg-red-500 hover:bg-red-600': listingForm.valid,
+                'bg-gray-300 cursor-not-allowed': listingForm.invalid
+              }"
+              class="px-6 py-2 rounded-lg text-white transition-colors"
+            >
+              List Item
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
