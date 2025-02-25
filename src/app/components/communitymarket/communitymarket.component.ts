@@ -43,6 +43,8 @@ export class CommunitymarketComponent {
   uploadedPhotos: UploadedPhoto[] = [];
   selectedCategory: string | null = null;
   selectedSubcategory: string | null = null;
+  isContentHidden = false;
+
 
   // Define categories and conditions
   mainCategories = [
@@ -63,6 +65,8 @@ export class CommunitymarketComponent {
     { value: 'wellUsed', label: 'Well Used' },
     { value: 'heavilyUsed', label: 'Heavily Used' }
   ];
+
+  private originalProducts: Product[] = [];
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.listingForm = this.fb.group({
@@ -91,6 +95,8 @@ export class CommunitymarketComponent {
       { id: '3', img: '/dogpillow.jpg', name: 'Dog Pillow', price: 120.00, user: 'John', condition: 'Used', category: 'dog', subcategory: 'accessories' },
       { id: '4', img: '/dogbone.jpg', name: 'Dog Bone Toy', price: 100.00, user: 'Ash', condition: 'Used', category: 'dog', subcategory: 'toys' }
     ];
+
+    this.originalProducts = [...this.products];
   }
   
   showValidationError(field: string): boolean {
@@ -152,18 +158,19 @@ export class CommunitymarketComponent {
   clearFilters() {
     this.activeCategory = null;
     this.activeSubcategory = null;
-    this.products = [...this.products];
+    this.products = [...this.originalProducts];
   }
 
   // Listing form methods
-  openListingForm() {
-    this.showListingForm = true;
+  toggleContent() {
+    this.isContentHidden = !this.isContentHidden;
+  if (this.isContentHidden) {
+    // Reset the form when opening it
     this.currentStep = 1;
     this.resetListingForm();
+    // Scroll to the top of the page to show the form below the banner
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  
-  closeListingForm() {
-    this.showListingForm = false;
   }
   
   resetListingForm() {
@@ -256,9 +263,11 @@ export class CommunitymarketComponent {
       
       // Add to products list
       this.products.unshift(newProduct);
+
+      this.originalProducts.unshift(newProduct);
       
       // Reset and close the form
-      this.closeListingForm();
+      this.toggleContent();
       
       // Show a success message (in a real app, this would be a more sophisticated notification)
       alert('Your item has been listed successfully!');
