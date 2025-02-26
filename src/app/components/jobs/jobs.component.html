@@ -1,46 +1,50 @@
 <app-banner></app-banner>
 
 <div class="container mx-auto px-4 py-8">
-    <!-- Main Sections Container -->
-    <div class="flex flex-wrap justify-center gap-8 mb-8" *ngIf="!showListingForm">
-      <!-- Category Selector Section -->
-      <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold mb-4">Service Category</h2>
-        <select 
-          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          (change)="onCategoryChange($event)">
-          <option value="">Select a category</option>
-          <option *ngFor="let category of serviceCategories" [value]="category">
-            {{category}}
-          </option>
-        </select>
-      </div>
-  
-      <!-- Location Search Section -->
-      <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold mb-4">Location</h2>
-        <div class="relative">
-          <input 
-            type="text" 
-            placeholder="Search location..."
-            class="w-full pl-10 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-            (input)="onLocationSearch($event)">
-          <svg class="w-5 h-5 text-gray-500 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-        </div>
-      </div>
-  
-      <!-- Request Service Section -->
-      <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold mb-4">Request Service</h2>
-        <button 
-          (click)="toggleListingForm()"
-          class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
-          Add New Listing
-        </button>
+  <!-- Main Sections Container -->
+  <div class="flex flex-wrap justify-center gap-8 mb-8" *ngIf="!showListingForm">
+    <!-- Category Selector Section -->
+    <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
+      <h2 class="text-lg font-semibold mb-4">Service Category</h2>
+      <select 
+        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+        (change)="onCategoryChange($event)"
+        [(ngModel)]="selectedCategory">
+        <option value="">All Categories</option>
+        <option *ngFor="let category of serviceCategories" [value]="category">
+          {{category}}
+        </option>
+      </select>
+    </div>
+
+    <!-- Location Search Section -->
+    <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
+      <h2 class="text-lg font-semibold mb-4">Location</h2>
+      <div class="relative">
+        <input 
+          type="text" 
+          placeholder="Search location..."
+          class="w-full pl-10 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="searchLocation"
+          (input)="onLocationSearch($event)">
+        <svg class="w-5 h-5 text-gray-500 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
       </div>
     </div>
+
+    <!-- Request Service Section -->
+    <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
+      <h2 class="text-lg font-semibold mb-4">Request Service</h2>
+      <button 
+        (click)="toggleListingForm()"
+        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
+        Add New Listing
+      </button>
+    </div>
+  </div>
+
+  
   
     <!-- Service Listing Form -->
     <div *ngIf="showListingForm" class="inset-0 bg-opacity-50 flex items-center justify-center z-50">
@@ -50,27 +54,52 @@
         <form [formGroup]="listingForm" (ngSubmit)="submitListing()" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-            <select formControlName="category" class="w-full p-2 border rounded-lg">
+            <select formControlName="category" class="w-full p-2 border rounded-lg" [ngClass]="{'border-red-500': showError('category')}">
               <option value="">Select a category</option>
               <option *ngFor="let category of serviceCategories" [value]="category">
                 {{category}}
               </option>
             </select>
+            <p *ngIf="showError('category')" class="mt-1 text-sm text-red-600">
+              Please select a category
+            </p>
           </div>
-  
+        
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Detail</label>
-            <textarea formControlName="detail" rows="3" class="w-full p-2 border rounded-lg"></textarea>
+            <textarea 
+              formControlName="detail" 
+              rows="3" 
+              class="w-full p-2 border rounded-lg"
+              [ngClass]="{'border-red-500': showError('detail')}">
+            </textarea>
+            <p *ngIf="showError('detail')" class="mt-1 text-sm text-red-600">
+              Please provide service details
+            </p>
           </div>
-  
+        
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-            <input type="text" formControlName="address" class="w-full p-2 border rounded-lg">
+            <input 
+              type="text" 
+              formControlName="address" 
+              class="w-full p-2 border rounded-lg"
+              [ngClass]="{'border-red-500': showError('address')}">
+            <p *ngIf="showError('address')" class="mt-1 text-sm text-red-600">
+              Please provide an address
+            </p>
           </div>
-  
+        
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-            <input type="tel" formControlName="phoneNumber" class="w-full p-2 border rounded-lg">
+            <input 
+              type="tel" 
+              formControlName="phoneNumber" 
+              class="w-full p-2 border rounded-lg"
+              [ngClass]="{'border-red-500': showError('phoneNumber')}">
+            <p *ngIf="showError('phoneNumber')" class="mt-1 text-sm text-red-600">
+              Please provide a valid 8-digit phone number
+            </p>
           </div>
   
           <div>
@@ -90,9 +119,16 @@
   
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Hourly Rate ($)</label>
-            <input type="number" formControlName="hourRate" class="w-full p-2 border rounded-lg">
+            <input 
+              type="number" 
+              formControlName="hourRate" 
+              class="w-full p-2 border rounded-lg"
+              [ngClass]="{'border-red-500': showError('hourRate')}">
+            <p *ngIf="showError('hourRate')" class="mt-1 text-sm text-red-600">
+              Please provide a valid hourly rate
+            </p>
           </div>
-  
+        
           <div class="flex gap-4 mt-6">
             <button 
               type="submit"
@@ -110,7 +146,7 @@
       </div>
     </div>
 
-    <div class="mt-8">
+    <div class="mt-8" *ngIf="!showListingForm">
       <h2 class="text-2xl font-bold mb-6">Available Jobs</h2>
       
       <!-- Listings Container -->
