@@ -68,16 +68,16 @@ export class ProfileComponent {
   //     localStorage.getItem('contactNo') ||
   //     sessionStorage.getItem('contactNo') ||
   //     '';
-  //   const address =
-  //     localStorage.getItem('address') ||
-  //     sessionStorage.getItem('address') ||
+  //   const address1 =
+  //     localStorage.getItem('address1') ||
+  //     sessionStorage.getItem('address1') ||
   //     '';
 
   //   return (
   //     username.trim() !== '' &&
   //     gender.trim() !== '' &&
   //     contactNo.trim() !== '' &&
-  //     address.trim() !== ''
+  //     address1.trim() !== ''
   //   );
   // }
 

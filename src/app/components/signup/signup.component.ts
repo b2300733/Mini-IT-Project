@@ -57,6 +57,10 @@ export class SignupComponent {
       this.errorMessage = 'Passwords do not match.';
       return false;
     }
+    if (!this.isGmailAddress(this.email)) {
+      this.errorMessage = 'Email must be a @gmail.com address.';
+      return false;
+    }
     this.errorMessage = '';
     return true;
   }
@@ -120,6 +124,11 @@ export class SignupComponent {
         this.showAlert('error', 'Signup failed! Please try again 😢');
       }
     );
+  }
+
+  isGmailAddress(email: string): boolean {
+    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    return gmailPattern.test(email);
   }
 
   showAlert(type: 'success' | 'error', message: string) {
