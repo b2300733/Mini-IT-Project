@@ -4,13 +4,13 @@
   <div class="flex flex-col lg:flex-row gap-8">
     <!-- Left Column - Product Image -->
     <div class="lg:w-1/2">
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <img [src]="'/images/' + product.image" 
-               [alt]="product.title"
-               class="w-full h-[500px] object-cover"
-               onerror="this.src='/images/placeholder.jpg'">
-        </div>
+      <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+        <img [src]="product.image" 
+             [alt]="product.title"
+             class="w-full h-[500px] object-cover"
+             onerror="this.src='assets/placeholder.jpg'">
       </div>
+    </div>
 
     <!-- Right Column - Product Details -->
     <div class="lg:w-1/2 space-y-6">

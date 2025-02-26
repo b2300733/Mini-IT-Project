@@ -59,7 +59,7 @@ const routes: Routes = [
     component: ShoppageComponent,
   },
   {
-    path: 'shopproduct',
+    path: 'shop-product',
     component: ShopproductpageComponent,
   },
 ];
