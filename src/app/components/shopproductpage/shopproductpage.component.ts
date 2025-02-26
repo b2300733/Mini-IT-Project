@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-interface Product {
+interface ShopProduct {
   id: string;
   title: string;
   price: number;
@@ -28,7 +28,7 @@ interface Review {
   styleUrls: ['./shopproductpage.component.css']
 })
 export class ShopproductpageComponent implements OnInit {
-  product: Product = {
+  product: ShopProduct = {
     id: '',
     title: '',
     price: 0,
