@@ -29,6 +29,7 @@ export class JobsComponent {
   selectedCategory: string = '';
   searchLocation: string = '';
   showListingForm: boolean = false;
+  private originalListings: ServiceListing[] = [];
 
   listings: ServiceListing[] = [
     {
@@ -76,14 +77,31 @@ export class JobsComponent {
       note: [''],
       hourRate: ['', [Validators.required, Validators.min(0)]]
     });
+    this.originalListings = [...this.listings];
   }
 
   onCategoryChange(event: any) {
     this.selectedCategory = event.target.value;
+    this.filterListings();
   }
 
   onLocationSearch(event: any) {
-    this.searchLocation = event.target.value;
+    this.searchLocation = event.target.value.toLowerCase();
+    this.filterListings();
+  }
+
+  private filterListings() {
+    this.listings = this.originalListings.filter(listing => {
+      const matchesCategory = !this.selectedCategory || listing.category === this.selectedCategory;
+      const matchesLocation = !this.searchLocation || listing.address.toLowerCase().includes(this.searchLocation);
+      return matchesCategory && matchesLocation;
+    });
+  }
+
+  clearFilters() {
+    this.selectedCategory = '';
+    this.searchLocation = '';
+    this.listings = [...this.originalListings];
   }
 
   toggleListingForm() {
@@ -92,10 +110,47 @@ export class JobsComponent {
 
   submitListing() {
     if (this.listingForm.valid) {
-      console.log(this.listingForm.value);
-      // Add your submission logic here
+      // Create new listing from form values
+      const newListing: ServiceListing = {
+        category: this.listingForm.value.category,
+        detail: this.listingForm.value.detail,
+        address: this.listingForm.value.address,
+        phoneNumber: this.listingForm.value.phoneNumber,
+        ownerName: this.listingForm.value.ownerName,
+        petName: this.listingForm.value.petName,
+        note: this.listingForm.value.note,
+        hourRate: this.listingForm.value.hourRate
+      };
+
+      // Add to both lists
+      this.listings.unshift(newListing);
+      this.originalListings.unshift(newListing);
+
+      // Show success message
+      alert('Service listing created successfully!');
+
+      // Reset form and close
       this.listingForm.reset();
       this.showListingForm = false;
+
+      // Reapply any active filters
+      if (this.selectedCategory || this.searchLocation) {
+        this.filterListings();
+      }
+    } else {
+      // Show validation errors
+      Object.keys(this.listingForm.controls).forEach(key => {
+        const control = this.listingForm.get(key);
+        if (control?.invalid) {
+          control.markAsTouched();
+        }
+      });
     }
+  }
+
+  // Add this helper method for form validation
+  showError(fieldName: string): boolean {
+    const field = this.listingForm.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
   }
 }
