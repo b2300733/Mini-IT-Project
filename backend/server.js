@@ -3,17 +3,23 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const path = require("path");
 
 const signupRoute = require("../backend/routes/signup.route");
 const loginRoute = require("../backend/routes/login.route");
 const passport = require("../backend/controllers/auth.controller");
 const authRoutes = require("../backend/routes/auth.route");
 const profileRoute = require("../backend/routes/profile.route");
+const marketRoute = require("./routes/communitymarket.route");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(
+  "/marketImgs",
+  express.static(path.join(__dirname, "public/marketImgs"))
+);
 
 mongoose
   .connect(
@@ -85,6 +91,9 @@ app.use(authRoutes);
 
 //profile get password--------------------------------------------------------------------------------------------
 app.use("/api/profile", profileRoute);
+
+// Market route--------------------------------------------------------------------------------------------
+app.use("/api/market", marketRoute);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
