@@ -8,12 +8,14 @@ interface Product {
   productTitle: string;
   productPrice: number;
   username: string;
+  userAvatar: string;
   condition: string;
   size?: string;
   category?: string;
   subCategory?: string;
   productDesc?: string;
   deliveryOpt?: string[];
+  createdAt: string;
 }
 
 interface UploadedPhoto {
@@ -49,6 +51,8 @@ export class CommunitymarketComponent {
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
     '';
+  email =
+    (localStorage.getItem('email') || sessionStorage.getItem('email')) ?? '';
 
   deliveryOptions = [
     { value: 'meetup', Label: 'Meetup' },
@@ -137,6 +141,7 @@ export class CommunitymarketComponent {
         condition: product.condition,
         img: product.productImg[0],
         user: product.username,
+        avatar: product.userAvatar,
         description: product.productDesc,
         category: product.category,
         deliveryOptions: product.deliveryOpt?.join(','),
@@ -250,6 +255,28 @@ export class CommunitymarketComponent {
     this.fileInput.nativeElement.click();
   }
 
+  calculateTimeAgo(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    now.setHours(now.getHours() + 8);
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+
+    const diffSeconds = Math.floor(diffTime / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+      return `${diffDays} days ago`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hours ago`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} minutes ago`;
+    } else {
+      return `${diffSeconds} seconds ago`;
+    }
+  }
+
   onFileSelected(event: any) {
     const files = event.target.files;
     if (files) {
@@ -337,6 +364,7 @@ export class CommunitymarketComponent {
         this.listingForm.value.deliveryOptions.join(',')
       );
       formData.append('username', this.username);
+      formData.append('userEmail', this.email);
 
       // Append photos
       this.uploadedPhotos.forEach((photo) => {

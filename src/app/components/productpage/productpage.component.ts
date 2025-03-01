@@ -15,7 +15,7 @@ interface Product {
 interface Seller {
   name: string;
   username: string;
-  avatar?: string;
+  avatar: string;
   joinDate: string;
   responseTime: string;
 }
@@ -24,7 +24,7 @@ interface Seller {
   selector: 'app-productpage',
   standalone: false,
   templateUrl: './productpage.component.html',
-  styleUrl: './productpage.component.css'
+  styleUrl: './productpage.component.css',
 })
 export class ProductpageComponent implements OnInit {
   product: Product = {
@@ -35,21 +35,21 @@ export class ProductpageComponent implements OnInit {
     condition: '',
     category: '',
     description: '',
-    deliveryOptions: ['Meetup', 'Delivery available']
+    deliveryOptions: ['Meetup', 'Delivery available'],
   };
 
   seller: Seller = {
     name: '',
     username: '',
-    avatar: 'assets/seller-avatar.jpg',
+    avatar: '',
     joinDate: 'Joined 2 years ago',
-    responseTime: 'Typically responds within 1 hour'
+    responseTime: 'Typically responds within 1 hour',
   };
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.product = {
         id: params['id'] || '',
         title: params['name'] || '',
@@ -58,14 +58,17 @@ export class ProductpageComponent implements OnInit {
         condition: params['condition'] || '',
         category: params['category'] || '',
         description: params['description'] || '',
-        deliveryOptions: params['deliveryOptions'] ? params['deliveryOptions'].split(',') : []
+        deliveryOptions: params['deliveryOptions']
+          ? params['deliveryOptions'].split(',')
+          : [],
       };
-      
+
       this.seller = {
         name: params['user'] || '',
         username: `@${params['user']?.toLowerCase() || 'user'}`,
+        avatar: params['avatar'],
         joinDate: 'Joined 2 years ago',
-        responseTime: 'Typically responds within 1 hour'
+        responseTime: 'Typically responds within 1 hour',
       };
     });
   }
@@ -92,11 +95,11 @@ export class ProductpageComponent implements OnInit {
 
   getConditionLabel(condition: string): string {
     const conditionMap: { [key: string]: string } = {
-      'brandNew': 'Brand New',
-      'likeNew': 'Like New',
-      'lightlyUsed': 'Lightly Used',
-      'wellUsed': 'Well Used',
-      'heavilyUsed': 'Heavily Used'
+      brandNew: 'Brand New',
+      likeNew: 'Like New',
+      lightlyUsed: 'Lightly Used',
+      wellUsed: 'Well Used',
+      heavilyUsed: 'Heavily Used',
     };
     return conditionMap[condition] || condition || 'Not Specified';
   }
@@ -104,18 +107,23 @@ export class ProductpageComponent implements OnInit {
   getCategoryLabel(category: string): string {
     // Match the categories from CommunityMarketComponent
     const mainCategories: { [key: string]: string } = {
-      'dog': 'Dog',
-      'cat': 'Cat',
-      'other': 'Other'
+      dog: 'Dog',
+      cat: 'Cat',
+      other: 'Other',
     };
 
     const subcategories: { [key: string]: string } = {
-      'accessories': 'Accessories',
-      'toys': 'Toys',
-      'clothes': 'Clothes'
+      accessories: 'Accessories',
+      toys: 'Toys',
+      clothes: 'Clothes',
     };
 
-    return (mainCategories[category] || subcategories[category] || category || 'Not Specified');
+    return (
+      mainCategories[category] ||
+      subcategories[category] ||
+      category ||
+      'Not Specified'
+    );
   }
 }
 

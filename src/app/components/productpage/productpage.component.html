@@ -5,10 +5,12 @@
     <!-- Left Column - Product Image -->
     <div class="lg:w-3/5">
       <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-        <img [src]="product.image" 
-             [alt]="product.title"
-             class="w-full h-[500px] object-cover"
-             (error)="handleImageError($event)">
+        <img
+          [src]="product.image"
+          [alt]="product.title"
+          class="w-full h-[500px] object-cover"
+          (error)="handleImageError($event)"
+        />
       </div>
     </div>
 
@@ -16,17 +18,25 @@
     <div class="lg:w-2/5 space-y-6">
       <!-- Product Title and Price -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
-        <h1 class="text-2xl font-semibold text-gray-900">{{ product.title }}</h1>
-        <p class="text-3xl font-bold text-gray-900 mt-2">${{ product.price }}</p>
-        
+        <h1 class="text-2xl font-semibold text-gray-900">
+          {{ product.title }}
+        </h1>
+        <p class="text-3xl font-bold text-gray-900 mt-2">
+          RM{{ product.price }}
+        </p>
+
         <!-- Action Buttons -->
         <div class="flex gap-4 mt-6">
-          <button (click)="makeOffer()" 
-                  class="flex-1 bg-red-500 text-white py-3 rounded-lg font-medium hover:bg-red-600 transition-colors">
+          <button
+            (click)="makeOffer()"
+            class="flex-1 bg-red-500 text-white py-3 rounded-lg font-medium hover:bg-red-600 transition-colors"
+          >
             Make Offer
           </button>
-          <button (click)="startChat()" 
-                  class="flex-1 bg-white text-red-500 py-3 rounded-lg font-medium border-2 border-red-500 hover:bg-red-50 transition-colors">
+          <button
+            (click)="startChat()"
+            class="flex-1 bg-white text-red-500 py-3 rounded-lg font-medium border-2 border-red-500 hover:bg-red-50 transition-colors"
+          >
             Chat
           </button>
         </div>
@@ -36,7 +46,7 @@
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Description</h2>
         <p class="text-gray-700 whitespace-pre-line">
-          {{ product.description || 'No description available' }}
+          {{ product.description || "No description available" }}
         </p>
       </div>
 
@@ -44,9 +54,22 @@
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Delivery Options</h2>
         <div class="space-y-2">
-          <div *ngFor="let option of product.deliveryOptions" class="flex items-center text-gray-700">
-            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          <div
+            *ngFor="let option of product.deliveryOptions"
+            class="flex items-center text-gray-700"
+          >
+            <svg
+              class="w-5 h-5 mr-2 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
             </svg>
             <span>{{ option }}</span>
           </div>
@@ -74,24 +97,26 @@
 
       <!-- Seller Profile -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <img [src]="seller.avatar" 
-                 [alt]="seller.name"
-                 class="w-12 h-12 rounded-full"
-                 (error)="handleAvatarError($event)">
+            <img
+              [src]="seller.avatar"
+              [alt]="seller.username"
+              class="w-12 h-12 rounded-full"
+              (error)="handleAvatarError($event)"
+            />
             <div>
               <h3 class="font-semibold">{{ seller.name }}</h3>
-              <p class="text-sm text-gray-500">{{ seller.username }}</p>
+              <!-- <p class="text-sm text-gray-500">{{ seller.username }}</p> -->
             </div>
           </div>
-          <button (click)="buyNow()" 
-                  class="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">
+          <button
+            (click)="buyNow()"
+            class="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+          >
             Buy Now
           </button>
         </div>
-        
-        
       </div>
     </div>
   </div>
