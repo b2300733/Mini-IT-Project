@@ -22,9 +22,7 @@ app.use(
 );
 
 mongoose
-  .connect(
-    "mongodb+srv://Admin:$$112233@database1.bz4vv.mongodb.net/L-B-DB?retryWrites=true&w=majority&appName=Database1"
-  )
+  .connect(process.env.MongoDB_HOST)
   .then(async () => {
     console.log("connected to database");
 
