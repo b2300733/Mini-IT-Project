@@ -72,8 +72,8 @@ const sendWelcomeEmail = async (email, username) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "[]",
-      clientSecret: "[]",
+      clientID: process.env.ClinetID,
+      clientSecret: process.env.GoogleSec,
       callbackURL: "http://localhost:3000/auth/google/callback",
     },
     async (token, tokenSecret, profile, done) => {
