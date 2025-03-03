@@ -6,11 +6,29 @@
   scroll-behavior: smooth;
 }
 
+@theme {
+  --font-primary: "Palanquin", "sans-serif"; /* title */
+  --font-secondary: "Montserrat", "sans-serif"; /* base */
+}
+
 @layer components {
   .max-container {
     max-width: 1440px;
     margin: 0 auto;
     background-color: red;
+  }
+
+  /* For input when hover or select */
+  .hover-selection {
+    @apply hover:ring-2
+    hover:ring-orange-300
+    hover:border-orange-300
+    ease-in-out
+    duration-300
+    focus:ring-2 
+    focus:ring-orange-700 
+    focus:border-orange-700
+     focus:outline-hidden;
   }
 }
 
