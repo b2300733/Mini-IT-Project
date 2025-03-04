@@ -1,6 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { ProfileService } from '../../../../backend/services/profile.service';
+
+interface Product {
+  productImg: string[];
+  productTitle: string;
+  productPrice: number;
+  username: string;
+  userAvatar: string;
+  condition: string;
+  size?: string;
+  category?: string;
+  subCategory?: string;
+  productDesc?: string;
+  deliveryOpt?: string[];
+  createdAt: string;
+}
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +29,7 @@ export class ProfileComponent {
   newPassword = '';
   errorMessage = '';
   selectedTab: string = 'account';
+  userProducts: any[] = [];
 
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
@@ -57,29 +73,25 @@ export class ProfileComponent {
     this.authToken = this.authToken === 'undefined' ? null : this.authToken;
   }
 
-  // isStorageValid(): boolean {
-  //   const username =
-  //     localStorage.getItem('username') ||
-  //     sessionStorage.getItem('username') ||
-  //     '';
-  //   const gender =
-  //     localStorage.getItem('gender') || sessionStorage.getItem('gender') || '';
-  //   const contactNo =
-  //     localStorage.getItem('contactNo') ||
-  //     sessionStorage.getItem('contactNo') ||
-  //     '';
-  //   const address1 =
-  //     localStorage.getItem('address1') ||
-  //     sessionStorage.getItem('address1') ||
-  //     '';
+  ngOnInit(): void {
+    this.getUserProduct();
+  }
 
-  //   return (
-  //     username.trim() !== '' &&
-  //     gender.trim() !== '' &&
-  //     contactNo.trim() !== '' &&
-  //     address1.trim() !== ''
-  //   );
-  // }
+  getUserProduct(): void {
+    if (!this.email) {
+      console.error('User email not found in storage');
+      return;
+    }
+
+    this.profileService.getListings(this.email).subscribe(
+      (products) => {
+        this.userProducts = products;
+      },
+      (error) => {
+        console.error('Error fetching products', error);
+      }
+    );
+  }
 
   isFormValid(): boolean {
     return (
@@ -198,5 +210,43 @@ export class ProfileComponent {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  calculateTimeAgo(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    now.setHours(now.getHours() + 8);
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+
+    const diffSeconds = Math.floor(diffTime / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+      return `${diffDays} days ago`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hours ago`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} minutes ago`;
+    } else {
+      return `${diffSeconds} seconds ago`;
+    }
+  }
+
+  navigateToProduct(product: Product) {
+    this.router.navigate(['/product'], {
+      queryParams: {
+        name: product.productTitle,
+        price: product.productPrice,
+        condition: product.condition,
+        img: product.productImg[0],
+        user: product.username,
+        avatar: product.userAvatar,
+        description: product.productDesc,
+        category: product.category,
+        deliveryOptions: product.deliveryOpt?.join(','),
+      },
+    });
   }
 }

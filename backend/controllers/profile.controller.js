@@ -1,4 +1,6 @@
 const User = require("../models/user.model");
+const Market = require("../models/communitymarket.model");
+
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer"); //ONLY SUPPORT GMAIL
 
@@ -98,4 +100,25 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { requestPasswordReset, resetPassword, updateProfile };
+const getlistings = async (req, res) => {
+  try {
+    const { userEmail } = req.params;
+
+    if (!userEmail) {
+      return res.status(400).json({ message: "User email is required." });
+    }
+
+    const market = await Market.find({ userEmail });
+
+    res.status(200).json(market);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  requestPasswordReset,
+  resetPassword,
+  updateProfile,
+  getlistings,
+};
