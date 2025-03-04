@@ -5,10 +5,12 @@
     <!-- Left Column - Product Image -->
     <div class="lg:w-1/2">
       <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-        <img [src]="product.image" 
-             [alt]="product.title"
-             class="w-full h-[500px] object-cover"
-             onerror="this.src='assets/placeholder.jpg'">
+        <img
+          [src]="product.image"
+          [alt]="product.title"
+          class="w-full h-[500px] object-cover"
+          onerror="this.src='assets/placeholder.jpg'"
+        />
       </div>
     </div>
 
@@ -17,8 +19,10 @@
       <!-- Brand and Title -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <span class="text-gray-600">{{ product.brand }}</span>
-        <h1 class="text-2xl font-semibold text-gray-900 mt-1">{{ product.title }}</h1>
-        
+        <h1 class="text-2xl font-semibold text-gray-900 mt-1">
+          {{ product.title }}
+        </h1>
+
         <!-- Rating 
         <div class="flex items-center mt-2">
           <div class="flex items-center">
@@ -35,28 +39,30 @@
         <!-- Price and Weight -->
         <div class="mt-4">
           <p class="text-3xl font-bold text-gray-900">${{ product.price }}</p>
-          <p class="text-gray-600 mt-1">Weight: {{ product.weight }}</p>
         </div>
 
         <!-- Quantity and Add to Cart -->
         <div class="mt-6">
           <div class="flex items-center space-x-4">
             <div class="flex items-center border rounded-lg">
-              <button 
+              <button
                 class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                (click)="decreaseQuantity()">
+                (click)="decreaseQuantity()"
+              >
                 -
               </button>
               <span class="px-4 py-2 border-x">{{ quantity }}</span>
-              <button 
+              <button
                 class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                (click)="increaseQuantity()">
+                (click)="increaseQuantity()"
+              >
                 +
               </button>
             </div>
-            <button 
+            <button
               (click)="addToCart()"
-              class="flex-1 bg-red-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-600 transition-colors">
+              class="flex-1 bg-red-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-600 transition-colors"
+            >
               Add to Cart
             </button>
           </div>
@@ -73,9 +79,22 @@
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Product Details</h2>
         <ul class="space-y-2">
-          <li *ngFor="let detail of product.details" class="flex items-center text-gray-700">
-            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          <li
+            *ngFor="let detail of product.details"
+            class="flex items-center text-gray-700"
+          >
+            <svg
+              class="w-5 h-5 mr-2 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
             </svg>
             {{ detail }}
           </li>
