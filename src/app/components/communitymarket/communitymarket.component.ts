@@ -279,6 +279,7 @@ export class CommunitymarketComponent {
 
   onFileSelected(event: any) {
     const files = event.target.files;
+
     if (files) {
       // Ensure we don't exceed 10 photos
       const remainingSlots = 10 - this.uploadedPhotos.length;
@@ -286,6 +287,13 @@ export class CommunitymarketComponent {
 
       for (let i = 0; i < filesToProcess; i++) {
         const file = files[i];
+
+        if (file.size > 3 * 1024 * 1024) {
+          // 3MB limit
+          alert('File size exceeds 3MB! Please upload a smaller file.');
+          return;
+        }
+
         if (file.type.startsWith('image/')) {
           // Create a URL for the image preview
           const reader = new FileReader();
