@@ -48,9 +48,6 @@ export class CommunitymarketComponent {
   activeSubcategories: string[] = [];
   searchQuery: string = '';
 
-  username =
-    (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
-    '';
   email =
     (localStorage.getItem('email') || sessionStorage.getItem('email')) ?? '';
 
@@ -371,7 +368,6 @@ export class CommunitymarketComponent {
         'deliveryOpt',
         this.listingForm.value.deliveryOptions.join(',')
       );
-      formData.append('username', this.username);
       formData.append('userEmail', this.email);
 
       // Append photos

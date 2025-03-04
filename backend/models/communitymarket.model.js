@@ -15,9 +15,7 @@ const marketSchema = new mongoose.Schema(
     subCategory: { type: String, required: true },
     condition: { type: String, required: true },
     deliveryOpt: { type: [String], required: true },
-    username: { type: String, required: true },
     userEmail: { type: String, required: true },
-    userAvatar: { type: String, required: true },
   },
   { timestamps: true }
 );
