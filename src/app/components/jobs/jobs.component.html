@@ -150,51 +150,53 @@
       <h2 class="text-2xl font-bold mb-6">Available Jobs</h2>
       
       <!-- Listings Container -->
-      <div class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Individual Listing -->
         <div *ngFor="let listing of listings" 
-             class="w-full bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div class="flex justify-between items-start">
-            <div class="space-y-2">
-              <div class="flex items-center gap-2">
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                  {{listing.category}}
-                </span>
-                <span class="text-green-600 font-semibold">${{listing.hourRate}}/hr</span>
-              </div>
-              <h3 class="text-lg font-semibold text-gray-900">{{listing.detail}}</h3>
-              
-              <div class="grid grid-cols-2 gap-4 mt-4">
-                <div>
-                  <p class="text-sm text-gray-600">Location</p>
-                  <p class="text-gray-900">{{listing.address}}</p>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-600">Contact</p>
-                  <p class="text-gray-900">{{listing.phoneNumber}}</p>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-600">Pet Owner</p>
-                  <p class="text-gray-900">{{listing.ownerName}}</p>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-600">Pet Name</p>
-                  <p class="text-gray-900">{{listing.petName}}</p>
-                </div>
-              </div>
-    
-              <div class="mt-4">
-                <p class="text-sm text-gray-600">Notes</p>
-                <p class="text-gray-900">{{listing.note}}</p>
-              </div>
+         class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div class="flex flex-col h-full">
+        <div class="flex justify-between items-start mb-4">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                {{listing.category}}
+              </span>
+              <span class="text-green-600 font-semibold">${{listing.hourRate}}/hr</span>
             </div>
-    
-            <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-              Apply
-            </button>
+            <h3 class="text-lg font-semibold text-gray-900">{{listing.detail}}</h3>
           </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mt-4">
+          <div>
+            <p class="text-sm text-gray-600">Location</p>
+            <p class="text-gray-900">{{listing.address}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Contact</p>
+            <p class="text-gray-900">{{listing.phoneNumber}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Pet Owner</p>
+            <p class="text-gray-900">{{listing.ownerName}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Pet Name</p>
+            <p class="text-gray-900">{{listing.petName}}</p>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <p class="text-sm text-gray-600">Notes</p>
+          <p class="text-gray-900">{{listing.note}}</p>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            Apply
+          </button>
         </div>
       </div>
     </div>
-
+  </div>
 </div>
