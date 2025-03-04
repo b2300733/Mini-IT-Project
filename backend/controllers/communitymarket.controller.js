@@ -13,7 +13,6 @@ const addProduct = async (req, res) => {
     const market = new Market({
       ...req.body,
       productImg,
-      userAvatar: user.avatar,
       createdAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
       updatedAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
     });
@@ -30,7 +29,22 @@ const addProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const products = await Market.find().sort({ createdAt: -1 });
-    res.status(200).json(products);
+
+    const productsWithUserDetails = await Promise.all(
+      products.map(async (product) => {
+        const user = await User.findOne({ email: product.userEmail }).select(
+          "username avatar"
+        );
+
+        return {
+          ...product.toObject(),
+          username: user ? user.username : "Unknown User",
+          userAvatar: user ? user.avatar : "/profilePics/default_user.png",
+        };
+      })
+    );
+
+    res.status(200).json(productsWithUserDetails);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

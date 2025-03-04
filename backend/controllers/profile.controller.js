@@ -108,9 +108,23 @@ const getlistings = async (req, res) => {
       return res.status(400).json({ message: "User email is required." });
     }
 
-    const market = await Market.find({ userEmail });
+    const products = await Market.find({ userEmail }).sort({ createdAt: -1 });
 
-    res.status(200).json(market);
+    const productsWithUserDetails = await Promise.all(
+      products.map(async (product) => {
+        const user = await User.findOne({ email: product.userEmail }).select(
+          "username avatar"
+        );
+
+        return {
+          ...product.toObject(),
+          username: user ? user.username : "Unknown User",
+          userAvatar: user ? user.avatar : "/profilePics/default_user.png",
+        };
+      })
+    );
+
+    res.status(200).json(productsWithUserDetails);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
