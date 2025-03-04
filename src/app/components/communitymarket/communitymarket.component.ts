@@ -136,8 +136,8 @@ export class CommunitymarketComponent {
         name: product.productTitle,
         price: product.productPrice,
         condition: product.condition,
-        images: product.productImg.join(','),  // Pass all images
-        img: product.productImg[0],  // Keep the first image as default
+        images: product.productImg.join(','), // Pass all images
+        img: product.productImg[0], // Keep the first image as default
         user: product.username,
         avatar: product.userAvatar,
         description: product.productDesc,
@@ -185,8 +185,10 @@ export class CommunitymarketComponent {
 
     // Filter products based on category and any of the selected subcategories
     this.products = this.originalProducts.filter((product: Product) => {
-      return product.category === category && 
-             this.activeSubcategories.includes(product.subCategory); // Changed from subCategory?
+      return (
+        product.category === category &&
+        this.activeSubcategories.includes(product.subCategory)
+      ); // Changed from subCategory?
     });
   }
 
@@ -217,9 +219,15 @@ export class CommunitymarketComponent {
 
   // Listing form methods
   toggleContent() {
+    if (!this.isLoggedIn()) {
+      // Redirect to login page if not logged in
+      alert('Please login first to sell items');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.isContentHidden = !this.isContentHidden;
     if (this.isContentHidden) {
-      // Reset the form when opening it
       this.currentStep = 1;
       this.resetListingForm();
     }
@@ -432,5 +440,12 @@ export class CommunitymarketComponent {
         return matchesSearch;
       });
     }
+  }
+
+  isLoggedIn(): boolean {
+    return (
+      !!localStorage.getItem('authToken') ||
+      !!sessionStorage.getItem('authToken')
+    );
   }
 }

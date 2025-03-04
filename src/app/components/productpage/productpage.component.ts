@@ -139,15 +139,19 @@ export class ProductpageComponent implements OnInit {
     const subcategories: { [key: string]: string } = {
       accessories: 'Accessories',
       toys: 'Toys',
-      clothes: 'Clothes'
+      clothes: 'Clothes',
     };
-    return subcategories[subcategory?.toLowerCase()] || subcategory || 'Not Specified';
+    return (
+      subcategories[subcategory?.toLowerCase()] ||
+      subcategory ||
+      'Not Specified'
+    );
   }
 
   private formatDeliveryOption(option: string): string {
     const optionMap: { [key: string]: string } = {
-      'meetup': 'MeetUp',
-      'delivery': 'Delivery Available'
+      meetup: 'MeetUp',
+      delivery: 'Delivery Available',
     };
     return optionMap[option.toLowerCase()] || option;
   }

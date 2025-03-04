@@ -31,6 +31,7 @@ import { AuthCallbackComponent } from '../../backend/auth-callback.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ShoppageComponent } from './components/shoppage/shoppage.component';
 import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { ShopproductpageComponent } from './components/shopproductpage/shopprodu
     ProfileComponent,
     ShoppageComponent,
     ShopproductpageComponent,
+    CartComponent,
   ],
   imports: [
     BrowserModule,
