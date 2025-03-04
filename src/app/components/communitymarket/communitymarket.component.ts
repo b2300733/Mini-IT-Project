@@ -12,7 +12,7 @@ interface Product {
   condition: string;
   size?: string;
   category?: string;
-  subCategory?: string;
+  subCategory: string;
   productDesc?: string;
   deliveryOpt?: string[];
   createdAt: string;
@@ -55,7 +55,7 @@ export class CommunitymarketComponent {
     (localStorage.getItem('email') || sessionStorage.getItem('email')) ?? '';
 
   deliveryOptions = [
-    { value: 'meetup', Label: 'Meetup' },
+    { value: 'meetup', Label: 'MeetUp' },
     { value: 'delivery', Label: 'Delivery Available' },
   ];
 
@@ -139,11 +139,13 @@ export class CommunitymarketComponent {
         name: product.productTitle,
         price: product.productPrice,
         condition: product.condition,
-        img: product.productImg[0],
+        images: product.productImg.join(','),  // Pass all images
+        img: product.productImg[0],  // Keep the first image as default
         user: product.username,
         avatar: product.userAvatar,
         description: product.productDesc,
         category: product.category,
+        subcategory: product.subCategory,
         deliveryOptions: product.deliveryOpt?.join(','),
       },
     });
@@ -186,10 +188,8 @@ export class CommunitymarketComponent {
 
     // Filter products based on category and any of the selected subcategories
     this.products = this.originalProducts.filter((product: Product) => {
-      return (
-        product.category === category &&
-        this.activeSubcategories.includes(product.subCategory || '')
-      );
+      return product.category === category && 
+             this.activeSubcategories.includes(product.subCategory); // Changed from subCategory?
     });
   }
 

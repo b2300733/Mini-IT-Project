@@ -5,11 +5,12 @@ interface Product {
   id: string;
   title: string;
   price: number;
-  image: string;
   condition: string;
   category: string;
+  subcategory: string;
   description: string;
   deliveryOptions: string[];
+  images: string[];
 }
 
 interface Seller {
@@ -27,15 +28,18 @@ interface Seller {
   styleUrl: './productpage.component.css',
 })
 export class ProductpageComponent implements OnInit {
+  currentImageIndex: number = 0;
+
   product: Product = {
     id: '',
+    images: [],
     title: '',
     price: 0,
-    image: '',
     condition: '',
     category: '',
+    subcategory: '',
     description: '',
-    deliveryOptions: ['Meetup', 'Delivery available'],
+    deliveryOptions: ['MeetUp', 'Delivery Available'],
   };
 
   seller: Seller = {
@@ -53,14 +57,15 @@ export class ProductpageComponent implements OnInit {
       this.product = {
         id: params['id'] || '',
         title: params['name'] || '',
-        price: Number(params['price']) || 0, // Ensure price is parsed as a number
-        image: params['img'] || '',
+        price: Number(params['price']) || 0,
+        images: params['images']?.split(',') || [params['img']] || [],
         condition: params['condition'] || '',
         category: params['category'] || '',
+        subcategory: params['subcategory'] || '',
         description: params['description'] || '',
         deliveryOptions: params['deliveryOptions']
-          ? params['deliveryOptions'].split(',')
-          : [],
+          ? params['deliveryOptions'].split(',').map(this.formatDeliveryOption)
+          : ['MeetUp', 'Delivery Available'],
       };
 
       this.seller = {
@@ -73,16 +78,20 @@ export class ProductpageComponent implements OnInit {
     });
   }
 
-  makeOffer(): void {
-    console.log('Make offer clicked');
+  nextImage(): void {
+    if (this.currentImageIndex < this.product.images.length - 1) {
+      this.currentImageIndex++;
+    }
   }
 
-  startChat(): void {
-    console.log('Chat clicked');
+  previousImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
   }
 
-  buyNow(): void {
-    console.log('Buy now clicked');
+  addCart(): void {
+    console.log('Add to Cart clicked');
   }
 
   handleImageError(event: Event) {
@@ -124,6 +133,23 @@ export class ProductpageComponent implements OnInit {
       category ||
       'Not Specified'
     );
+  }
+
+  getSubcategoryLabel(subcategory: string): string {
+    const subcategories: { [key: string]: string } = {
+      accessories: 'Accessories',
+      toys: 'Toys',
+      clothes: 'Clothes'
+    };
+    return subcategories[subcategory?.toLowerCase()] || subcategory || 'Not Specified';
+  }
+
+  private formatDeliveryOption(option: string): string {
+    const optionMap: { [key: string]: string } = {
+      'meetup': 'MeetUp',
+      'delivery': 'Delivery Available'
+    };
+    return optionMap[option.toLowerCase()] || option;
   }
 }
 
