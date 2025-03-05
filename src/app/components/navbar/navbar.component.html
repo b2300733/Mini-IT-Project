@@ -12,11 +12,14 @@
     <lucide-icon name="search" class="cursor-pointer"></lucide-icon>
   </ul>
   <div class="flex gap-3 flex-1 justify-end pr-3">
-    <lucide-icon
-      name="shopping-cart"
-      routerLink="/cart"
-      class="cursor-pointer"
-    ></lucide-icon>
+    <div class="flex">
+      <lucide-icon
+        name="shopping-cart"
+        routerLink="/cart"
+        class="cursor-pointer"
+      ></lucide-icon>
+      <h1 class="pl-0.5">1</h1>
+    </div>
     <div class="relative dropdown-menu" (click)="toggleDropdown($event)">
       <ng-container *ngIf="isLoggedIn(); else loginIcon">
         <img
