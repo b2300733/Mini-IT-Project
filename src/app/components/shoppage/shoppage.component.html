@@ -3,7 +3,9 @@
   <!-- Enhanced Horizontal Dropdown Menu -->
   <div class="pl-6">
     <div class="relative mb-8 w-full">
-      <h3 class="text-xl font-bold mb-6 text-gray-800 border-b-2 border-red-500 pb-2 inline-block">
+      <h3
+        class="text-xl font-bold mb-6 text-gray-800 border-b-2 border-red-500 pb-2 inline-block"
+      >
         Browse by Category
       </h3>
 
@@ -12,209 +14,229 @@
         <div class="relative group">
           <button
             class="flex items-center bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
-            (click)="toggleCategory('dog')">
+            (click)="toggleCategory('dog')"
+          >
             <span class="flex items-center">
               <span class="text-2xl mr-2">🐶</span>
               <span class="text-gray-800">Dog</span>
             </span>
-            <svg class="w-5 h-5 ml-2 transform transition-transform"
-                 [ngClass]="{ 'rotate-180': isDogExpanded }"
-                 fill="none"
-                 stroke="currentColor"
-                 viewBox="0 0 24 24">
-              <path stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"></path>
+            <svg
+              class="w-5 h-5 ml-2 transform transition-transform"
+              [ngClass]="{ 'rotate-180': isDogExpanded }"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
             </svg>
           </button>
           <!-- Dropdown content -->
-          <div class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
-               [ngClass]="{
-                 'opacity-100 scale-100': isDogExpanded,
-                 'opacity-0 scale-95 pointer-events-none': !isDogExpanded
-               }">
-               <div class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]">
-                <div
-                  class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('dog', 'accessories')"
-                >
-                  <span class="text-blue-500 mr-2">🔸</span>
-                  <span>Accessories</span>
-                </div>
-                <div
-                  class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('dog', 'toys')"
-                >
-                  <span class="text-blue-500 mr-2">🔸</span>
-                  <span>Toys</span>
-                </div>
-                <div
-                  class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('dog', 'clothes')"
-                >
-                  <span class="text-blue-500 mr-2">🔸</span>
-                  <span>Clothes</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        
-        <!-- Cat Category - Enhanced -->
-        <div class="relative group">
-            <button
-              class="flex items-center bg-gradient-to-r from-purple-100 to-purple-200 hover:from-purple-200 hover:to-purple-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
-              (click)="toggleCategory('cat')"
-            >
-              <span class="flex items-center">
-                <span class="text-2xl mr-2">🐱</span>
-                <span class="text-gray-800">Cat</span>
-              </span>
-              <svg
-                class="w-5 h-5 ml-2 transform transition-transform"
-                [ngClass]="{ 'rotate-180': isCatExpanded }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
-            </button>
+          <div
+            class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
+            [ngClass]="{
+              'opacity-100 scale-100': isDogExpanded,
+              'opacity-0 scale-95 pointer-events-none': !isDogExpanded
+            }"
+          >
             <div
-              class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
-              [ngClass]="{
-                'opacity-100 scale-100': isCatExpanded,
-                'opacity-0 scale-95 pointer-events-none': !isCatExpanded
-              }"
+              class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]"
             >
-              <div class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]">
-                <div
-                  class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('cat', 'accessories')"
-                >
-                  <span class="text-purple-500 mr-2">🔸</span>
-                  <span>Accessories</span>
-                </div>
-                <div
-                  class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('cat', 'toys')"
-                >
-                  <span class="text-purple-500 mr-2">🔸</span>
-                  <span>Toys</span>
-                </div>
-                <div
-                  class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('cat', 'clothes')"
-                >
-                  <span class="text-purple-500 mr-2">🔸</span>
-                  <span>Clothes</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        <!-- Other Category - Enhanced -->
-        <div class="relative group">
-            <button
-              class="flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
-              (click)="toggleCategory('other')"
-            >
-              <span class="flex items-center">
-                <span class="text-2xl mr-2">🐾</span>
-                <span class="text-gray-800">Other</span>
-              </span>
-              <svg
-                class="w-5 h-5 ml-2 transform transition-transform"
-                [ngClass]="{ 'rotate-180': isOtherExpanded }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <div
+                class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('dog', 'accessories')"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
-            </button>
-            <div
-              class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
-              [ngClass]="{
-                'opacity-100 scale-100': isOtherExpanded,
-                'opacity-0 scale-95 pointer-events-none': !isOtherExpanded
-              }"
-            >
-              <div class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]">
-                <div
-                  class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('other', 'accessories')"
-                >
-                  <span class="text-green-500 mr-2">🔸</span>
-                  <span>Accessories</span>
-                </div>
-                <div
-                  class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('other', 'toys')"
-                >
-                  <span class="text-green-500 mr-2">🔸</span>
-                  <span>Toys</span>
-                </div>
-                <div
-                  class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
-                  (click)="selectSubcategoryFilter('other', 'clothes')"
-                >
-                  <span class="text-green-500 mr-2">🔸</span>
-                  <span>Clothes</span>
-                </div>
+                <span class="text-blue-500 mr-2">🔸</span>
+                <span>Accessories</span>
+              </div>
+              <div
+                class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('dog', 'toys')"
+              >
+                <span class="text-blue-500 mr-2">🔸</span>
+                <span>Toys</span>
+              </div>
+              <div
+                class="p-4 hover:bg-blue-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('dog', 'clothes')"
+              >
+                <span class="text-blue-500 mr-2">🔸</span>
+                <span>Clothes</span>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Cat Category - Enhanced -->
+        <div class="relative group">
+          <button
+            class="flex items-center bg-gradient-to-r from-purple-100 to-purple-200 hover:from-purple-200 hover:to-purple-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
+            (click)="toggleCategory('cat')"
+          >
+            <span class="flex items-center">
+              <span class="text-2xl mr-2">🐱</span>
+              <span class="text-gray-800">Cat</span>
+            </span>
+            <svg
+              class="w-5 h-5 ml-2 transform transition-transform"
+              [ngClass]="{ 'rotate-180': isCatExpanded }"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </button>
+          <div
+            class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
+            [ngClass]="{
+              'opacity-100 scale-100': isCatExpanded,
+              'opacity-0 scale-95 pointer-events-none': !isCatExpanded
+            }"
+          >
+            <div
+              class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]"
+            >
+              <div
+                class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('cat', 'accessories')"
+              >
+                <span class="text-purple-500 mr-2">🔸</span>
+                <span>Accessories</span>
+              </div>
+              <div
+                class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('cat', 'toys')"
+              >
+                <span class="text-purple-500 mr-2">🔸</span>
+                <span>Toys</span>
+              </div>
+              <div
+                class="p-4 hover:bg-purple-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('cat', 'clothes')"
+              >
+                <span class="text-purple-500 mr-2">🔸</span>
+                <span>Clothes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other Category - Enhanced -->
+        <div class="relative group">
+          <button
+            class="flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium"
+            (click)="toggleCategory('other')"
+          >
+            <span class="flex items-center">
+              <span class="text-2xl mr-2">🐾</span>
+              <span class="text-gray-800">Other</span>
+            </span>
+            <svg
+              class="w-5 h-5 ml-2 transform transition-transform"
+              [ngClass]="{ 'rotate-180': isOtherExpanded }"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </button>
+          <div
+            class="absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 opacity-0 scale-95 transform origin-top-left"
+            [ngClass]="{
+              'opacity-100 scale-100': isOtherExpanded,
+              'opacity-0 scale-95 pointer-events-none': !isOtherExpanded
+            }"
+          >
+            <div
+              class="grid grid-cols-1 divide-y divide-gray-100 min-w-[200px]"
+            >
+              <div
+                class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('other', 'accessories')"
+              >
+                <span class="text-green-500 mr-2">🔸</span>
+                <span>Accessories</span>
+              </div>
+              <div
+                class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('other', 'toys')"
+              >
+                <span class="text-green-500 mr-2">🔸</span>
+                <span>Toys</span>
+              </div>
+              <div
+                class="p-4 hover:bg-green-50 cursor-pointer flex items-center transition-colors"
+                (click)="selectSubcategoryFilter('other', 'clothes')"
+              >
+                <span class="text-green-500 mr-2">🔸</span>
+                <span>Clothes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Active Filter Indicator -->
-      <div *ngIf="activeCategory" class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+      <div
+        *ngIf="activeCategory"
+        class="mt-4 flex flex-wrap items-center gap-2 text-sm"
+      >
         <span class="text-gray-600">Browsing:</span>
         <span class="bg-gray-200 px-3 py-1 rounded-full">
           {{ activeCategory }}
         </span>
         <span class="text-gray-600">></span>
         <div class="flex flex-wrap gap-2">
-          <span *ngFor="let subcategory of activeSubcategories" 
-                class="bg-gray-200 px-3 py-1 rounded-full flex items-center">
+          <span
+            *ngFor="let subcategory of activeSubcategories"
+            class="bg-gray-200 px-3 py-1 rounded-full flex items-center"
+          >
             {{ subcategory }}
             <button
               class="ml-1 text-gray-500 hover:text-red-500"
-              (click)="removeSubcategory(subcategory)">
+              (click)="removeSubcategory(subcategory)"
+            >
               <svg
                 class="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24">
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12">
-                </path>
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
               </svg>
             </button>
           </span>
         </div>
         <button
           class="ml-2 text-gray-500 hover:text-red-500 flex items-center"
-          (click)="clearFilters()">
+          (click)="clearFilters()"
+        >
           Clear all
         </button>
       </div>
     </div>
   </div>
-    
 
   <!-- Recommend and Search Section -->
   <div class="container mx-auto">
@@ -222,26 +244,50 @@
       <p class="text-left pl-6 text-lg font-semibold">Featured Products</p>
       <!-- Search Container -->
       <div class="relative flex-grow max-w-md">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        <div
+          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+        >
+          <svg
+            class="w-5 h-5 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
           </svg>
         </div>
-        <input type="text"
-               placeholder="Search products..."
-               class="w-full pl-10 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-               [value]="searchQuery"
-               (input)="searchProducts($event)" />
+        <input
+          type="text"
+          placeholder="Search products..."
+          class="w-full pl-10 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [value]="searchQuery"
+          (input)="searchProducts($event)"
+        />
       </div>
     </div>
 
     <!-- Product Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-      <div *ngFor="let product of products"
-           class="rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-           (click)="navigateToProduct(product)">
-        <img class="w-full h-48 object-cover" [src]="product?.img" [alt]="product?.name" />
-        <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">{{ product?.name }}</h3>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+    >
+      <div
+        *ngFor="let product of products"
+        class="rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+        (click)="navigateToProduct(product)"
+      >
+        <img
+          class="w-full h-48 object-cover"
+          [src]="product?.img"
+          [alt]="product?.name"
+        />
+        <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
+          {{ product?.name }}
+        </h3>
         <p class="text-gray-600 text-left">${{ product?.price }}</p>
         <p class="text-black text-left">{{ product?.brand }}</p>
         <p class="text-gray-600 text-left">{{ product?.condition }}</p>
