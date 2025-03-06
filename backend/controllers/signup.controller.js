@@ -72,7 +72,7 @@ const addUser = async (req, res) => {
     });
 
     // Send Welcome Email
-    //await sendWelcomeEmail(email, username); ////////////////////////////////////////////////////////////////////
+    await sendWelcomeEmail(email, username);
 
     res
       .status(200)

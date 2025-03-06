@@ -107,7 +107,7 @@ passport.use(
           await user.save();
 
           // Send Welcome Email to New User
-          // await sendWelcomeEmail(user.email, user.username); ////////////////////////////////////////
+          await sendWelcomeEmail(user.email, user.username);
         }
         return done(null, user);
       } catch (error) {
