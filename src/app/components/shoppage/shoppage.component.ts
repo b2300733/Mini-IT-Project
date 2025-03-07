@@ -1,18 +1,18 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ShopService } from '../../../../backend/services/shop.service';
 
 interface ShopProduct {
-  id: string;
-  img: string;
-  name: string;
-  price: number;
-  brand: string;
-  condition: string;
-  category?: string;
-  subcategory?: string;
-  weight?: string;
-  description?: string;
-  details?: string[];
+  productImg: string[];
+  productTitle: string;
+  productPrice: number;
+  productBrand: string;
+  category: string;
+  subCategory: string;
+  productDesc: string;
+  productSpec: string;
+  productQuantity: number;
 }
 
 interface UploadedPhoto {
@@ -29,6 +29,7 @@ interface UploadedPhoto {
 export class ShoppageComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
 
+  productForm: FormGroup;
   isDogExpanded = false;
   isCatExpanded = false;
   isOtherExpanded = false;
@@ -41,39 +42,8 @@ export class ShoppageComponent {
   selectedCategory: string | null = null;
   selectedSubcategory: string | null = null;
 
-  products: ShopProduct[] = [
-    {
-      id: '1',
-      img: '/catlitterbox.jpg',
-      name: 'Cat Litter Box',
-      price: 29.99,
-      brand: 'PetCo',
-      condition: 'New',
-      category: 'cat',
-      subcategory: 'accessories',
-      weight: '2kg',
-      description: 'High-quality cat litter box with odor control system',
-      details: ['Easy to clean', 'Odor control system', 'Durable material'],
-    },
-    {
-      id: '2',
-      img: '/dogfood.jpg',
-      name: 'Dog Food',
-      price: 49.99,
-      brand: 'PetCo',
-      condition: 'New',
-      category: 'dog',
-      subcategory: 'beds',
-      weight: '3kg',
-      description: 'Premium dog food for all breeds and sizes',
-      details: [
-        'High-quality ingredients',
-        'Suitable for all breeds',
-        'Easy to digest',
-      ],
-    },
-    // Add more products as needed
-  ];
+  email =
+    (localStorage.getItem('email') || sessionStorage.getItem('email')) ?? '';
 
   // Define categories and conditions
   mainCategories = [
@@ -87,9 +57,44 @@ export class ShoppageComponent {
     { value: 'clothes', label: 'Clothes' },
   ];
 
-  private originalProducts: ShopProduct[] = [...this.products];
+  private originalProducts: ShopProduct[] = [];
+  products: ShopProduct[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private shopService: ShopService
+  ) {
+    this.productForm = this.fb.group({
+      brand: ['', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      specification: ['', Validators.required],
+      price: ['', Validators.required],
+      quantity: ['', Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    this.fetchProducts();
+  }
+
+  fetchProducts(): void {
+    this.shopService.getProducts().subscribe(
+      (response) => {
+        this.products = response;
+        this.originalProducts = response;
+      },
+      (error) => {
+        console.error('Error fetching products:', error);
+      }
+    );
+  }
+
+  showValidationError(field: string): boolean {
+    const control = this.productForm.get(field);
+    return !!control && control.invalid && (control.dirty || control.touched);
+  }
 
   toggleCategory(category: string) {
     switch (category) {
@@ -125,7 +130,7 @@ export class ShoppageComponent {
     this.products = this.originalProducts.filter((product: ShopProduct) => {
       return (
         product.category === category &&
-        this.activeSubcategories.includes(product.subcategory || '')
+        this.activeSubcategories.includes(product.subCategory || '')
       );
     });
   }
@@ -147,7 +152,7 @@ export class ShoppageComponent {
       this.products = this.originalProducts.filter((product: ShopProduct) => {
         return (
           product.category === this.activeCategory &&
-          this.activeSubcategories.includes(product.subcategory || '')
+          this.activeSubcategories.includes(product.subCategory || '')
         );
       });
     }
@@ -162,7 +167,7 @@ export class ShoppageComponent {
         this.products = this.originalProducts.filter((product: ShopProduct) => {
           return (
             product.category === this.activeCategory &&
-            this.activeSubcategories.includes(product.subcategory || '')
+            this.activeSubcategories.includes(product.subCategory || '')
           );
         });
       } else {
@@ -170,13 +175,15 @@ export class ShoppageComponent {
       }
     } else {
       this.products = this.originalProducts.filter((product: ShopProduct) => {
-        const matchesSearch = product.name.toLowerCase().includes(query);
+        const matchesSearch = product.productTitle
+          .toLowerCase()
+          .includes(query);
 
         if (this.activeCategory && this.activeSubcategories.length > 0) {
           return (
             matchesSearch &&
             product.category === this.activeCategory &&
-            this.activeSubcategories.includes(product.subcategory || '')
+            this.activeSubcategories.includes(product.subCategory || '')
           );
         }
 
@@ -188,24 +195,16 @@ export class ShoppageComponent {
   navigateToProduct(product: ShopProduct) {
     this.router.navigate(['/shop-product'], {
       queryParams: {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        condition: product.condition,
-        img: product.img, // Pass the full image path
-        brand: product.brand,
+        name: product.productTitle,
+        price: product.productPrice,
+        images: product.productImg.join(','),
+        img: product.productImg[0],
+        brand: product.productBrand,
         category: product.category,
-        weight: product.weight || '1kg',
-        description:
-          product.description ||
-          'High-quality pet product perfect for your furry friend.',
-        details: (
-          product.details || [
-            'Premium quality',
-            'Durable material',
-            'Easy to clean',
-          ]
-        ).join(','),
+        description: product.productDesc,
+        specification: product.productSpec,
+        subcategory: product.subCategory,
+        quantity: product.productQuantity,
       },
     });
   }
@@ -266,5 +265,48 @@ export class ShoppageComponent {
 
   selectSubcategory(subcategory: string) {
     this.selectedSubcategory = subcategory;
+  }
+
+  // Submit listing
+  submitProduct() {
+    if (
+      this.productForm.valid &&
+      this.uploadedPhotos.length > 0 &&
+      this.selectedCategory &&
+      this.selectedSubcategory
+    ) {
+      // Prepare the form data
+      const formData = new FormData();
+      formData.append('productBrand', this.productForm.value.brand);
+      formData.append('productTitle', this.productForm.value.title);
+      formData.append('productDesc', this.productForm.value.description);
+      formData.append('productSpec', this.productForm.value.specification);
+      formData.append('productPrice', this.productForm.value.price);
+      formData.append('category', this.selectedCategory);
+      formData.append('subCategory', this.selectedSubcategory);
+      formData.append('productQuantity', this.productForm.value.quantity);
+      formData.append('userEmail', this.email);
+      // Append photos
+      this.uploadedPhotos.forEach((photo) => {
+        formData.append('productImg', photo.file);
+      });
+      // Send the form data to the backend
+      this.shopService.uploadProduct(formData).subscribe(
+        (response) => {
+          // Handle success
+          console.log('Product uploaded successfully:', response);
+          // Reset and close the form
+          this.toggleContent();
+          // Show a success message (in a real app, this would be a more sophisticated notification)
+          alert('Your item has been listed successfully!');
+          window.location.reload();
+        },
+        (error) => {
+          // Handle error
+          console.error('Error uploading product:', error);
+          alert('There was an error listing your item. Please try again.');
+        }
+      );
+    }
   }
 }

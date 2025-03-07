@@ -2,16 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 interface ShopProduct {
-  id: string;
   title: string;
   price: number;
-  image: string;
+  images: string[];
   brand: string;
-  weight: string;
   description: string;
-  details: string[];
-  rating: number;
-  reviews: Review[];
+  specification: string;
+  quantity: number;
 }
 
 interface Review {
@@ -25,56 +22,34 @@ interface Review {
   selector: 'app-shopproductpage',
   standalone: false,
   templateUrl: './shopproductpage.component.html',
-  styleUrls: ['./shopproductpage.component.css']
+  styleUrls: ['./shopproductpage.component.css'],
 })
 export class ShopproductpageComponent implements OnInit {
   product: ShopProduct = {
-    id: '',
     title: '',
     price: 0,
-    image: '',
+    images: [],
     brand: '',
-    weight: '',
     description: '',
-    details: [],
-    rating: 0,
-    reviews: []
+    specification: '',
+    quantity: 0,
   };
 
   quantity: number = 1;
+  message: string = '';
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.product = {
-        id: params['id'] || '',
         title: params['name'] || '',
         price: Number(params['price']) || 0,
-        image: params['img'] ? params['img'].replace('/images/', '') : 'placeholder.jpg',
+        images: params['images']?.split(',') || [params['img']] || [],
         brand: params['brand'] || '',
-        weight: params['weight'] || '1kg',
         description: params['description'] || 'No description available',
-        details: params['details']?.split(',') || [
-          'Premium quality pet product',
-          'Suitable for all pet sizes',
-          'Easy to clean and maintain'
-        ],
-        rating: 4.5,
-        reviews: [
-          {
-            username: 'John D.',
-            rating: 5,
-            comment: 'Great product! My pet loves it.',
-            date: '2024-02-20'
-          },
-          {
-            username: 'Mary S.',
-            rating: 4,
-            comment: 'Good quality, but a bit pricey.',
-            date: '2024-02-18'
-          }
-        ]
+        specification: params['specification'] || 'No description available',
+        quantity: Number(params['quantity']) || 0,
       };
     });
   }
@@ -82,11 +57,18 @@ export class ShopproductpageComponent implements OnInit {
   decreaseQuantity(): void {
     if (this.quantity > 1) {
       this.quantity--;
+      this.message = '';
     }
   }
 
   increaseQuantity(): void {
-    this.quantity++;
+    if (this.quantity < this.product.quantity) {
+      this.quantity++;
+      this.message = '';
+    } else {
+      this.message =
+        'You have reached the maximum quantity available for this item';
+    }
   }
 
   addToCart(): void {

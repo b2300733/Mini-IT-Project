@@ -6,10 +6,9 @@
     <div class="lg:w-1/2">
       <div class="bg-white rounded-lg overflow-hidden shadow-sm">
         <img
-          [src]="product.image"
+          [src]="product.images"
           [alt]="product.title"
           class="w-full h-[500px] object-cover"
-          onerror="this.src='assets/placeholder.jpg'"
         />
       </div>
     </div>
@@ -36,7 +35,7 @@
           <span class="ml-2 text-sm text-gray-600">{{ product.rating }} ({{ product.reviews.length }} reviews)</span>
         </div>-->
 
-        <!-- Price and Weight -->
+        <!-- Price -->
         <div class="mt-4">
           <p class="text-3xl font-bold text-gray-900">${{ product.price }}</p>
         </div>
@@ -66,6 +65,10 @@
               Add to Cart
             </button>
           </div>
+          <div *ngIf="message" style="color: red; margin-top: 5px">
+            {{ message }}
+          </div>
+          <div>Quantity: {{ product.quantity }}</div>
         </div>
       </div>
 
@@ -75,30 +78,10 @@
         <p class="text-gray-700">{{ product.description }}</p>
       </div>
 
-      <!-- Product Details -->
+      <!-- Specification Details -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Product Details</h2>
-        <ul class="space-y-2">
-          <li
-            *ngFor="let detail of product.details"
-            class="flex items-center text-gray-700"
-          >
-            <svg
-              class="w-5 h-5 mr-2 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-            {{ detail }}
-          </li>
-        </ul>
+        <p class="text-gray-700">{{ product.specification }}</p>
       </div>
 
       <!-- Reviews 

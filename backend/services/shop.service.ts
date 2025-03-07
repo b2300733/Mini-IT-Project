@@ -1,12 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CommunitymarketService {
-  private baseUrl = 'http://localhost:3000/api/market';
+export class ShopService {
+  private baseUrl = 'http://localhost:3000/api/shop';
 
   constructor(private http: HttpClient) {}
 
