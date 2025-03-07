@@ -291,33 +291,44 @@
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
     >
       <div
+        *ngIf="products.length === 0"
+        class="col-span-full text-center text-gray-500"
+      >
+        No products found.
+      </div>
+      <div
         *ngFor="let product of products"
         class="rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
         (click)="navigateToProduct(product)"
       >
         <img
-          class="w-full h-48 object-cover"
-          [src]="product?.img"
-          [alt]="product?.name"
+          class="w-full h-48 object-cover rounded-xl"
+          [src]="product?.productImg?.[0]"
+          [alt]="product?.productTitle"
         />
         <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
-          {{ product?.name }}
+          {{ product?.productTitle }}
         </h3>
-        <p class="text-gray-600 text-left">${{ product?.price }}</p>
-        <p class="text-black text-left">{{ product?.brand }}</p>
-        <p class="text-gray-600 text-left">{{ product?.condition }}</p>
+        <p class="text-gray-600 text-left">${{ product?.productPrice }}</p>
+        <p class="text-black text-left">{{ product?.productBrand }}</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="container mx-auto mt-4" *ngIf="isContentHidden">
+<!-- Product Add Section - Only shown when Add button is clicked -->
+<form
+  [formGroup]="productForm"
+  (ngSubmit)="submitProduct()"
+  class="container mx-auto mt-4"
+  *ngIf="isContentHidden"
+>
   <div
     class="bg-white rounded-lg w-full max-w-4xl mx-auto p-6 shadow-lg relative"
   >
     <!-- Close Button -->
     <button
-      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer"
       (click)="toggleContent()"
     >
       <svg
@@ -340,16 +351,16 @@
 
     <!-- Photo Upload -->
     <div class="mb-5 border-b-2 pb-5">
-      <h3 class="text-lg font-semibold mb-4">Upload Photos (Required)</h3>
+      <h3 class="text-lg font-semibold mb-4">Upload Photos*</h3>
       <p class="text-gray-600 mb-4">
-        Please upload at least one photo to continue (maximum 10)
+        Please upload at least one photo (maximum 10)
       </p>
 
       <div class="grid grid-cols-5 gap-4">
         <!-- Upload Box -->
         <div
           *ngIf="uploadedPhotos.length < 10"
-          class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-red-500 transition-colors"
+          class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-orange-500 transition-colors"
           (click)="triggerFileInput()"
         >
           <svg
@@ -386,7 +397,7 @@
             class="w-full h-full object-cover"
           />
           <button
-            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
             (click)="removePhoto(i)"
           >
             ✕
@@ -397,21 +408,24 @@
 
     <!-- Product Category -->
     <div class="mb-5 border-b-2 pb-5">
-      <h3 class="text-lg font-semibold mb-4">Select Category</h3>
+      <h3 class="text-lg font-semibold mb-4">Select Category*</h3>
 
       <!-- Main Categories -->
-      <div class="grid grid-cols-3 gap-4 mb-6">
-        <div
-          *ngFor="let category of mainCategories"
-          [ngClass]="{
-            'border-red-500 bg-red-50': selectedCategory === category.value,
-            'border-gray-200': selectedCategory !== category.value
-          }"
-          class="border-2 rounded-lg p-4 flex flex-col items-center cursor-pointer hover:border-red-300 transition-colors"
-          (click)="selectCategory(category.value)"
-        >
-          <span class="text-2xl mb-2">{{ category.icon }}</span>
-          <span class="font-medium">{{ category.label }}</span>
+      <div class="mb-4">
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div
+            *ngFor="let category of mainCategories"
+            [ngClass]="{
+              'border-orange-500 bg-orange-50':
+                selectedCategory === category.value,
+              'border-gray-200': selectedCategory !== category.value
+            }"
+            class="border-2 rounded-lg p-4 flex flex-col items-center cursor-pointer hover-selection"
+            (click)="selectCategory(category.value)"
+          >
+            <span class="text-2xl mb-2">{{ category.icon }}</span>
+            <span class="font-medium">{{ category.label }}</span>
+          </div>
         </div>
       </div>
 
@@ -422,11 +436,11 @@
           <div
             *ngFor="let subcategory of subcategories"
             [ngClass]="{
-              'border-red-500 bg-red-50':
+              'border-orange-500 bg-orange-50':
                 selectedSubcategory === subcategory.value,
               'border-gray-200': selectedSubcategory !== subcategory.value
             }"
-            class="border-2 rounded-lg p-3 text-center cursor-pointer hover:border-red-300 transition-colors"
+            class="border-2 rounded-lg p-3 text-center cursor-pointer hover-selection transition-colors"
             (click)="selectSubcategory(subcategory.value)"
           >
             {{ subcategory.label }}
@@ -434,5 +448,163 @@
         </div>
       </div>
     </div>
+
+    <!-- Product Details Section -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-4">Product Details*</h3>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="brand">Brand</label>
+        <input
+          type="text"
+          id="brand"
+          formControlName="brand"
+          class="w-full p-3 border border-gray-300 rounded-lg hover-selection"
+          placeholder="Product brand"
+        />
+        <div
+          *ngIf="showValidationError('brand')"
+          class="text-red-500 text-sm mt-1"
+        >
+          Please enter the brand of the product
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="title">Title</label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="w-full p-3 border border-gray-300 rounded-lg hover-selection"
+          placeholder="Product title"
+        />
+        <div
+          *ngIf="showValidationError('title')"
+          class="text-red-500 text-sm mt-1"
+        >
+          Please enter the title of the product
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="description"
+          >Description</label
+        >
+        <textarea
+          id="description"
+          formControlName="description"
+          class="w-full p-3 border border-gray-300 rounded-lg hover-selection resize-none"
+          rows="4"
+          placeholder="Product description"
+        ></textarea>
+        <div
+          *ngIf="showValidationError('description')"
+          class="text-red-500 text-sm mt-1"
+        >
+          Please enter the description of the product
+        </div>
+      </div>
+
+      <!-- Product Specification Section -->
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2" for="specification"
+          >Specification</label
+        >
+        <textarea
+          id="specification"
+          formControlName="specification"
+          class="w-full p-3 border border-gray-300 rounded-lg hover-selection resize-none"
+          rows="4"
+          placeholder="Product specification
+Example:
+✔ Easy to clean
+✔ Durable material"
+        ></textarea>
+        <div
+          *ngIf="showValidationError('specification')"
+          class="text-red-500 text-sm mt-1"
+        >
+          Please enter the specification of the product
+        </div>
+      </div>
+
+      <div class="flex flex-row gap-5">
+        <div>
+          <!-- Price Section -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2" for="price"
+              >Price (RM)</label
+            >
+            <input
+              type="number"
+              id="price"
+              formControlName="price"
+              min="0.01"
+              step="0.01"
+              class="w-full p-3 border border-gray-300 rounded-lg hover-selection"
+              placeholder="0.00"
+            />
+            <div
+              *ngIf="showValidationError('price')"
+              class="text-red-500 text-sm mt-1"
+            >
+              Please enter a valid price
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Quantity Section -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2" for="quantity"
+              >Quantity</label
+            >
+            <input
+              type="number"
+              id="quantity"
+              formControlName="quantity"
+              min="1"
+              step="1"
+              class="w-full p-3 border border-gray-300 rounded-lg hover-selection"
+              placeholder="0"
+            />
+            <div
+              *ngIf="showValidationError('quantity')"
+              class="text-red-500 text-sm mt-1"
+            >
+              Please enter a valid quantity
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between">
+      <button
+        type="submit"
+        [disabled]="
+          productForm.invalid ||
+          uploadedPhotos.length === 0 ||
+          !selectedCategory ||
+          !selectedSubcategory
+        "
+        [ngClass]="{
+          'bg-red-500 hover:bg-red-600 cursor-pointer':
+            productForm.valid &&
+            uploadedPhotos.length > 0 &&
+            selectedCategory &&
+            selectedSubcategory,
+          'bg-gray-300 cursor-not-allowed':
+            productForm.invalid ||
+            uploadedPhotos.length === 0 ||
+            !selectedCategory ||
+            !selectedSubcategory
+        }"
+        class="px-6 py-2 rounded-lg text-white transition-colors"
+      >
+        Add product
+      </button>
+    </div>
   </div>
-</div>
+</form>
