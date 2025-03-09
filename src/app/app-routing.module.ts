@@ -12,6 +12,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ShoppageComponent } from './components/shoppage/shoppage.component';
 import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
 import { CartComponent } from './components/cart/cart.component';
+import { ForumComponent } from './components/forum/forum.component'; 
 
 const routes: Routes = [
   {
@@ -66,6 +67,10 @@ const routes: Routes = [
   {
     path: 'cart',
     component: CartComponent,
+  },
+  {
+    path: 'forum',
+    component: ForumComponent,
   },
 ];
 

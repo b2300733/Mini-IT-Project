@@ -32,6 +32,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ShoppageComponent } from './components/shoppage/shoppage.component';
 import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
 import { CartComponent } from './components/cart/cart.component';
+import { ForumComponent } from './components/forum/forum.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { CartComponent } from './components/cart/cart.component';
     ShoppageComponent,
     ShopproductpageComponent,
     CartComponent,
+    ForumComponent,
   ],
   imports: [
     BrowserModule,
