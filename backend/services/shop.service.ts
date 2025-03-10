@@ -17,4 +17,8 @@ export class ShopService {
   getProducts(): Observable<any> {
     return this.http.get(`${this.baseUrl}/all`);
   }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/api/users?email=${email}`);
+  }
 }

@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth.route");
 const profileRoute = require("./routes/profile.route");
 const marketRoute = require("./routes/communitymarket.route");
 const shopRoute = require("./routes/shop.route");
+const userRoute = require("./routes/user.route");
 
 const app = express();
 
@@ -74,6 +75,9 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+//user route--------------------------------------------------------------------------------------------
+app.use("/api/users", userRoute);
 
 //signup--------------------------------------------------------------------------------------------
 app.use("/api/signup", signupRoute);
