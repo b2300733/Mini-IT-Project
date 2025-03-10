@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ShopService } from '../../../../backend/services/shop.service';
+import { HttpClient } from '@angular/common/http';
 
 interface ShopProduct {
   productImg: string[];
@@ -41,6 +42,7 @@ export class ShoppageComponent {
   uploadedPhotos: UploadedPhoto[] = [];
   selectedCategory: string | null = null;
   selectedSubcategory: string | null = null;
+  isAdminUser: boolean = false;
 
   email =
     (localStorage.getItem('email') || sessionStorage.getItem('email')) ?? '';
@@ -63,7 +65,8 @@ export class ShoppageComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private http: HttpClient
   ) {
     this.productForm = this.fb.group({
       brand: ['', Validators.required],
@@ -77,6 +80,7 @@ export class ShoppageComponent {
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.fetchUserData();
   }
 
   fetchProducts(): void {
@@ -89,6 +93,23 @@ export class ShoppageComponent {
         console.error('Error fetching products:', error);
       }
     );
+  }
+
+  fetchUserData(): void {
+    if (!this.email) return; // Skip if no email found
+
+    this.http
+      .get<{ isAdmin: boolean }>(
+        `http://localhost:3000/api/users?email=${this.email}`
+      )
+      .subscribe(
+        (response) => {
+          this.isAdminUser = response.isAdmin;
+        },
+        (error) => {
+          console.error('Error fetching user data:', error);
+        }
+      );
   }
 
   showValidationError(field: string): boolean {
@@ -308,5 +329,9 @@ export class ShoppageComponent {
         }
       );
     }
+  }
+
+  isAdmin(): boolean {
+    return this.isAdminUser;
   }
 }
