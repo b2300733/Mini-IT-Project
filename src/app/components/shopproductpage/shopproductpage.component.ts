@@ -7,7 +7,6 @@ import {
 } from '../../../../backend/services/cart.service';
 
 interface ShopProduct {
-  productId: string;
   title: string;
   price: number;
   images: string[];
@@ -34,7 +33,6 @@ interface Review {
 })
 export class ShopproductpageComponent implements OnInit {
   product: ShopProduct = {
-    productId: '',
     title: '',
     price: 0,
     images: [],
@@ -58,7 +56,6 @@ export class ShopproductpageComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.product = {
-        productId: params['productId'] || '',
         title: params['name'] || '',
         price: Number(params['price']) || 0,
         images: params['images']?.split(',') || [params['img']] || [],
@@ -97,21 +94,14 @@ export class ShopproductpageComponent implements OnInit {
       return;
     }
 
-    const email = localStorage.getItem('email');
-    if (!email) {
-      alert('User email not found. Please log in again.');
-      return;
-    }
-
     const cartItem: CartItem = {
-      productId: this.product.productId,
       productImg: this.product.images[0],
       productName: this.product.title,
       quantity: this.quantity,
       price: this.product.price * this.quantity,
     };
 
-    this.cartService.addToCart(email, cartItem);
+    this.cartService.addToCart(cartItem);
     console.log('Added to cart:', cartItem);
   }
 

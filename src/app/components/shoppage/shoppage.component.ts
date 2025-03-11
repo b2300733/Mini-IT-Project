@@ -5,7 +5,6 @@ import { ShopService } from '../../../../backend/services/shop.service';
 import { HttpClient } from '@angular/common/http';
 
 interface ShopProduct {
-  product_id: string;
   productImg: string[];
   productTitle: string;
   productPrice: number;
@@ -217,7 +216,6 @@ export class ShoppageComponent {
   navigateToProduct(product: ShopProduct) {
     this.router.navigate(['/shop-product'], {
       queryParams: {
-        id: product.product_id,
         name: product.productTitle,
         price: product.productPrice,
         images: product.productImg.join(','),

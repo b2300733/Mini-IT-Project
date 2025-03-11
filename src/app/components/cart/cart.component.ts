@@ -16,11 +16,6 @@ export class CartComponent {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    const email = localStorage.getItem('email');
-    if (email) {
-      this.cartService.fetchCart(email);
-    }
-
     this.cartService.getCartItems().subscribe((items) => {
       this.cartItems = items;
     });
