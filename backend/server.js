@@ -13,6 +13,7 @@ const profileRoute = require("./routes/profile.route");
 const marketRoute = require("./routes/communitymarket.route");
 const shopRoute = require("./routes/shop.route");
 const userRoute = require("./routes/user.route");
+const forumRoute = require("./models/forum.model");
 
 const app = express();
 
@@ -104,4 +105,30 @@ app.use("/api/shop", shopRoute);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
+});
+
+mongoose.connect('mongodb://localhost:27017/reddit-clone', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// Get all posts
+app.get('/posts', async (req, res) => {
+  const posts = await Post.find();
+  res.json(posts);
+});
+
+// Create a new post
+app.post('/posts', async (req, res) => {
+  const newPost = new Post(req.body);
+  await newPost.save();
+  res.json(newPost);
+});
+
+// Upvote a post
+app.put('/posts/:id/upvote', async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  post.votes += 1;
+  await post.save();
+  res.json(post);
 });
