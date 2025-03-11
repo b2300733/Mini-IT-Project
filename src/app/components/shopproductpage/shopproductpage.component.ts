@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 interface ShopProduct {
   title: string;
@@ -42,7 +46,10 @@ export class ShopproductpageComponent implements OnInit {
   quantity: number = 1;
   message: string = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -78,8 +85,17 @@ export class ShopproductpageComponent implements OnInit {
   }
 
   addToCart(): void {
-    console.log(`Adding ${this.quantity} items to cart`);
-    // Implement cart functionality
+    const cartItem: CartItem = {
+      userAvatar: 'assets/placeholder-avatar.jpg', // Default user avatar
+      userName: 'Guest User', // Modify as needed
+      productImg: this.product.images[0],
+      productName: this.product.title,
+      condition: 'New', // You can modify this to fetch condition dynamically
+      price: this.product.price * this.quantity,
+    };
+
+    this.cartService.addToCart(cartItem);
+    console.log('Added to cart:', cartItem);
   }
 
   getRatingStars(rating: number): number[] {

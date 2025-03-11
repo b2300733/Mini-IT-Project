@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
-
-interface CartItem {
-  userAvatar: string;
-  userName: string;
-  productImg: string;
-  productName: string;
-  condition: string;
-  price: number;
-}
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -16,20 +11,18 @@ interface CartItem {
   styleUrl: './cart.component.css',
 })
 export class CartComponent {
-  cartItems: CartItem[] = [
-    {
-      userAvatar: '',
-      userName: 'John Doe',
-      productImg: '',
-      productName: 'Pet Carrier',
-      condition: 'New',
-      price: 59.99,
-    },
-    // Add more items as needed
-  ];
+  cartItems: CartItem[] = [];
+
+  constructor(private cartService: CartService) {}
+
+  ngOnInit(): void {
+    this.cartService.getCartItems().subscribe((items) => {
+      this.cartItems = items;
+    });
+  }
 
   removeItem(index: number): void {
-    this.cartItems.splice(index, 1);
+    this.cartService.removeFromCart(index);
   }
 
   getTotalItems(): number {
