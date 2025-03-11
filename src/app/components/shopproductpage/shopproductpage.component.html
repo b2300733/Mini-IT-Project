@@ -76,13 +76,32 @@
       <!-- Product Description -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Description</h2>
-        <p class="text-gray-700">{{ product.description }}</p>
+        <p class="text-gray-700" [style.white-space]="'pre-line'">
+          {{ product.description }}
+        </p>
       </div>
 
       <!-- Specification Details -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Product Details</h2>
-        <p class="text-gray-700">{{ product.specification }}</p>
+        <p class="text-gray-700" [style.white-space]="'pre-line'">
+          {{ product.specification }}
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <div class="flex justify-between">
+          <span class="text-black">Category:</span>
+          <span class="text-gray-900">
+            {{ getCategoryLabel(product.category) }}
+          </span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-black">Subcategory:</span>
+          <span class="text-gray-900">
+            {{ getSubcategoryLabel(product.subcategory) }}
+          </span>
+        </div>
       </div>
 
       <!-- Reviews 
