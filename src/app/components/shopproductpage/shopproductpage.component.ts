@@ -9,6 +9,8 @@ interface ShopProduct {
   description: string;
   specification: string;
   quantity: number;
+  category: string;
+  subcategory: string;
 }
 
 interface Review {
@@ -33,6 +35,8 @@ export class ShopproductpageComponent implements OnInit {
     description: '',
     specification: '',
     quantity: 0,
+    category: '',
+    subcategory: '',
   };
 
   quantity: number = 1;
@@ -50,6 +54,8 @@ export class ShopproductpageComponent implements OnInit {
         description: params['description'] || 'No description available',
         specification: params['specification'] || 'No description available',
         quantity: Number(params['quantity']) || 0,
+        category: params['category'] || '',
+        subcategory: params['subcategory'] || '',
       };
     });
   }
@@ -82,5 +88,40 @@ export class ShopproductpageComponent implements OnInit {
 
   getEmptyStars(rating: number): number[] {
     return Array(5 - Math.floor(rating)).fill(0);
+  }
+
+  getCategoryLabel(category: string): string {
+    // Match the categories from CommunityMarketComponent
+    const mainCategories: { [key: string]: string } = {
+      dog: 'Dog',
+      cat: 'Cat',
+      other: 'Other',
+    };
+
+    const subcategories: { [key: string]: string } = {
+      accessories: 'Accessories',
+      toys: 'Toys',
+      clothes: 'Clothes',
+    };
+
+    return (
+      mainCategories[category] ||
+      subcategories[category] ||
+      category ||
+      'Not Specified'
+    );
+  }
+
+  getSubcategoryLabel(subcategory: string): string {
+    const subcategories: { [key: string]: string } = {
+      accessories: 'Accessories',
+      toys: 'Toys',
+      clothes: 'Clothes',
+    };
+    return (
+      subcategories[subcategory?.toLowerCase()] ||
+      subcategory ||
+      'Not Specified'
+    );
   }
 }
