@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface CartItem {
-  userAvatar: string;
-  userName: string;
   productImg: string;
   productName: string;
   condition: string;
@@ -11,7 +9,7 @@ export interface CartItem {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
   private cartItems = new BehaviorSubject<CartItem[]>([]);
