@@ -62,6 +62,15 @@
             <button
               (click)="addToCart()"
               class="flex-1 bg-red-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-600 transition-colors"
+              [ngClass]="{
+                'hover:bg-red-600 cursor-pointer': isLoggedIn(),
+                'opacity-50 cursor-not-allowed': !isLoggedIn()
+              }"
+              [title]="
+                isLoggedIn()
+                  ? 'Sell an item'
+                  : 'Please login to add item to cart'
+              "
             >
               Add to Cart
             </button>

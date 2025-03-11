@@ -13,7 +13,11 @@ const profileRoute = require("./routes/profile.route");
 const marketRoute = require("./routes/communitymarket.route");
 const shopRoute = require("./routes/shop.route");
 const userRoute = require("./routes/user.route");
+<<<<<<< Updated upstream
 const forumRoute = require("./models/forum.model");
+=======
+const cartRoute = require("./routes/cart.route");
+>>>>>>> Stashed changes
 
 const app = express();
 
@@ -77,16 +81,16 @@ app.use((req, res, next) => {
   next();
 });
 
-//user route--------------------------------------------------------------------------------------------
+//user route
 app.use("/api/users", userRoute);
 
-//signup--------------------------------------------------------------------------------------------
+//signup
 app.use("/api/signup", signupRoute);
 
-//login--------------------------------------------------------------------------------------------
+//login
 app.use("/api/login", loginRoute);
 
-//google auth--------------------------------------------------------------------------------------------
+//google auth
 app.use(
   session({ secret: "your_secret_key", resave: false, saveUninitialized: true })
 );
@@ -94,14 +98,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(authRoutes);
 
-//profile get password--------------------------------------------------------------------------------------------
+//profile get password
 app.use("/api/profile", profileRoute);
 
-// Market route--------------------------------------------------------------------------------------------
+// Market route
 app.use("/api/market", marketRoute);
 
-// Shop route--------------------------------------------------------------------------------------------
+// Shop route
 app.use("/api/shop", shopRoute);
+
+// cart route
+app.use("/api/cart", cartRoute);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

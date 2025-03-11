@@ -16,6 +16,11 @@ export class CartComponent {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
+    const email = localStorage.getItem('email');
+    if (email) {
+      this.cartService.fetchCart(email);
+    }
+
     this.cartService.getCartItems().subscribe((items) => {
       this.cartItems = items;
     });
@@ -26,7 +31,7 @@ export class CartComponent {
   }
 
   getTotalItems(): number {
-    return this.cartItems.length;
+    return this.cartItems.reduce((total, item) => total + item.quantity, 0);
   }
 
   getTotalAmount(): number {
