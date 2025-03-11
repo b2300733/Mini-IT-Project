@@ -5,47 +5,61 @@
     <h1 class="text-2xl font-bold mb-6">Shopping Cart</h1>
 
     <!-- Empty Cart Message -->
-    <div *ngIf="cartItems.length === 0" 
-         class="bg-white rounded-lg shadow-md p-6 text-center">
+    <div
+      *ngIf="cartItems.length === 0"
+      class="bg-white rounded-lg shadow-md p-6 text-center"
+    >
       <p class="text-gray-600">Your cart is empty</p>
     </div>
 
     <!-- Cart Items -->
-    <div *ngIf="cartItems.length > 0" 
-         class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-      <div *ngFor="let item of cartItems; let i = index" 
-           class="p-6 border-b last:border-b-0">
+    <div
+      *ngIf="cartItems.length > 0"
+      class="bg-white rounded-lg shadow-md overflow-hidden mb-6"
+    >
+      <div
+        *ngFor="let item of cartItems; let i = index"
+        class="p-6 border-b last:border-b-0"
+      >
         <!-- User Info -->
-        <div class="flex items-center space-x-3 mb-4">
-          <img [src]="item.userAvatar" 
-               [alt]="item.userName"
-               class="w-10 h-10 rounded-full object-cover"
-               onerror="this.src='assets/placeholder-avatar.jpg'">
-          <span class="font-medium">{{item.userName}}</span>
-        </div>
 
         <!-- Product Info Container -->
         <div class="flex items-center justify-between">
           <!-- Product Image and Details -->
           <div class="flex items-center space-x-4 flex-grow">
-            <img [src]="item.productImg" 
-                 [alt]="item.productName"
-                 class="w-16 h-16 rounded-lg object-cover"
-                 onerror="this.src='assets/placeholder-product.jpg'">
+            <img
+              [src]="item.productImg"
+              [alt]="item.productName"
+              class="w-16 h-16 rounded-lg object-cover"
+              onerror="this.src='assets/placeholder-product.jpg'"
+            />
             <div>
-              <h3 class="font-medium">{{item.productName}}</h3>
-              <p class="text-sm text-gray-600">Condition: {{item.condition}}</p>
+              <h3 class="font-medium">{{ item.productName }}</h3>
+              <p class="text-sm text-gray-600">
+                Condition: {{ item.condition }}
+              </p>
             </div>
           </div>
 
           <!-- Price and Delete Button -->
           <div class="flex items-center space-x-6">
-            <p class="text-lg font-bold text-gray-900">RM{{item.price}}</p>
-            <button (click)="removeItem(i)" 
-                    class="text-red-500 hover:text-red-700 transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            <p class="text-lg font-bold text-gray-900">RM{{ item.price }}</p>
+            <button
+              (click)="removeItem(i)"
+              class="text-red-500 hover:text-red-700 transition-colors"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
               </svg>
             </button>
           </div>
@@ -57,15 +71,18 @@
     <div *ngIf="cartItems.length > 0" class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-between mb-4">
         <span class="text-gray-600">Total Items:</span>
-        <span class="font-medium">{{getTotalItems()}}</span>
+        <span class="font-medium">{{ getTotalItems() }}</span>
       </div>
       <div class="flex justify-between mb-6">
         <span class="text-gray-600">Total Amount:</span>
-        <span class="font-bold text-xl">RM{{getTotalAmount() | number:'1.2-2'}}</span>
+        <span class="font-bold text-xl"
+          >RM{{ getTotalAmount() | number : "1.2-2" }}</span
+        >
       </div>
-      <button (click)="checkout()" 
-              class="w-full bg-blue-500 text-white py-3 rounded-lg font-medium 
-                     hover:bg-blue-600 transition-colors">
+      <button
+        (click)="checkout()"
+        class="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+      >
         Proceed to Checkout
       </button>
     </div>

@@ -86,8 +86,6 @@ export class ShopproductpageComponent implements OnInit {
 
   addToCart(): void {
     const cartItem: CartItem = {
-      userAvatar: 'assets/placeholder-avatar.jpg', // Default user avatar
-      userName: 'Guest User', // Modify as needed
       productImg: this.product.images[0],
       productName: this.product.title,
       condition: 'New', // You can modify this to fetch condition dynamically
