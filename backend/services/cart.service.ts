@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 export interface CartItem {
+  productId: string;
   productImg: string;
   productName: string;
-  condition: string;
+  quantity: number;
   price: number;
 }
 
@@ -12,28 +14,46 @@ export interface CartItem {
   providedIn: 'root',
 })
 export class CartService {
+  private baseUrl = 'http://localhost:3000/api/cart';
   private cartItems = new BehaviorSubject<CartItem[]>([]);
+
+  constructor(private http: HttpClient) {}
 
   getCartItems(): Observable<CartItem[]> {
     return this.cartItems.asObservable();
   }
 
-  addToCart(item: CartItem) {
-    const currentItems = this.cartItems.value;
-    this.cartItems.next([...currentItems, item]);
+  fetchCart(email: string): void {
+    this.http.get<{ cart: CartItem[] }>(`${this.baseUrl}/${email}`).subscribe(
+      (response) => {
+        this.cartItems.next(response.cart);
+      },
+      (error) => {
+        console.error('Error fetching cart:', error);
+      }
+    );
   }
 
-  removeFromCart(index: number) {
+  addToCart(email: string, item: CartItem): void {
+    this.http.post(`${this.baseUrl}/add`, { email, ...item }).subscribe(
+      (response: any) => {
+        this.cartItems.next(response.cart);
+      },
+      (error) => {
+        console.error('Error adding to cart:', error);
+      }
+    );
+  }
+
+  removeFromCart(index: number): void {
     const currentItems = [...this.cartItems.value];
     currentItems.splice(index, 1);
     this.cartItems.next(currentItems);
   }
 
-  clearCart() {
-    this.cartItems.next([]);
-  }
-
-  getTotalAmount(): number {
-    return this.cartItems.value.reduce((total, item) => total + item.price, 0);
+  clearCart(email: string): void {
+    this.http.post(`${this.baseUrl}/clear`, { email }).subscribe(() => {
+      this.cartItems.next([]);
+    });
   }
 }

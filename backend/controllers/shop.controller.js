@@ -1,6 +1,8 @@
 const Shop = require("../models/shop.model");
 const User = require("../models/user.model");
 
+const { v4: uuidv4 } = require("uuid");
+
 const addProduct = async (req, res) => {
   try {
     const productImg = req.files.map((file) => `/shopImgs/${file.filename}`);
@@ -11,6 +13,7 @@ const addProduct = async (req, res) => {
     }
 
     const shop = new Shop({
+      product_id: uuidv4(),
       ...req.body,
       productImg,
       createdAt: new Date(new Date().getTime() + 8 * 60 * 60 * 1000),
@@ -29,7 +32,20 @@ const getAllProducts = async (req, res) => {
   try {
     const products = await Shop.find().sort({ createdAt: -1 });
 
-    res.status(200).json(products);
+    const formattedProducts = products.map((product) => ({
+      productId: product.product_id,
+      title: product.title,
+      price: product.price,
+      images: product.productImg,
+      brand: product.brand,
+      description: product.description,
+      specification: product.specification,
+      quantity: product.quantity,
+      category: product.category,
+      subcategory: product.subcategory,
+    }));
+
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
