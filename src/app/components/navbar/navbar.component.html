@@ -18,7 +18,10 @@
         routerLink="/cart"
         class="cursor-pointer"
       ></lucide-icon>
-      <h1 class="pl-0.5">1</h1>
+
+      <span *ngIf="getTotalItems() > 0" class="pl-1">{{
+        getTotalItems()
+      }}</span>
     </div>
     <div class="relative dropdown-menu" (click)="toggleDropdown($event)">
       <ng-container *ngIf="isLoggedIn(); else loginIcon">

@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 interface Product {
   id: string;
   title: string;
   price: number;
+  quantity: number;
   condition: string;
   category: string;
   subcategory: string;
@@ -35,6 +41,7 @@ export class ProductpageComponent implements OnInit {
     images: [],
     title: '',
     price: 0,
+    quantity: 0,
     condition: '',
     category: '',
     subcategory: '',
@@ -50,7 +57,14 @@ export class ProductpageComponent implements OnInit {
     responseTime: 'Typically responds within 1 hour',
   };
 
-  constructor(private route: ActivatedRoute) {}
+  quantity: number = 1;
+  message: string = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -58,6 +72,7 @@ export class ProductpageComponent implements OnInit {
         id: params['id'] || '',
         title: params['name'] || '',
         price: Number(params['price']) || 0,
+        quantity: Number(params['quantity']) || 0,
         images: params['images']?.split(',') || [params['img']] || [],
         condition: params['condition'] || '',
         category: params['category'] || '',
@@ -88,10 +103,6 @@ export class ProductpageComponent implements OnInit {
     if (this.currentImageIndex > 0) {
       this.currentImageIndex--;
     }
-  }
-
-  addCart(): void {
-    console.log('Add to Cart clicked');
   }
 
   handleImageError(event: Event) {
@@ -155,6 +166,47 @@ export class ProductpageComponent implements OnInit {
     };
     return optionMap[option.toLowerCase()] || option;
   }
-}
 
-//assets/placeholder
+  isLoggedIn(): boolean {
+    return (
+      !!localStorage.getItem('authToken') ||
+      !!sessionStorage.getItem('authToken')
+    );
+  }
+
+  addToCart(): void {
+    if (!this.isLoggedIn()) {
+      // Redirect to login page if not logged in
+      alert('Please login first to sell items');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const cartItem: CartItem = {
+      productImg: this.product.images[0],
+      productName: this.product.title,
+      quantity: this.quantity,
+      price: this.product.price * this.quantity,
+    };
+
+    this.cartService.addToCart(cartItem);
+    console.log('Added to cart:', cartItem);
+  }
+
+  decreaseQuantity(): void {
+    if (this.quantity > 1) {
+      this.quantity--;
+      this.message = '';
+    }
+  }
+
+  increaseQuantity(): void {
+    if (this.quantity < this.product.quantity) {
+      this.quantity++;
+      this.message = '';
+    } else {
+      this.message =
+        'You have reached the maximum quantity available for this item';
+    }
+  }
+}

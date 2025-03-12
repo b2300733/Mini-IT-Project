@@ -26,7 +26,8 @@ export class CartComponent {
   }
 
   getTotalItems(): number {
-    return this.cartItems.reduce((total, item) => total + item.quantity, 0);
+    return this.cartItems.length;
+    // return this.cartItems.reduce((total, item) => total + item.quantity, 0);
   }
 
   getTotalAmount(): number {

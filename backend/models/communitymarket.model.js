@@ -10,6 +10,7 @@ const marketSchema = new mongoose.Schema(
       trim: true,
     },
     productPrice: { type: String, required: true },
+    productQuantity: { type: Number, required: true },
     productImg: { type: [String], required: false },
     category: { type: String, required: true },
     subCategory: { type: String, required: true },

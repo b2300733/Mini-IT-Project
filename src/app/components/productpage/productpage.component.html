@@ -3,7 +3,7 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
   <div class="flex flex-col lg:flex-row gap-8">
     <!-- Left Column - Product Image -->
-    <div class="lg:w-3/5">
+    <div class="lg:w-1/2">
       <div class="bg-white rounded-lg overflow-hidden shadow-sm relative">
         <!-- Image -->
         <img
@@ -80,24 +80,56 @@
     </div>
 
     <!-- Right Column - Product Details -->
-    <div class="lg:w-2/5 space-y-6">
-      <!-- Product Title and Price -->
+    <div class="lg:w-1/2 space-y-6">
+      <!-- Brand and Title -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
-        <h1 class="text-2xl font-semibold text-gray-900">
+        <h1 class="text-2xl font-semibold text-gray-900 mt-1">
           {{ product.title }}
         </h1>
-        <p class="text-3xl font-bold text-gray-900 mt-2">
-          RM{{ product.price }}
-        </p>
 
-        <!-- Action Buttons -->
-        <div class="flex gap-4 mt-6">
-          <button
-            (click)="addCart()"
-            class="flex-1 bg-red-500 text-white py-3 rounded-lg font-medium hover:bg-red-600 transition-colors"
-          >
-            Add to Cart
-          </button>
+        <!-- Price -->
+        <div class="mt-4">
+          <p class="text-3xl font-bold text-gray-900">RM{{ product.price }}</p>
+        </div>
+
+        <!-- Quantity and Add to Cart -->
+        <div class="mt-6">
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center border rounded-lg">
+              <button
+                class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                (click)="decreaseQuantity()"
+              >
+                -
+              </button>
+              <span class="px-4 py-2 border-x">{{ quantity }}</span>
+              <button
+                class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                (click)="increaseQuantity()"
+              >
+                +
+              </button>
+            </div>
+            <button
+              (click)="addToCart()"
+              class="flex-1 bg-red-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-600 transition-colors"
+              [ngClass]="{
+                'hover:bg-red-600 cursor-pointer': isLoggedIn(),
+                'opacity-50 cursor-not-allowed': !isLoggedIn()
+              }"
+              [title]="
+                isLoggedIn()
+                  ? 'Sell an item'
+                  : 'Please login to add item to cart'
+              "
+            >
+              Add to Cart
+            </button>
+          </div>
+          <div *ngIf="message" style="color: red; margin-top: 5px">
+            {{ message }}
+          </div>
+          <div>Quantity: {{ product.quantity }}</div>
         </div>
       </div>
 

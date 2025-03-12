@@ -10,6 +10,7 @@ interface Product {
   username: string;
   userAvatar: string;
   condition: string;
+  productQuantity: number;
   size?: string;
   category?: string;
   subCategory: string;
@@ -90,6 +91,7 @@ export class CommunitymarketComponent {
       condition: ['', Validators.required],
       priceType: ['sale', Validators.required],
       price: [null, [Validators.required, Validators.min(0.01)]],
+      quantity: ['', Validators.required],
       deliveryOptions: [[], Validators.required],
     });
 
@@ -135,6 +137,7 @@ export class CommunitymarketComponent {
       queryParams: {
         name: product.productTitle,
         price: product.productPrice,
+        quantity: product.productQuantity,
         condition: product.condition,
         images: product.productImg.join(','), // Pass all images
         img: product.productImg[0], // Keep the first image as default
@@ -369,6 +372,7 @@ export class CommunitymarketComponent {
           ? '0'
           : this.listingForm.value.price
       );
+      formData.append('productQuantity', this.listingForm.value.quantity);
       formData.append('category', this.selectedCategory);
       formData.append('subCategory', this.selectedSubcategory);
       formData.append('condition', this.listingForm.value.condition);

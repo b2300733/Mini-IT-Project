@@ -1,5 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -26,10 +30,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
     localStorage.getItem('country') || sessionStorage.getItem('country');
   zip = localStorage.getItem('zip') || sessionStorage.getItem('zip');
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cartService: CartService) {}
+  cartItems: CartItem[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
     document.addEventListener('click', this.handleClickOutside.bind(this));
+
+    this.cartService.getCartItems().subscribe((items) => {
+      this.cartItems = items;
+    });
   }
 
   ngOnDestroy() {
@@ -123,5 +132,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('zip');
     this.dropdownOpen = false;
     this.router.navigate(['/login']);
+  }
+
+  getTotalItems(): number {
+    return this.cartItems.length;
   }
 }
