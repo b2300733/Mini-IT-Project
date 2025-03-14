@@ -15,7 +15,6 @@
 
         <!-- Navigation Arrows -->
         <div
-          *ngIf="product.images.length > 1"
           class="absolute inset-y-0 left-0 right-0 flex justify-between items-center px-4"
         >
           <!-- Previous Button -->
@@ -69,9 +68,8 @@
           </div>
         </div>
 
-        <!-- Image Counter - Only show if multiple images -->
+        <!-- Image Counter -->
         <div
-          *ngIf="product.images.length > 1"
           class="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm"
         >
           {{ currentImageIndex + 1 }} / {{ product.images.length }}
@@ -136,10 +134,7 @@
       <!-- Product Description - Replacing Delivery Information -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Description</h2>
-        <p
-          class="text-gray-700 whitespace-pre-line"
-          [style.white-space]="'pre-line'"
-        >
+        <p class="text-gray-700 whitespace-pre-line">
           {{ product.description || "No description available" }}
         </p>
       </div>
@@ -148,6 +143,12 @@
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">Delivery Options</h2>
         <div class="space-y-2">
+          <div
+            *ngIf="product.deliveryOptions.length === 0"
+            class="text-gray-500"
+          >
+            No delivery options specified
+          </div>
           <div
             *ngFor="let option of product.deliveryOptions"
             class="flex items-center text-gray-700"
@@ -169,6 +170,7 @@
           </div>
         </div>
       </div>
+      <
 
       <!-- Product Details -->
       <div class="bg-white rounded-lg p-6 shadow-sm">

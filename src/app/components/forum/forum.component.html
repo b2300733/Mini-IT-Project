@@ -63,94 +63,219 @@
         </div>
       </div>
 
-      <!-- Categories (only in listing view) -->
+      <!-- Categories Section -->
       <div *ngIf="!isDetailView" class="flex p-4 space-x-2 overflow-x-auto">
         <button
-          *ngFor="let category of categories"
+          *ngFor="let category of filterCategories"
           (click)="filterByCategory(category)"
           [ngClass]="{
-            'bg-red-100 text-red-600': selectedCategory === category
+            'bg-red-100 text-red-600': activeCategory === category,
+            'hover:bg-gray-100': activeCategory !== category
           }"
-          class="px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors"
+          class="px-4 py-2 rounded-full text-sm font-medium transition-colors"
         >
           {{ category }}
         </button>
       </div>
-    </div>
 
-    <!-- New Post Form (only in listing view) -->
-    <div
-      *ngIf="showNewPostForm && !isDetailView"
-      class="bg-white rounded-lg shadow mb-6 p-4"
-    >
-      <form [formGroup]="postForm" (ngSubmit)="submitPost()" class="space-y-4">
-        <div>
-          <input
-            type="text"
-            formControlName="title"
-            placeholder="Title"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          />
-        </div>
-        <div>
-          <textarea
-            formControlName="content"
-            rows="4"
-            placeholder="What's on your mind?"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          ></textarea>
-        </div>
-        <div>
-          <select
-            formControlName="category"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          >
-            <option value="">Select category</option>
-            <option *ngFor="let category of categories" [value]="category">
-              {{ category }}
-            </option>
-          </select>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button
-            type="button"
-            (click)="toggleNewPost()"
-            class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            [disabled]="!postForm.valid"
-            class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
-          >
-            Post
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Post Listing (only when not in detail view) -->
-    <div *ngIf="!isDetailView" class="space-y-4">
+      <!-- New Post Form (only in listing view) -->
       <div
-        *ngFor="let post of posts"
-        class="bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer"
-        (click)="viewPost(post)"
+        *ngIf="showNewPostForm && !isDetailView"
+        class="bg-white rounded-lg shadow mb-6 p-4"
       >
-        <div class="p-4 flex-1">
+        <form
+          [formGroup]="postForm"
+          (ngSubmit)="submitPost()"
+          class="space-y-4"
+        >
+          <div>
+            <input
+              type="text"
+              formControlName="title"
+              placeholder="Title"
+              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            />
+            <div
+              *ngIf="
+                postForm.get('title')?.touched && postForm.get('title')?.invalid
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              <span *ngIf="postForm.get('title')?.errors?.['required']"
+                >Title is required</span
+              >
+              <span *ngIf="postForm.get('title')?.errors?.['minlength']"
+                >Title must be at least 10 characters</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <textarea
+              formControlName="content"
+              rows="4"
+              placeholder="What's on your mind?"
+              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            ></textarea>
+            <div
+              *ngIf="
+                postForm.get('content')?.touched &&
+                postForm.get('content')?.invalid
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              <span *ngIf="postForm.get('content')?.errors?.['required']"
+                >Content is required</span
+              >
+              <span *ngIf="postForm.get('content')?.errors?.['minlength']"
+                >Content must be at least 20 characters</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <select
+              formControlName="category"
+              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            >
+              <option value="" disabled selected>Select category</option>
+              <option
+                *ngFor="let category of postCategories"
+                [value]="category"
+              >
+                {{ category }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                postForm.get('category')?.touched &&
+                postForm.get('category')?.invalid
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              <span *ngIf="postForm.get('category')?.errors?.['required']">
+                Category is required
+              </span>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              type="button"
+              (click)="toggleNewPost()"
+              class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="!postForm.valid"
+              class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
+            >
+              Post
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Post Listing (only when not in detail view) -->
+      <div *ngIf="!isDetailView" class="space-y-4">
+        <div
+          *ngFor="let post of posts"
+          class="bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer"
+          (click)="viewPost(post)"
+        >
+          <div class="p-4 flex-1">
+            <div class="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+              <span class="bg-gray-100 px-2 py-1 rounded">{{
+                post.category
+              }}</span>
+              <span>Posted by {{ post.userEmail }}</span>
+              <span>{{ post.timestamp }}</span>
+            </div>
+            <h2 class="text-lg font-semibold mb-2">{{ post.title }}</h2>
+            <p class="text-gray-600 mb-4">{{ post.content }}</p>
+            <div class="flex items-center text-gray-500 text-sm space-x-4">
+              <div class="flex items-center space-x-2">
+                <button
+                  (click)="upvotePost(post, $event)"
+                  class="hover:text-red-500"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                    />
+                  </svg>
+                </button>
+                <span>{{ post.upvotes }}</span>
+                <button
+                  (click)="downvotePost(post, $event)"
+                  class="hover:text-red-500"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2.5"
+                    />
+                  </svg>
+                </button>
+                <span>{{ post.downvotes }}</span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  ></path>
+                </svg>
+                <span>{{ post.commentCount }} comments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post Detail View -->
+      <div *ngIf="isDetailView && selectedPost" class="space-y-4">
+        <!-- Post Detail -->
+        <div class="bg-white rounded-lg shadow p-4">
           <div class="flex items-center space-x-2 text-xs text-gray-500 mb-2">
             <span class="bg-gray-100 px-2 py-1 rounded">{{
-              post.category
+              selectedPost.category
             }}</span>
-            <span>Posted by {{ post.author }}</span>
-            <span>{{ post.timestamp }}</span>
+            <span>Posted by {{ selectedPost.userEmail }}</span>
+            <span>{{ selectedPost.timestamp }}</span>
           </div>
-          <h2 class="text-lg font-semibold mb-2">{{ post.title }}</h2>
-          <p class="text-gray-600 mb-4">{{ post.content }}</p>
-          <div class="flex items-center text-gray-500 text-sm space-x-4">
+          <h1 class="text-2xl font-bold mb-4">{{ selectedPost.title }}</h1>
+          <p class="text-gray-700 mb-6">{{ selectedPost.content }}</p>
+          <div
+            class="flex items-center text-gray-500 text-sm space-x-4 border-t pt-4"
+          >
             <div class="flex items-center space-x-2">
               <button
-                (click)="upvotePost(post, $event)"
+                (click)="upvotePost(selectedPost, $event)"
                 class="hover:text-red-500"
               >
                 <svg
@@ -163,13 +288,13 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M5 15l7-7 7 7"
-                  ></path>
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                  />
                 </svg>
               </button>
-              <span>{{ post.upvotes }}</span>
+              <span>{{ selectedPost.upvotes }}</span>
               <button
-                (click)="downvotePost(post, $event)"
+                (click)="downvotePost(selectedPost, $event)"
                 class="hover:text-red-500"
               >
                 <svg
@@ -182,11 +307,11 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
+                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2.5"
+                  />
                 </svg>
               </button>
-              <span>{{ post.downvotes }}</span>
+              <span>{{ selectedPost.downvotes }}</span>
             </div>
             <div class="flex items-center space-x-1">
               <svg
@@ -202,212 +327,136 @@
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>{{ post.commentCount }} comments</span>
+              <span>{{ selectedPost.commentCount }} comments</span>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Post Detail View -->
-    <div *ngIf="isDetailView && selectedPost" class="space-y-4">
-      <!-- Post Detail -->
-      <div class="bg-white rounded-lg shadow p-4">
-        <div class="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-          <span class="bg-gray-100 px-2 py-1 rounded">{{
-            selectedPost.category
-          }}</span>
-          <span>Posted by {{ selectedPost.author }}</span>
-          <span>{{ selectedPost.timestamp }}</span>
-        </div>
-        <h1 class="text-2xl font-bold mb-4">{{ selectedPost.title }}</h1>
-        <p class="text-gray-700 mb-6">{{ selectedPost.content }}</p>
-        <div
-          class="flex items-center text-gray-500 text-sm space-x-4 border-t pt-4"
-        >
-          <div class="flex items-center space-x-2">
-            <button
-              (click)="upvotePost(selectedPost, $event)"
-              class="hover:text-red-500"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 15l7-7 7 7"
-                ></path>
-              </svg>
-            </button>
-            <span>{{ selectedPost.upvotes }}</span>
-            <button
-              (click)="downvotePost(selectedPost, $event)"
-              class="hover:text-red-500"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
-            </button>
-            <span>{{ selectedPost.downvotes }}</span>
-          </div>
-          <div class="flex items-center space-x-1">
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              ></path>
-            </svg>
-            <span>{{ selectedPost.commentCount }} comments</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Comment Form -->
-      <div class="bg-white rounded-lg shadow p-4">
-        <h3 class="font-medium mb-2">Add a comment</h3>
-        <form
-          [formGroup]="commentForm"
-          (ngSubmit)="submitComment()"
-          class="space-y-3"
-        >
-          <textarea
-            formControlName="content"
-            rows="3"
-            placeholder="What are your thoughts?"
-            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          ></textarea>
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              [disabled]="!commentForm.valid"
-              class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
-            >
-              Comment
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Comments Section -->
-      <div class="bg-white rounded-lg shadow p-4">
-        <h3 class="font-medium mb-4">
-          Comments ({{ selectedPost.commentCount }})
-        </h3>
-
-        <div class="space-y-4">
-          <!-- Individual Comments -->
-          <div
-            *ngFor="let comment of selectedPost.comments"
-            class="border-b pb-4 last:border-0"
+        <!-- Comment Form -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <h3 class="font-medium mb-2">Add a comment</h3>
+          <form
+            [formGroup]="commentForm"
+            (ngSubmit)="submitComment()"
+            class="space-y-3"
           >
-            <div class="flex items-start space-x-2 mb-2">
-              <div
-                class="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
+            <textarea
+              formControlName="content"
+              rows="3"
+              placeholder="What are your thoughts?"
+              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            ></textarea>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                [disabled]="!commentForm.valid"
+                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
               >
-                <span class="text-gray-700 font-semibold">{{
-                  comment.author.charAt(0)
-                }}</span>
-              </div>
-              <div class="flex-1">
-                <div class="flex items-center space-x-2">
-                  <span class="font-medium">{{ comment.author }}</span>
-                  <span class="text-xs text-gray-500">{{
-                    comment.timestamp
+                Comment
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <h3 class="font-medium mb-4">
+            Comments ({{ selectedPost.commentCount }})
+          </h3>
+
+          <div class="space-y-4">
+            <!-- Individual Comments -->
+            <div
+              *ngFor="let comment of selectedPost.comments"
+              class="border-b pb-4 last:border-0"
+            >
+              <div class="flex items-start space-x-2 mb-2">
+                <div
+                  class="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
+                >
+                  <span class="text-gray-700 font-semibold">{{
+                    comment.userEmail.charAt(0)
                   }}</span>
                 </div>
-                <p class="text-gray-700 mt-1">{{ comment.content }}</p>
+                <div class="flex-1">
+                  <div class="flex items-center space-x-2">
+                    <span class="font-medium">{{ comment.userEmail }}</span>
+                    <span class="text-xs text-gray-500">{{
+                      comment.timestamp
+                    }}</span>
+                  </div>
+                  <p class="text-gray-700 mt-1">{{ comment.content }}</p>
 
-                <!-- Reply Button -->
-                <button
-                  (click)="toggleReplyForm(comment)"
-                  class="text-xs text-gray-500 hover:text-red-500 mt-1"
-                >
-                  Reply
-                </button>
-
-                <!-- Reply Form -->
-                <div *ngIf="comment.isReplying" class="mt-2">
-                  <form
-                    [formGroup]="replyForm"
-                    (ngSubmit)="submitReply(comment)"
-                    class="space-y-2"
+                  <!-- Reply Button -->
+                  <button
+                    (click)="toggleReplyForm(comment)"
+                    class="text-xs text-gray-500 hover:text-red-500 mt-1"
                   >
-                    <textarea
-                      formControlName="content"
-                      rows="2"
-                      placeholder="Write a reply..."
-                      class="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                    ></textarea>
-                    <div class="flex justify-end space-x-2">
-                      <button
-                        type="button"
-                        (click)="toggleReplyForm(comment)"
-                        class="px-3 py-1 text-xs text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        [disabled]="!replyForm.valid"
-                        class="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
-                      >
-                        Reply
-                      </button>
-                    </div>
-                  </form>
-                </div>
+                    Reply
+                  </button>
 
-                <!-- Nested Replies -->
-                <div
-                  *ngIf="comment.replies.length > 0"
-                  class="ml-6 mt-3 space-y-3"
-                >
-                  <div
-                    *ngFor="let reply of comment.replies"
-                    class="border-l-2 border-gray-200 pl-3"
-                  >
-                    <div class="flex items-start space-x-2">
-                      <div
-                        class="bg-gray-200 rounded-full w-6 h-6 flex items-center justify-center"
-                      >
-                        <span class="text-gray-700 text-xs font-semibold">{{
-                          reply.author.charAt(0)
-                        }}</span>
+                  <!-- Reply Form -->
+                  <div *ngIf="comment.isReplying" class="mt-2">
+                    <form
+                      [formGroup]="replyForm"
+                      (ngSubmit)="submitReply(comment)"
+                      class="space-y-2"
+                    >
+                      <textarea
+                        formControlName="content"
+                        rows="2"
+                        placeholder="Write a reply..."
+                        class="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      ></textarea>
+                      <div class="flex justify-end space-x-2">
+                        <button
+                          type="button"
+                          (click)="toggleReplyForm(comment)"
+                          class="px-3 py-1 text-xs text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          [disabled]="!replyForm.valid"
+                          class="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
+                        >
+                          Reply
+                        </button>
                       </div>
-                      <div>
-                        <div class="flex items-center space-x-2">
-                          <span class="font-medium text-sm">{{
-                            reply.author
-                          }}</span>
-                          <span class="text-xs text-gray-500">{{
-                            reply.timestamp
+                    </form>
+                  </div>
+
+                  <!-- Nested Replies -->
+                  <div
+                    *ngIf="comment.replies.length > 0"
+                    class="ml-6 mt-3 space-y-3"
+                  >
+                    <div
+                      *ngFor="let reply of comment.replies"
+                      class="border-l-2 border-gray-200 pl-3"
+                    >
+                      <div class="flex items-start space-x-2">
+                        <div
+                          class="bg-gray-200 rounded-full w-6 h-6 flex items-center justify-center"
+                        >
+                          <span class="text-gray-700 text-xs font-semibold">{{
+                            reply.userEmail.charAt(0)
                           }}</span>
                         </div>
-                        <p class="text-gray-700 text-sm mt-1">
-                          {{ reply.content }}
-                        </p>
+                        <div>
+                          <div class="flex items-center space-x-2">
+                            <span class="font-medium text-sm">{{
+                              reply.userEmail
+                            }}</span>
+                            <span class="text-xs text-gray-500">{{
+                              reply.timestamp
+                            }}</span>
+                          </div>
+                          <p class="text-gray-700 text-sm mt-1">
+                            {{ reply.content }}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>

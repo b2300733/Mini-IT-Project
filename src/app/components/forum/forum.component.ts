@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ForumService } from '../../../../backend/services/forum.service';
 
 interface Comment {
   id: number;
-  author: string;
+  userEmail: string;
   content: string;
   timestamp: string;
   replies: Comment[];
@@ -11,10 +13,10 @@ interface Comment {
 }
 
 interface ForumPost {
-  id: number;
+  id?: string;
   title: string;
   content: string;
-  author: string;
+  userEmail: string;
   upvotes: number;
   downvotes: number;
   commentCount: number;
@@ -27,10 +29,20 @@ interface ForumPost {
   selector: 'app-forum',
   standalone: false,
   templateUrl: './forum.component.html',
+  styleUrls: ['./forum.component.css'],
 })
 export class ForumComponent implements OnInit {
-  categories: string[] = ['All', 'Dog', 'Cat', 'Other'];
-  selectedCategory: string = 'All';
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
+  mainCategories = [
+    { value: 'dog', label: 'Dog' },
+    { value: 'cat', label: 'Cat' },
+    { value: 'other', label: 'Other' },
+  ];
+  filterCategories: string[] = ['All', 'Dog', 'Cat', 'Other'];
+  postCategories: string[] = ['Dog', 'Cat', 'Other'];
+  selectedCategory: string = '';
+  activeCategory: string | null = null;
   showNewPostForm = false;
   postForm: FormGroup;
   commentForm: FormGroup;
@@ -39,8 +51,14 @@ export class ForumComponent implements OnInit {
   posts: ForumPost[] = [];
   selectedPost: ForumPost | null = null;
   isDetailView = false;
+  searchQuery: string = '';
+  currentStep = 1;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private forumService: ForumService
+  ) {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(10)]],
       content: ['', [Validators.required, Validators.minLength(20)]],
@@ -57,111 +75,119 @@ export class ForumComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Create sample posts with comments
-    this.posts = [
-      {
-        id: 1,
-        title: 'Need advice for my new puppy',
-        content:
-          'Just got a new Golden Retriever puppy. Any tips for first-time dog owners?',
-        author: 'dogLover123',
-        upvotes: 15,
-        downvotes: 2,
-        commentCount: 2,
-        timestamp: '2 hours ago',
-        category: 'Dog',
-        comments: [
-          {
-            id: 1,
-            author: 'PuppyExpert',
-            content: 'Make sure to start training early! Consistency is key.',
-            timestamp: '1 hour ago',
-            replies: [
-              {
-                id: 3,
-                author: 'dogLover123',
-                content:
-                  'Thanks for the advice! Any specific training methods you recommend?',
-                timestamp: '45 minutes ago',
-                replies: [],
-                isReplying: false,
-              },
-            ],
-            isReplying: false,
-          },
-          {
-            id: 2,
-            author: 'VetTech42',
-            content:
-              'Schedule a vet visit within the first week. Also, make sure to puppy-proof your home!',
-            timestamp: '30 minutes ago',
-            replies: [],
-            isReplying: false,
-          },
-        ],
-      },
-      {
-        id: 2,
-        title: 'My cat keeps knocking things off shelves',
-        content:
-          'My 2-year-old tabby has developed a habit of pushing everything off every surface. Help!',
-        author: 'CatParent',
-        upvotes: 8,
-        downvotes: 1,
-        commentCount: 1,
-        timestamp: '3 hours ago',
-        category: 'Cat',
-        comments: [
-          {
-            id: 4,
-            author: 'CatBehaviorist',
-            content: 'OMG Is 100 teeth dinasour',
-            timestamp: '2 hours ago',
-            replies: [],
-            isReplying: false,
-          },
-        ],
-      },
-    ];
+    this.fetchForumPosts();
+  }
 
-    // Store original posts
-    this.originalPosts = [...this.posts];
+  fetchForumPosts() {
+    this.forumService.getAllPosts().subscribe({
+      next: (response) => {
+        this.posts = response;
+        this.originalPosts = [...response];
+      },
+      error: (error) => {
+        console.error('Error fetching forum posts:', error);
+      },
+    });
   }
 
   toggleNewPost() {
     this.showNewPostForm = !this.showNewPostForm;
+    if (this.showNewPostForm) {
+      this.currentStep = 1;
+      this.resetListingForm();
+    }
+  }
+
+  resetListingForm() {
+    this.postForm.reset({
+      title: '',
+      content: '',
+      category: '', // Reset to empty string
+    });
+    this.selectedCategory = '';
+    this.currentStep = 1;
+  }
+
+  onCategoryChange(event: any) {
+    this.selectedCategory = event.target.value;
+    // If you need to filter posts by category
+    if (this.selectedCategory) {
+      this.filterByCategory(this.selectedCategory);
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return !!(localStorage.getItem('email') || sessionStorage.getItem('email'));
   }
 
   submitPost() {
+    if (!this.isLoggedIn()) {
+      alert('Please login first to create a post');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     if (this.postForm.valid) {
-      const newPost: ForumPost = {
-        id: this.posts.length + 1,
-        ...this.postForm.value,
-        author: 'CurrentUser', // Replace with actual logged-in user
+      const userEmail =
+        localStorage.getItem('email') || sessionStorage.getItem('email');
+
+      if (!userEmail) {
+        alert('Please login first to create a post');
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const postData = {
+        title: this.postForm.value.title.trim(),
+        content: this.postForm.value.content.trim(),
+        category: this.postForm.value.category,
+        userEmail: userEmail,
         upvotes: 0,
         downvotes: 0,
         commentCount: 0,
-        timestamp: 'Just now',
         comments: [],
+        timestamp: new Date().toISOString(),
       };
-      this.posts.unshift(newPost);
-      this.originalPosts = [...this.posts];
-      this.postForm.reset();
-      this.showNewPostForm = false;
+
+      console.log('Sending post data:', postData); // Debug log
+
+      this.forumService.createPost(postData).subscribe({
+        next: (response) => {
+          console.log('Post created successfully:', response);
+          this.fetchForumPosts();
+          this.postForm.reset();
+          this.showNewPostForm = false;
+          alert('Your post has been created successfully!');
+        },
+        error: (error) => {
+          console.error('Error details:', error); // Detailed error log
+          const errorMessage =
+            error.error?.message ||
+            'There was an error creating your post. Please try again.';
+          alert(errorMessage);
+        },
+      });
+    } else {
+      // Form validation failed
+      Object.keys(this.postForm.controls).forEach((key) => {
+        const control = this.postForm.get(key);
+        if (control?.invalid) {
+          console.log(`${key} is invalid:`, control.errors); // Debug validation
+        }
+      });
     }
   }
 
   filterByCategory(category: string) {
-    this.selectedCategory = category;
+    this.activeCategory = category;
 
     if (category === 'All') {
       this.posts = [...this.originalPosts];
-      return;
+    } else {
+      this.posts = this.originalPosts.filter(
+        (post) => post.category === category
+      );
     }
-
-    this.posts = this.originalPosts.filter(
-      (post) => post.category === category
-    );
   }
 
   searchPosts(event: any) {
@@ -176,7 +202,7 @@ export class ForumComponent implements OnInit {
       (post) =>
         post.title.toLowerCase().includes(searchTerm) ||
         post.content.toLowerCase().includes(searchTerm) ||
-        post.author.toLowerCase().includes(searchTerm)
+        post.userEmail.toLowerCase().includes(searchTerm)
     );
   }
 
@@ -194,7 +220,7 @@ export class ForumComponent implements OnInit {
     if (this.commentForm.valid && this.selectedPost) {
       const newComment: Comment = {
         id: this.getNextCommentId(),
-        author: 'CurrentUser', // Replace with actual logged-in user
+        userEmail: '', // Replace with actual logged-in user
         content: this.commentForm.value.content,
         timestamp: 'Just now',
         replies: [],
@@ -218,7 +244,7 @@ export class ForumComponent implements OnInit {
     if (this.replyForm.valid) {
       const newReply: Comment = {
         id: this.getNextCommentId(),
-        author: 'CurrentUser', // Replace with actual logged-in user
+        userEmail: '', // Replace with actual logged-in user
         content: this.replyForm.value.content,
         timestamp: 'Just now',
         replies: [],

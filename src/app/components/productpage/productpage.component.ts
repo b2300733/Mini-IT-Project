@@ -68,6 +68,8 @@ export class ProductpageComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      const deliveryOpts = params['deliveryOptions']?.split(',') || [];
+
       this.product = {
         id: params['id'] || '',
         title: params['name'] || '',
@@ -78,9 +80,9 @@ export class ProductpageComponent implements OnInit {
         category: params['category'] || '',
         subcategory: params['subcategory'] || '',
         description: params['description'] || '',
-        deliveryOptions: params['deliveryOptions']
-          ? params['deliveryOptions'].split(',').map(this.formatDeliveryOption)
-          : ['MeetUp', 'Delivery Available'],
+        deliveryOptions: deliveryOpts.map((opt: string) =>
+          this.formatDeliveryOption(opt)
+        ),
       };
 
       this.seller = {
@@ -161,7 +163,7 @@ export class ProductpageComponent implements OnInit {
 
   private formatDeliveryOption(option: string): string {
     const optionMap: { [key: string]: string } = {
-      meetup: 'MeetUp',
+      meetup: 'Meet Up',
       delivery: 'Delivery Available',
     };
     return optionMap[option.toLowerCase()] || option;
