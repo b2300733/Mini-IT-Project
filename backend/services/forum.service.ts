@@ -59,18 +59,29 @@ export class ForumService {
   addComment(
     postId: string,
     comment: { content: string; userEmail: string }
-  ): Observable<any> {
-    return this.http.post(`${this.baseUrl}/posts/${postId}/comments`, comment);
+  ): Observable<ForumPost> {
+    return this.http.post<ForumPost>(
+      `${this.baseUrl}/posts/${postId}/comments`,
+      {
+        content: comment.content,
+        userEmail: comment.userEmail,
+        timestamp: new Date().toISOString(),
+      }
+    );
   }
 
   addReply(
     postId: string,
     commentId: string,
     reply: { content: string; userEmail: string }
-  ): Observable<any> {
-    return this.http.post(
+  ): Observable<ForumPost> {
+    return this.http.post<ForumPost>(
       `${this.baseUrl}/posts/${postId}/comments/${commentId}/replies`,
-      reply
+      {
+        content: reply.content,
+        userEmail: reply.userEmail,
+        timestamp: new Date().toISOString(),
+      }
     );
   }
 

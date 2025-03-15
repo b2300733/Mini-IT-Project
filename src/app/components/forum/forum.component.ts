@@ -226,18 +226,23 @@ export class ForumComponent implements OnInit {
 
   submitComment() {
     if (this.commentForm.valid && this.selectedPost) {
-      const newComment: Comment = {
-        id: this.getNextCommentId(),
-        userEmail: '', // Replace with actual logged-in user
+      const comment = {
         content: this.commentForm.value.content,
-        timestamp: 'Just now',
-        replies: [],
-        isReplying: false,
+        userEmail: this.userEmail,
       };
 
-      this.selectedPost.comments.push(newComment);
-      this.selectedPost.commentCount += 1;
-      this.commentForm.reset();
+      this.forumService.addComment(this.selectedPost._id!, comment).subscribe({
+        next: (updatedPost) => {
+          this.selectedPost = updatedPost;
+          this.commentForm.reset();
+          // Update the post in the posts array
+          this.updatePost(updatedPost);
+        },
+        error: (error) => {
+          console.error('Error adding comment:', error);
+          alert('Failed to add comment');
+        },
+      });
     }
   }
 
@@ -249,23 +254,27 @@ export class ForumComponent implements OnInit {
   }
 
   submitReply(parentComment: Comment) {
-    if (this.replyForm.valid) {
-      const newReply: Comment = {
-        id: this.getNextCommentId(),
-        userEmail: '', // Replace with actual logged-in user
+    if (this.replyForm.valid && this.selectedPost) {
+      const reply = {
         content: this.replyForm.value.content,
-        timestamp: 'Just now',
-        replies: [],
-        isReplying: false,
+        userEmail: this.userEmail,
       };
 
-      parentComment.replies.push(newReply);
-      if (this.selectedPost) {
-        this.selectedPost.commentCount += 1;
-      }
-
-      parentComment.isReplying = false;
-      this.replyForm.reset();
+      this.forumService
+        .addReply(this.selectedPost._id!, parentComment.id.toString(), reply)
+        .subscribe({
+          next: (updatedPost) => {
+            this.selectedPost = updatedPost;
+            this.replyForm.reset();
+            parentComment.isReplying = false;
+            // Update the post in the posts array
+            this.updatePost(updatedPost);
+          },
+          error: (error) => {
+            console.error('Error adding reply:', error);
+            alert('Failed to add reply');
+          },
+        });
     }
   }
 
@@ -320,12 +329,12 @@ export class ForumComponent implements OnInit {
 
   downvotePost(post: ForumPost, event: Event) {
     event.stopPropagation();
-  
+
     if (!post._id) {
       console.error('Post ID is missing:', post);
       return;
     }
-  
+
     // Check if user has already downvoted
     if (post.downvotedBy.includes(this.userEmail)) {
       // Remove downvote
@@ -365,7 +374,7 @@ export class ForumComponent implements OnInit {
         this.originalPosts[originalIndex] = updatedPost;
       }
     }
-  
+
     // Update selected post if in detail view
     if (this.selectedPost?._id === updatedPost._id) {
       this.selectedPost = updatedPost;
