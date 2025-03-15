@@ -14,6 +14,7 @@ const marketRoute = require("./routes/communitymarket.route");
 const shopRoute = require("./routes/shop.route");
 const userRoute = require("./routes/user.route");
 const forumRoute = require("./routes/forum.route");
+const cartRoute = require("./routes/cart.route");
 
 const app = express();
 
@@ -104,6 +105,7 @@ app.use("/api/market", marketRoute);
 app.use("/api/shop", shopRoute);
 
 // cart route--------------------------------------------------------------------------------------------
+app.use("/api/cart", cartRoute);
 
 // Forum route--------------------------------------------------------------------------------------------
 app.use("/api/forum", forumRoute);

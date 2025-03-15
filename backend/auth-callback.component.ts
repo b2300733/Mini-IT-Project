@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CartService } from '../backend/services/cart.service';
 
 @Component({
   selector: 'app-auth-callback',
@@ -7,7 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: '',
 })
 export class AuthCallbackComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -39,6 +44,7 @@ export class AuthCallbackComponent implements OnInit {
         localStorage.setItem('state', state);
         localStorage.setItem('country', country);
         localStorage.setItem('zip', zip);
+        this.cartService.setUserEmail(email);
         this.router.navigate(['/profile']).then(() => {
           window.location.reload();
         });

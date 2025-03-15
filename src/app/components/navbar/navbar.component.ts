@@ -39,6 +39,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.cartService.getCartItems().subscribe((items) => {
       this.cartItems = items;
     });
+
+    // Set user email if logged in
+    const email =
+      localStorage.getItem('email') || sessionStorage.getItem('email');
+    if (email) {
+      this.cartService.setUserEmail(email);
+    }
   }
 
   ngOnDestroy() {
@@ -105,6 +112,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    // Clear cart service user email to empty cart display
+    this.cartService.clearUserEmail();
+
     localStorage.removeItem('authToken');
     localStorage.removeItem('username');
     localStorage.removeItem('avatar');

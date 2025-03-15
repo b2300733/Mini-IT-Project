@@ -33,6 +33,7 @@ const login = async (req, res) => {
         state: user.state,
         country: user.country,
         zip: user.zip,
+        cart: user.cart || [],
       },
     });
   } catch (error) {

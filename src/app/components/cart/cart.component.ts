@@ -23,6 +23,7 @@ export class CartComponent {
 
   removeItem(index: number): void {
     this.cartService.removeFromCart(index);
+    alert('Item have been removed successfully!');
   }
 
   getTotalItems(): number {
@@ -36,6 +37,6 @@ export class CartComponent {
 
   checkout(): void {
     console.log('Proceeding to checkout...');
-    // Implement checkout logic
+    alert('Proceeding to checkout...');
   }
 }

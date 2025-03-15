@@ -19,7 +19,7 @@
     >
       <div
         *ngFor="let item of cartItems; let i = index"
-        class="p-6 border-b border-dashed last:border-b-0 hover:bg-orange-100 transition duration-300 ease-in"
+        class="p-6 border-b border-dashed last:border-b-0 hover:bg-orange-100/70 transition duration-300 ease-in"
       >
         <!-- User Info -->
 
@@ -29,12 +29,12 @@
           <div class="flex items-center space-x-4 flex-grow">
             <img
               [src]="item.productImg"
-              [alt]="item.productName"
+              [alt]="item.productTitle"
               class="w-16 h-16 rounded-lg object-cover"
               onerror="this.src='assets/placeholder-product.jpg'"
             />
             <div>
-              <h3 class="font-medium">{{ item.productName }}</h3>
+              <h3 class="font-medium">{{ item.productTitle }}</h3>
               <p class="text-sm text-gray-600">Quantity: {{ item.quantity }}</p>
             </div>
           </div>

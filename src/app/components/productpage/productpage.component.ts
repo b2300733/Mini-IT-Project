@@ -186,13 +186,23 @@ export class ProductpageComponent implements OnInit {
 
     const cartItem: CartItem = {
       productImg: this.product.images[0],
-      productName: this.product.title,
+      productTitle: this.product.title,
       quantity: this.quantity,
       price: this.product.price * this.quantity,
     };
 
-    this.cartService.addToCart(cartItem);
-    console.log('Added to cart:', cartItem);
+    const userEmail =
+      localStorage.getItem('email') || sessionStorage.getItem('email');
+
+    if (userEmail) {
+      this.cartService.addToCart(cartItem);
+      console.log('Added to cart:', cartItem);
+      alert('Item added to cart successfully!');
+    } else {
+      // This shouldn't happen if isLoggedIn() returns true, but just in case
+      alert('Error: User email not found. Please log in again.');
+      this.router.navigate(['/login']);
+    }
   }
 
   decreaseQuantity(): void {

@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema(
     oauthProvider: { type: String, required: false },
     oauthId: { type: String, required: false, unique: true, sparse: true },
     isAdmin: { type: Boolean, default: false },
+    cart: [
+      {
+        productImg: String,
+        productTitle: String,
+        quantity: Number,
+        price: Number,
+      },
+    ],
   },
   { timestamps: true }
 );

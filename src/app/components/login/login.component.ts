@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../../backend/services/login.service';
+import { CartService } from '../../../../backend/services/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,11 @@ export class LoginComponent {
   rememberMe = false;
   errorMessage = '';
 
-  constructor(private router: Router, private loginService: LoginService) {}
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private cartService: CartService
+  ) {}
 
   submit() {
     if (this.validateForm()) {
@@ -34,6 +39,7 @@ export class LoginComponent {
           storage.setItem('state', response.user.state);
           storage.setItem('country', response.user.country);
           storage.setItem('zip', response.user.zip);
+          this.cartService.setUserEmail(response.user.email);
           this.router.navigate(['/profile']).then(() => {
             window.location.reload();
           });
