@@ -49,35 +49,46 @@ const addComment = async (req, res) => {
     const { postId } = req.params;
     const { content, userEmail } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(postId)) {
-      return res.status(400).json({
-        message: `Invalid post ID: ${postId}`,
-      });
-    }
+    console.log("Adding comment:", { postId, content, userEmail });
 
     const post = await ForumPost.findById(postId);
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    // Find the highest ID among all comments and replies
+    let maxId = 0;
+    post.comments.forEach((comment) => {
+      maxId = Math.max(maxId, comment.id || 0);
+      comment.replies.forEach((reply) => {
+        maxId = Math.max(maxId, reply.id || 0);
+      });
+    });
+
     const newComment = {
+      id: maxId + 1, // Ensure unique ID
       userEmail,
       content,
       timestamp: new Date(),
       replies: [],
+      isReplying: false,
+      replyContent: "",
     };
+
+    console.log("Created new comment with ID:", newComment.id); // Debug log
 
     post.comments.push(newComment);
     post.commentCount = post.comments.length;
 
     const updatedPost = await post.save();
-    console.log("Added comment:", newComment); // Debug log
+    console.log("Comment added successfully:", newComment);
     res.status(200).json(updatedPost);
   } catch (error) {
     console.error("Error adding comment:", error);
     res.status(500).json({
       message: "Error adding comment",
       error: error.message,
+      stack: error.stack,
     });
   }
 };
@@ -87,40 +98,51 @@ const addReply = async (req, res) => {
     const { postId, commentId } = req.params;
     const { content, userEmail } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(postId)) {
-      return res.status(400).json({
-        message: `Invalid post ID: ${postId}`,
-      });
-    }
+    console.log("Adding reply:", { postId, commentId, content, userEmail }); // Debug log
 
     const post = await ForumPost.findById(postId);
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    const comment = post.comments.id(commentId);
+    // Find comment by id (convert commentId to number since it comes as string)
+    const comment = post.comments.find((c) => c.id === parseInt(commentId, 10));
     if (!comment) {
+      console.log("Comment not found:", {
+        commentId,
+        availableComments: post.comments.map((c) => c.id),
+      });
       return res.status(404).json({ message: "Comment not found" });
     }
 
+    // Generate new reply ID
+    const maxId = Math.max(
+      0,
+      ...post.comments.map((c) => c.id || 0),
+      ...post.comments.flatMap((c) => c.replies.map((r) => r.id || 0))
+    );
+    const newId = maxId + 1;
+
     const newReply = {
+      id: newId,
       userEmail,
       content,
       timestamp: new Date(),
-      replies: [],
     };
 
     comment.replies.push(newReply);
     post.commentCount += 1;
 
-    const updatedPost = await post.save();
-    console.log("Added reply:", newReply); // Debug log
-    res.status(200).json(updatedPost);
+    await post.save();
+    console.log("Reply added successfully:", newReply); // Debug log
+    res.status(200).json(post);
   } catch (error) {
     console.error("Error adding reply:", error);
     res.status(500).json({
       message: "Error adding reply",
       error: error.message,
+      params: req.params,
+      body: req.body,
     });
   }
 };

@@ -1,10 +1,20 @@
 const mongoose = require("mongoose");
 
-const CommentSchema = new mongoose.Schema({
+const ReplySchema = new mongoose.Schema({
+  id: { type: Number, required: true },
   userEmail: { type: String, required: true },
   content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
-  replies: [this],
+});
+
+const CommentSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  userEmail: { type: String, required: true },
+  content: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now },
+  replies: [ReplySchema],
+  isReplying: { type: Boolean, default: false },
+  replyContent: String,
 });
 
 const PostSchema = new mongoose.Schema({
@@ -17,14 +27,7 @@ const PostSchema = new mongoose.Schema({
   upvotedBy: [{ type: String }],
   downvotedBy: [{ type: String }],
   commentCount: { type: Number, default: 0 },
-  comments: [
-    {
-      userEmail: String,
-      content: String,
-      timestamp: { type: Date, default: Date.now },
-      replies: [this],
-    },
-  ],
+  comments: [CommentSchema],
   timestamp: { type: Date, default: Date.now },
 });
 

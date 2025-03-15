@@ -384,22 +384,27 @@
             >
               <div class="flex items-start space-x-2 mb-2">
                 <div
-                  class="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
+                  class="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center"
                 >
                   <span class="text-gray-700 font-semibold">{{
                     comment.userEmail.charAt(0)
                   }}</span>
                 </div>
-                <div class="flex-1">
-                  <div class="flex items-center space-x-2">
-                    <span class="font-medium">{{ comment.userEmail }}</span>
+                <div class="flex-1 min-w-0">
+                  <!-- Added min-w-0 to allow text wrapping -->
+                  <div class="flex items-center space-x-2 flex-wrap">
+                    <span class="font-medium break-all">{{
+                      comment.userEmail
+                    }}</span>
                     <span class="text-xs text-gray-500">{{
                       comment.timestamp
                     }}</span>
                   </div>
-                  <p class="text-gray-700 mt-1">{{ comment.content }}</p>
+                  <p class="text-gray-700 mt-1 break-words">
+                    {{ comment.content }}
+                  </p>
 
-                  <!-- Reply Button -->
+                  <!-- Reply section -->
                   <button
                     (click)="toggleReplyForm(comment)"
                     class="text-xs text-gray-500 hover:text-red-500 mt-1"
@@ -409,13 +414,9 @@
 
                   <!-- Reply Form -->
                   <div *ngIf="comment.isReplying" class="mt-2">
-                    <form
-                      [formGroup]="replyForm"
-                      (ngSubmit)="submitReply(comment)"
-                      class="space-y-2"
-                    >
+                    <div class="space-y-2">
                       <textarea
-                        formControlName="content"
+                        [(ngModel)]="comment.replyContent"
                         rows="2"
                         placeholder="Write a reply..."
                         class="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
@@ -429,17 +430,17 @@
                           Cancel
                         </button>
                         <button
-                          type="submit"
-                          [disabled]="!replyForm.valid"
+                          (click)="submitReply(comment)"
+                          [disabled]="!comment.replyContent?.trim()"
                           class="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
                         >
                           Reply
                         </button>
                       </div>
-                    </form>
+                    </div>
                   </div>
 
-                  <!-- Nested Replies -->
+                  <!-- Nested Replies with word wrap -->
                   <div
                     *ngIf="comment.replies.length > 0"
                     class="ml-6 mt-3 space-y-3"
@@ -450,22 +451,23 @@
                     >
                       <div class="flex items-start space-x-2">
                         <div
-                          class="bg-gray-200 rounded-full w-6 h-6 flex items-center justify-center"
+                          class="bg-gray-200 rounded-full w-6 h-6 flex-shrink-0 flex items-center justify-center"
                         >
                           <span class="text-gray-700 text-xs font-semibold">{{
                             reply.userEmail.charAt(0)
                           }}</span>
                         </div>
-                        <div>
-                          <div class="flex items-center space-x-2">
-                            <span class="font-medium text-sm">{{
+                        <div class="flex-1 min-w-0">
+                          <!-- Added min-w-0 to allow text wrapping -->
+                          <div class="flex items-center space-x-2 flex-wrap">
+                            <span class="font-medium text-sm break-all">{{
                               reply.userEmail
                             }}</span>
                             <span class="text-xs text-gray-500">{{
                               reply.timestamp
                             }}</span>
                           </div>
-                          <p class="text-gray-700 text-sm mt-1">
+                          <p class="text-gray-700 text-sm mt-1 break-words">
                             {{ reply.content }}
                           </p>
                         </div>

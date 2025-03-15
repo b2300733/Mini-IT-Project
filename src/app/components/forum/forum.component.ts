@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { ForumService } from '../../../../backend/services/forum.service';
 
 interface Comment {
-  id: number;
+  id: number; // Required numeric ID
   userEmail: string;
   content: string;
   timestamp: string;
   replies: Comment[];
   isReplying: boolean;
+  replyContent?: string;
 }
 
 interface ForumPost {
@@ -227,15 +228,17 @@ export class ForumComponent implements OnInit {
   submitComment() {
     if (this.commentForm.valid && this.selectedPost) {
       const comment = {
-        content: this.commentForm.value.content,
+        content: this.commentForm.value.content.trim(),
         userEmail: this.userEmail,
       };
 
+      console.log('Submitting comment:', comment);
+
       this.forumService.addComment(this.selectedPost._id!, comment).subscribe({
         next: (updatedPost) => {
+          console.log('Comment added with response:', updatedPost);
           this.selectedPost = updatedPost;
           this.commentForm.reset();
-          // Update the post in the posts array
           this.updatePost(updatedPost);
         },
         error: (error) => {
@@ -249,33 +252,50 @@ export class ForumComponent implements OnInit {
   toggleReplyForm(comment: Comment) {
     comment.isReplying = !comment.isReplying;
     if (!comment.isReplying) {
-      this.replyForm.reset();
+      comment.replyContent = ''; // Reset reply content when closing form
     }
   }
 
   submitReply(parentComment: Comment) {
-    if (this.replyForm.valid && this.selectedPost) {
-      const reply = {
-        content: this.replyForm.value.content,
-        userEmail: this.userEmail,
-      };
-
-      this.forumService
-        .addReply(this.selectedPost._id!, parentComment.id.toString(), reply)
-        .subscribe({
-          next: (updatedPost) => {
-            this.selectedPost = updatedPost;
-            this.replyForm.reset();
-            parentComment.isReplying = false;
-            // Update the post in the posts array
-            this.updatePost(updatedPost);
-          },
-          error: (error) => {
-            console.error('Error adding reply:', error);
-            alert('Failed to add reply');
-          },
-        });
+    if (!this.selectedPost || !parentComment.replyContent?.trim()) {
+      console.log('Invalid reply attempt:', {
+        hasSelectedPost: !!this.selectedPost,
+        replyContent: parentComment.replyContent,
+      });
+      return;
     }
+
+    if (!parentComment.id && parentComment.id !== 0) {
+      console.error('Comment missing ID:', parentComment);
+      alert('Error: Comment is missing ID');
+      return;
+    }
+
+    console.log('Submitting reply:', {
+      postId: this.selectedPost._id,
+      commentId: parentComment.id,
+      content: parentComment.replyContent,
+      userEmail: this.userEmail,
+    });
+
+    this.forumService
+      .addReply(this.selectedPost._id!, parentComment.id.toString(), {
+        content: parentComment.replyContent.trim(),
+        userEmail: this.userEmail,
+      })
+      .subscribe({
+        next: (updatedPost) => {
+          console.log('Reply added successfully:', updatedPost);
+          this.selectedPost = updatedPost;
+          parentComment.replyContent = '';
+          parentComment.isReplying = false;
+          this.updatePost(updatedPost);
+        },
+        error: (error) => {
+          console.error('Error adding reply:', error);
+          alert('Failed to add reply. Error: ' + error.message);
+        },
+      });
   }
 
   private getNextCommentId(): number {

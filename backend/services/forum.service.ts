@@ -17,13 +17,15 @@ export interface ForumPost {
   timestamp: string;
 }
 
-export interface Comment {
-  id: number;
+interface Comment {
+  _id?: string; // Add MongoDB ID
+  id: number; // Keep numeric ID for compatibility
   userEmail: string;
   content: string;
   timestamp: string;
   replies: Comment[];
   isReplying: boolean;
+  replyContent?: string;
 }
 
 @Injectable({
@@ -75,6 +77,7 @@ export class ForumService {
     commentId: string,
     reply: { content: string; userEmail: string }
   ): Observable<ForumPost> {
+    console.log('Service adding reply:', { postId, commentId, reply }); // Debug log
     return this.http.post<ForumPost>(
       `${this.baseUrl}/posts/${postId}/comments/${commentId}/replies`,
       {
