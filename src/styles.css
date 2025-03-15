@@ -48,3 +48,9 @@
     animation: fadeIn 0.3s ease-out;
   }
 }
+
+html,
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #ffb547 #f1f1f1;
+}
