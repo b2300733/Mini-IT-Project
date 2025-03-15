@@ -199,6 +199,9 @@
               <div class="flex items-center space-x-2">
                 <button
                   (click)="upvotePost(post, $event)"
+                  [ngClass]="{
+                    'text-red-500': post.upvotedBy.includes(userEmail)
+                  }"
                   class="hover:text-red-500"
                 >
                   <svg
@@ -218,7 +221,10 @@
                 <span>{{ post.upvotes }}</span>
                 <button
                   (click)="downvotePost(post, $event)"
-                  class="hover:text-red-500"
+                  [ngClass]="{
+                    'text-blue-500': post.downvotedBy.includes(userEmail)
+                  }"
+                  class="hover:text-blue-500"
                 >
                   <svg
                     class="w-5 h-5"
@@ -276,6 +282,9 @@
             <div class="flex items-center space-x-2">
               <button
                 (click)="upvotePost(selectedPost, $event)"
+                [ngClass]="{
+                  'text-red-500': selectedPost.upvotedBy.includes(userEmail)
+                }"
                 class="hover:text-red-500"
               >
                 <svg
@@ -295,7 +304,10 @@
               <span>{{ selectedPost.upvotes }}</span>
               <button
                 (click)="downvotePost(selectedPost, $event)"
-                class="hover:text-red-500"
+                [ngClass]="{
+                  'text-blue-500': selectedPost.downvotedBy.includes(userEmail)
+                }"
+                class="hover:text-blue-500"
               >
                 <svg
                   class="w-5 h-5"

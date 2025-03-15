@@ -13,16 +13,18 @@ interface Comment {
 }
 
 interface ForumPost {
-  id?: string;
+  _id?: string;
   title: string;
   content: string;
   userEmail: string;
+  category: string;
   upvotes: number;
   downvotes: number;
+  upvotedBy: string[];
+  downvotedBy: string[];
   commentCount: number;
-  timestamp: string;
-  category: string;
   comments: Comment[];
+  timestamp: string;
 }
 
 @Component({
@@ -53,6 +55,7 @@ export class ForumComponent implements OnInit {
   isDetailView = false;
   searchQuery: string = '';
   currentStep = 1;
+  userEmail: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +75,9 @@ export class ForumComponent implements OnInit {
     this.replyForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(1)]],
     });
+
+    this.userEmail =
+      localStorage.getItem('email') || sessionStorage.getItem('email') || '';
   }
 
   ngOnInit() {
@@ -137,7 +143,7 @@ export class ForumComponent implements OnInit {
         return;
       }
 
-      const postData = {
+      const postData: Omit<ForumPost, 'id'> = {
         title: this.postForm.value.title.trim(),
         content: this.postForm.value.content.trim(),
         category: this.postForm.value.category,
@@ -146,10 +152,12 @@ export class ForumComponent implements OnInit {
         downvotes: 0,
         commentCount: 0,
         comments: [],
+        upvotedBy: [], // Add this line
+        downvotedBy: [], // Add this line
         timestamp: new Date().toISOString(),
       };
 
-      console.log('Sending post data:', postData); // Debug log
+      console.log('Sending post data:', postData);
 
       this.forumService.createPost(postData).subscribe({
         next: (response) => {
@@ -160,7 +168,7 @@ export class ForumComponent implements OnInit {
           alert('Your post has been created successfully!');
         },
         error: (error) => {
-          console.error('Error details:', error); // Detailed error log
+          console.error('Error details:', error);
           const errorMessage =
             error.error?.message ||
             'There was an error creating your post. Please try again.';
@@ -172,7 +180,7 @@ export class ForumComponent implements OnInit {
       Object.keys(this.postForm.controls).forEach((key) => {
         const control = this.postForm.get(key);
         if (control?.invalid) {
-          console.log(`${key} is invalid:`, control.errors); // Debug validation
+          console.log(`${key} is invalid:`, control.errors);
         }
       });
     }
@@ -277,12 +285,90 @@ export class ForumComponent implements OnInit {
   }
 
   upvotePost(post: ForumPost, event: Event) {
-    event.stopPropagation(); // Prevent viewPost from triggering
-    post.upvotes += 1;
+    event.stopPropagation();
+
+    if (!post._id) {
+      console.error('Post ID is missing:', post);
+      return;
+    }
+
+    // Check if user has already upvoted
+    if (post.upvotedBy.includes(this.userEmail)) {
+      // Remove upvote
+      this.forumService.upvotePost(post._id, this.userEmail).subscribe({
+        next: (updatedPost) => {
+          this.updatePost(updatedPost);
+        },
+        error: (error) => {
+          console.error('Error updating vote:', error);
+          alert('Failed to update vote');
+        },
+      });
+    } else {
+      // Add upvote
+      this.forumService.upvotePost(post._id, this.userEmail).subscribe({
+        next: (updatedPost) => {
+          this.updatePost(updatedPost);
+        },
+        error: (error) => {
+          console.error('Error updating vote:', error);
+          alert('Failed to update vote');
+        },
+      });
+    }
   }
 
   downvotePost(post: ForumPost, event: Event) {
-    event.stopPropagation(); // Prevent viewPost from triggering
-    post.downvotes += 1;
+    event.stopPropagation();
+  
+    if (!post._id) {
+      console.error('Post ID is missing:', post);
+      return;
+    }
+  
+    // Check if user has already downvoted
+    if (post.downvotedBy.includes(this.userEmail)) {
+      // Remove downvote
+      this.forumService.downvotePost(post._id, this.userEmail).subscribe({
+        next: (updatedPost) => {
+          this.updatePost(updatedPost);
+        },
+        error: (error) => {
+          console.error('Error updating vote:', error);
+          alert('Failed to update vote');
+        },
+      });
+    } else {
+      // Add downvote
+      this.forumService.downvotePost(post._id, this.userEmail).subscribe({
+        next: (updatedPost) => {
+          this.updatePost(updatedPost);
+        },
+        error: (error) => {
+          console.error('Error updating vote:', error);
+          alert('Failed to update vote');
+        },
+      });
+    }
+  }
+
+  private updatePost(updatedPost: ForumPost) {
+    // Update in posts array
+    const index = this.posts.findIndex((p) => p._id === updatedPost._id);
+    if (index !== -1) {
+      this.posts[index] = updatedPost;
+      // Also update originalPosts to maintain consistency
+      const originalIndex = this.originalPosts.findIndex(
+        (p) => p._id === updatedPost._id
+      );
+      if (originalIndex !== -1) {
+        this.originalPosts[originalIndex] = updatedPost;
+      }
+    }
+  
+    // Update selected post if in detail view
+    if (this.selectedPost?._id === updatedPost._id) {
+      this.selectedPost = updatedPost;
+    }
   }
 }

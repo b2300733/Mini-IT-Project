@@ -3,19 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface ForumPost {
-  id?: string;
+  _id?: string;
   title: string;
   content: string;
-  userEmail: string;
   category: string;
+  userEmail: string;
   upvotes: number;
   downvotes: number;
+  upvotedBy: string[];
+  downvotedBy: string[];
   commentCount: number;
-  comments: Comment[];
+  comments: Array<Comment>;
   timestamp: string;
 }
 
-interface Comment {
+export interface Comment {
   id: number;
   userEmail: string;
   content: string;
@@ -33,7 +35,6 @@ export class ForumService {
   constructor(private http: HttpClient) {}
 
   createPost(postData: Omit<ForumPost, 'id'>): Observable<ForumPost> {
-    // Clean up the data before sending
     const cleanedData = {
       title: postData.title,
       content: postData.content,
@@ -41,6 +42,8 @@ export class ForumService {
       userEmail: postData.userEmail,
       upvotes: 0,
       downvotes: 0,
+      upvotedBy: [],
+      downvotedBy: [],
       commentCount: 0,
       comments: [],
       timestamp: new Date().toISOString(),
@@ -69,5 +72,25 @@ export class ForumService {
       `${this.baseUrl}/posts/${postId}/comments/${commentId}/replies`,
       reply
     );
+  }
+
+  upvotePost(postId: string, userEmail: string): Observable<ForumPost> {
+    // Log for debugging
+    console.log('Upvoting post:', { postId, userEmail });
+
+    return this.http.post<ForumPost>(`${this.baseUrl}/posts/${postId}/vote`, {
+      userEmail,
+      voteType: 'upvote',
+    });
+  }
+
+  downvotePost(postId: string, userEmail: string): Observable<ForumPost> {
+    // Log for debugging
+    console.log('Downvoting post:', { postId, userEmail });
+
+    return this.http.post<ForumPost>(`${this.baseUrl}/posts/${postId}/vote`, {
+      userEmail,
+      voteType: 'downvote',
+    });
   }
 }
