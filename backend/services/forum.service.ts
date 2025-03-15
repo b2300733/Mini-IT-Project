@@ -15,6 +15,15 @@ export interface ForumPost {
   timestamp: string;
 }
 
+interface Comment {
+  id: number;
+  userEmail: string;
+  content: string;
+  timestamp: string;
+  replies: Comment[];
+  isReplying: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
