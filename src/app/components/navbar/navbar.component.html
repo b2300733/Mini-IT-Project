@@ -27,8 +27,8 @@
       <ng-container *ngIf="isLoggedIn(); else loginIcon">
         <img
           [src]="avatar"
-          alt="user img"
-          class="cursor-pointer w-6 h-6 rounded-full"
+          alt="{{ username }}"
+          class="cursor-pointer w-6 h-6 rounded-full text-sm"
         />
       </ng-container>
       <ng-template #loginIcon>

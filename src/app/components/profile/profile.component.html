@@ -9,7 +9,7 @@
         <label class="relative group">
           <img
             [src]="avatar"
-            alt="user img"
+            alt="{{ username }}"
             class="rounded-full h-35 w-35 mt-2 object-cover border border-gray-300 text-center"
           />
           <input
@@ -270,73 +270,108 @@
   <!--My Pet Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'myPet'"
-    class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2 font-secondary"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
-    <div class="absolute w-full text-center">
+    <div class="w-full text-center">
       <h1 class="font-bold text-2xl pt-3">My Pet</h1>
     </div>
-    <div class="pt-10">
-      <div class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="petName">Pet Name</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3 hover-selection"
-            type="text"
-            id="petName"
-            name="petName"
-            placeholder="Enter your pet name"
-            required
-          />
+    <div class="overflow-auto max-h-[500px]">
+      <div *ngFor="let pet of pets" class="mb-5" [id]="'pet-' + pet.id">
+        <div class="flex justify-between px-10">
+          <h1 class="text-lg font-[600]">Pet {{ pet.id }}</h1>
+          <lucide-icon
+            name="trash-2"
+            class="cursor-pointer text-red-500 hover:text-red-700 transition-colors w-5 h-5"
+            (click)="removePet(pet.id)"
+          ></lucide-icon>
         </div>
-        <div class="flex flex-col gap-3">
-          <label for="type">Pet Type</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3 hover-selection"
-            type="text"
-            id="type"
-            name="type"
-            placeholder="What's your pet type?"
-            required
-          />
-        </div>
-        <!-- <div class="flex flex-col gap-3">
-          <label for="description">Description</label>
-          <textarea
-            class="border-1 rounded-sm h-34 px-3 hover-selection resize-none"
-            type="text"
-            id="description"
-            name="description"
-            placeholder="Enter description"
-          ></textarea>
-        </div> -->
-      </div>
-    </div>
-    <div class="pt-10">
-      <div class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="gender">Gender</label>
-          <select
-            class="border-1 rounded-sm h-10 px-3 hover-selection cursor-pointer"
-            name="gender"
-            required
-          >
-            <option selected disabled value="">Select pet gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-span-2 flex flex-col justify-center items-center gap-2">
-      <button
-        class="bg-orange-700 w-30 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
-      >
-        Save
-      </button>
 
-      <p *ngIf="errorMessage" class="text-red-600 text-sm">
-        {{ errorMessage }}
-      </p>
+        <div
+          class="grid grid-cols-2 gap-3 border-2 border-dashed border-gray-400 mx-10 rounded-sm pb-1.5 hover:border-orange-300"
+        >
+          <!-- grid grid-cols-2 gap-3 mx-10 rounded-sm pb-1.5 border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 -->
+
+          <div class="flex flex-col px-3 gap-5">
+            <div class="flex flex-col gap-3">
+              <label [for]="'petName' + pet.id">Pet Name</label>
+              <input
+                class="border-1 rounded-sm h-10 px-3 hover-selection"
+                type="text"
+                [id]="'petName' + pet.id"
+                [name]="'petName' + pet.id"
+                placeholder="Enter your pet name"
+                [(ngModel)]="pet.name"
+                (ngModelChange)="onPetInfoChange(pet)"
+                required
+              />
+            </div>
+            <div class="flex flex-col gap-3">
+              <label [for]="'type' + pet.id">Pet Type</label>
+              <input
+                class="border-1 rounded-sm h-10 px-3 hover-selection"
+                type="text"
+                [id]="'type' + pet.id"
+                [name]="'type' + pet.id"
+                placeholder="What's your pet type?"
+                [(ngModel)]="pet.type"
+                (ngModelChange)="onPetInfoChange(pet)"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-col px-3 gap-5 justify-between">
+            <div class="flex flex-col gap-3">
+              <label [for]="'gender' + pet.id">Gender</label>
+              <select
+                class="border-1 rounded-sm h-10 px-3 hover-selection cursor-pointer"
+                [name]="'gender' + pet.id"
+                [(ngModel)]="pet.gender"
+                (ngModelChange)="onPetInfoChange(pet)"
+                required
+              >
+                <option selected disabled value="">Select pet gender</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+            <div class="col-span-2 flex justify-end items-center gap-2">
+              <p *ngIf="pet.errorMessage" class="text-red-600 text-sm">
+                {{ pet.errorMessage }}
+              </p>
+              <button
+                *ngIf="!pet.saved || pet.hasChanges"
+                class="bg-orange-700 w-30 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
+                [ngClass]="{
+                  'bg-orange-700 hover:bg-orange-800': !pet.saved,
+                  'bg-green-600 hover:bg-green-700': pet.saved && pet.hasChanges
+                }"
+                (click)="savePet(pet.id)"
+              >
+                {{ pet.saved ? "Save Changes" : "Save" }}
+              </button>
+              <span
+                *ngIf="pet.saved && !pet.hasChanges"
+                class="text-green-600 font-semibold"
+              >
+                Saved ✓
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center mt-5 gap-3">
+        <div
+          class="flex text-gray-400 border-dotted border-2 w-fit rounded-sm p-1 cursor-pointer ml-10 hover:border-orange-700 hover:text-orange-700 transition duration-300"
+          (click)="addPet()"
+        >
+          <lucide-icon name="plus"></lucide-icon>
+          <h1>Add More Pet</h1>
+        </div>
+        <p *ngIf="errorAddPetMessage" class="text-red-600 text-sm">
+          {{ errorAddPetMessage }}
+        </p>
+      </div>
     </div>
   </form>
 
@@ -349,11 +384,17 @@
       <h1 class="font-bold text-2xl pt-3">My Listings</h1>
     </div>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 overflow-auto h-[500px]"
+      *ngIf="userProducts.length === 0"
+      class="col-span-full text-center text-gray-500 mt-10"
+    >
+      No products found.
+    </div>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 overflow-auto h-[500px] px-5"
     >
       <div
         *ngFor="let product of userProducts"
-        class="rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+        class="rounded-lg p-6 hover:shadow-lg transition duration-300 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400"
         (click)="navigateToProduct(product)"
       >
         <div class="flex flex-row gap-2 items-center pb-2">
@@ -390,25 +431,13 @@
   <!--History Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'history'"
-    class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
   >
-    <div class="absolute w-full text-center">
+    <div class="w-full text-center">
       <h1 class="font-bold text-2xl pt-3">History</h1>
     </div>
-    <div class="pt-10">
-      <div class="flex flex-col px-10 py-5 gap-5">
-        <div class="flex flex-col gap-3">
-          <label for="petName">Pet Name</label>
-          <input
-            class="border-1 rounded-sm h-10 px-3"
-            type="text"
-            id="petName"
-            name="petName"
-            placeholder="Enter your pet name"
-            required
-          />
-        </div>
-      </div>
+    <div class="col-span-full text-center text-gray-500 mt-10">
+      No history found.
     </div>
   </form>
 </section>

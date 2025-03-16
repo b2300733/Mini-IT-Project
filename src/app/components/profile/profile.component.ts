@@ -28,8 +28,36 @@ export class ProfileComponent {
   verificationCode = '';
   newPassword = '';
   errorMessage = '';
+  errorPetMessage = '';
+  errorAddPetMessage = '';
   selectedTab: string = 'account';
   userProducts: any[] = [];
+
+  pets: {
+    id: number;
+    name: string;
+    type: string;
+    gender: string;
+    saved: boolean;
+    errorMessage?: string;
+    originalData?: {
+      name: string;
+      type: string;
+      gender: string;
+    };
+    hasChanges?: boolean;
+  }[] = [
+    {
+      id: 1,
+      name: '',
+      type: '',
+      gender: '',
+      saved: false,
+      errorMessage: '',
+      hasChanges: false,
+    },
+  ];
+  nextPetId = 2;
 
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
@@ -248,5 +276,113 @@ export class ProfileComponent {
         deliveryOptions: product.deliveryOpt?.join(','),
       },
     });
+  }
+
+  checkPetChanges(pet: any): void {
+    if (!pet.originalData) {
+      pet.hasChanges = !pet.saved; // If no original data, consider changed if not saved
+      return;
+    }
+
+    pet.hasChanges =
+      pet.name !== pet.originalData.name ||
+      pet.type !== pet.originalData.type ||
+      pet.gender !== pet.originalData.gender;
+  }
+
+  // Add listeners for input changes
+  onPetInfoChange(pet: any): void {
+    this.checkPetChanges(pet);
+  }
+
+  addPet(): void {
+    // Check if the last pet in the array has all required fields filled
+    const lastPet = this.pets[this.pets.length - 1];
+
+    if (!lastPet.saved) {
+      // If any field is empty, show an error message
+      this.errorAddPetMessage = `Please save Pet ${lastPet.id} information before adding a new pet.`;
+
+      return;
+    }
+
+    // Clear any previous error messages
+    this.errorAddPetMessage = '';
+
+    this.pets.push({
+      id: this.nextPetId,
+      name: '',
+      type: '',
+      gender: '',
+      saved: false,
+      errorMessage: '',
+      hasChanges: false,
+    });
+    this.nextPetId++;
+  }
+
+  removePet(id: number): void {
+    if (this.pets.length > 1) {
+      this.pets = this.pets.filter((pet) => pet.id !== id);
+      alert(`You have removed pet ${id}`);
+
+      // Renumber the remaining pets sequentially
+      this.pets = this.pets.map((pet, index) => {
+        return {
+          ...pet,
+          id: index + 1,
+        };
+      });
+
+      // Update nextPetId to be one more than the highest current ID
+      this.nextPetId = this.pets.length + 1;
+    } else {
+      // If it's the last pet, just reset it instead of removing
+      this.pets = [
+        {
+          id: 1,
+          name: '',
+          type: '',
+          gender: '',
+          saved: false,
+          errorMessage: '',
+        },
+      ];
+      this.nextPetId = 2;
+    }
+  }
+
+  savePet(petId: number): void {
+    const pet = this.pets.find((p) => p.id === petId);
+
+    if (!pet) {
+      return;
+    }
+
+    pet.errorMessage = '';
+
+    // Trim whitespace from string fields to check if they're truly empty
+    const petName = pet.name.trim();
+    const petType = pet.type.trim();
+
+    if (!petName || !petType || !pet.gender) {
+      pet.errorMessage = 'Please fill in all required fields';
+      return;
+    }
+
+    pet.name = petName;
+    pet.type = petType;
+    pet.saved = true;
+    pet.hasChanges = false;
+
+    // Store original data to detect future changes
+    pet.originalData = {
+      name: petName,
+      type: petType,
+      gender: pet.gender,
+    };
+
+    this.errorPetMessage = '';
+    alert(`Pet ${petId} information saved successfully!`);
   }
 }

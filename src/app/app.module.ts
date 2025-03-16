@@ -9,6 +9,8 @@ import {
   Eye,
   EyeOff,
   Camera,
+  Plus,
+  Trash2,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -66,6 +68,8 @@ import { ForumComponent } from './components/forum/forum.component';
       Eye,
       EyeOff,
       Camera,
+      Plus,
+      Trash2,
     }),
     ReactiveFormsModule,
     FormsModule,

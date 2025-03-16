@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface ServiceListing {
   category: string;
-  detail: string;
+  title: string;
   address: string;
   phoneNumber: string;
   ownerName: string;
-  petName: string;
+  petType: string;
   note: string;
   hourRate: number;
 }
@@ -16,15 +16,10 @@ interface ServiceListing {
   selector: 'app-jobs',
   standalone: false,
   templateUrl: './jobs.component.html',
-  styleUrls: ['./jobs.component.css']
+  styleUrls: ['./jobs.component.css'],
 })
 export class JobsComponent {
-  serviceCategories = [
-    'Day Care',
-    'Pet Sitting',
-    'Pet Walking',
-    'Grooming'
-  ];
+  serviceCategories = ['Day Care', 'Pet Sitting', 'Pet Walking', 'Grooming'];
 
   selectedCategory: string = '';
   searchLocation: string = '';
@@ -34,48 +29,52 @@ export class JobsComponent {
   listings: ServiceListing[] = [
     {
       category: 'Day Care',
-      detail: 'Need someone to take care of my golden retriever during office hours',
-      address: '123 Pine Street, Singapore',
-      phoneNumber: '91234567',
-      ownerName: 'John Smith',
-      petName: 'Max',
+      title:
+        'Need someone to take care of my golden retriever during office hours',
+      address: 'Shah Alam, Selangor',
+      phoneNumber: '0123456789',
+      ownerName: 'Frannie',
+      petType: 'Dog',
       note: 'Max is friendly but needs regular walks',
-      hourRate: 15
+      hourRate: 15,
     },
     {
       category: 'Pet Walking',
-      detail: 'Looking for someone to walk my corgi twice a day',
-      address: '456 Oak Avenue, Singapore',
-      phoneNumber: '98765432',
-      ownerName: 'Sarah Lee',
-      petName: 'Coco',
+      title: 'Looking for someone to walk my corgi twice a day',
+      address: 'Subang Jaya, Selangor',
+      phoneNumber: '0131234567',
+      ownerName: 'Thenh Thing',
+      petType: 'Cat',
       note: 'Coco needs to be walked morning and evening',
-      hourRate: 12
+      hourRate: 12,
     },
     {
       category: 'Grooming',
-      detail: 'Monthly grooming service needed for my persian cat',
-      address: '789 Maple Road, Singapore',
-      phoneNumber: '90001111',
-      ownerName: 'Mike Chen',
-      petName: 'Luna',
+      title: 'Monthly grooming service needed for my persian cat',
+      address: 'George Town, Penang',
+      phoneNumber: '0162223333',
+      ownerName: 'Ma Yun',
+      petType: 'Dog',
       note: 'Luna needs special attention for her long fur',
-      hourRate: 25
-    }
+      hourRate: 25,
+    },
   ];
-  
+
   listingForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.listingForm = this.fb.group({
       category: ['', Validators.required],
-      detail: ['', Validators.required],
+      title: ['', Validators.required],
       address: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{8,}$')]],
+      phoneNumber: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]{8,}$')],
+      ],
       ownerName: ['', Validators.required],
-      petName: ['', Validators.required],
+      petType: ['', Validators.required],
       note: [''],
-      hourRate: ['', [Validators.required, Validators.min(0)]]
+      hourRate: ['', [Validators.required, Validators.min(0)]],
     });
     this.originalListings = [...this.listings];
   }
@@ -91,9 +90,12 @@ export class JobsComponent {
   }
 
   private filterListings() {
-    this.listings = this.originalListings.filter(listing => {
-      const matchesCategory = !this.selectedCategory || listing.category === this.selectedCategory;
-      const matchesLocation = !this.searchLocation || listing.address.toLowerCase().includes(this.searchLocation);
+    this.listings = this.originalListings.filter((listing) => {
+      const matchesCategory =
+        !this.selectedCategory || listing.category === this.selectedCategory;
+      const matchesLocation =
+        !this.searchLocation ||
+        listing.address.toLowerCase().includes(this.searchLocation);
       return matchesCategory && matchesLocation;
     });
   }
@@ -113,13 +115,13 @@ export class JobsComponent {
       // Create new listing from form values
       const newListing: ServiceListing = {
         category: this.listingForm.value.category,
-        detail: this.listingForm.value.detail,
+        title: this.listingForm.value.title,
         address: this.listingForm.value.address,
         phoneNumber: this.listingForm.value.phoneNumber,
         ownerName: this.listingForm.value.ownerName,
-        petName: this.listingForm.value.petName,
+        petType: this.listingForm.value.petType,
         note: this.listingForm.value.note,
-        hourRate: this.listingForm.value.hourRate
+        hourRate: this.listingForm.value.hourRate,
       };
 
       // Add to both lists
@@ -139,7 +141,7 @@ export class JobsComponent {
       }
     } else {
       // Show validation errors
-      Object.keys(this.listingForm.controls).forEach(key => {
+      Object.keys(this.listingForm.controls).forEach((key) => {
         const control = this.listingForm.get(key);
         if (control?.invalid) {
           control.markAsTouched();
