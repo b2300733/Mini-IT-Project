@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommunitymarketService } from '../../../../backend/services/communitymarket.service';
 
 interface Product {
@@ -83,6 +83,7 @@ export class CommunitymarketComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private communitymarketService: CommunitymarketService
   ) {
     this.listingForm = this.fb.group({
@@ -112,6 +113,20 @@ export class CommunitymarketComponent {
 
   ngOnInit(): void {
     this.fetchProducts();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['openAddForm'] === 'true') {
+        // Check if user is logged in before opening form
+        if (this.isLoggedIn()) {
+          this.isContentHidden = true;
+          this.currentStep = 1;
+        } else {
+          // If not logged in, alert and redirect to login
+          alert('Please login first to sell items');
+          this.router.navigate(['/login']);
+        }
+      }
+    });
   }
 
   fetchProducts(): void {
@@ -394,9 +409,20 @@ export class CommunitymarketComponent {
           console.log('Product uploaded successfully:', response);
           // Reset and close the form
           this.toggleContent();
-          // Show a success message (in a real app, this would be a more sophisticated notification)
+          // Show a success message
           alert('Your item has been listed successfully!');
-          window.location.reload();
+
+          // Check if redirected from profile page
+          const fromProfile =
+            this.route.snapshot.queryParams['fromProfile'] === 'true';
+          if (fromProfile) {
+            // Redirect back to profile page with listings tab selected
+            this.router.navigate(['/profile'], {
+              queryParams: { tab: 'listings' },
+            });
+          } else {
+            window.location.reload();
+          }
         },
         (error) => {
           // Handle error

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../../../backend/services/profile.service';
 
 interface Product {
@@ -32,7 +32,20 @@ export class ProfileComponent {
   errorAddPetMessage = '';
   selectedTab: string = 'account';
   userProducts: any[] = [];
-
+  invalidFields: Set<string> = new Set();
+  originalAccountData: {
+    username: string;
+    gender: string;
+    contactNo: string;
+    address1: string;
+    address2: string;
+    city: string;
+    state: string;
+    country: string;
+    zip: string;
+  } | null = null;
+  accountSaved = false;
+  accountHasChanges = false;
   pets: {
     id: number;
     name: string;
@@ -89,7 +102,11 @@ export class ProfileComponent {
   authToken =
     localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
 
-  constructor(private profileService: ProfileService, private router: Router) {
+  constructor(
+    private profileService: ProfileService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         if (!this.isFormValid()) {
@@ -103,6 +120,60 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.getUserProduct();
+
+    // Check if there's a tab parameter to switch to a specific tab
+    this.route.queryParams.subscribe((params) => {
+      if (params['tab']) {
+        this.selectedTab = params['tab'];
+      }
+    });
+
+    // Store original account data for change detection
+    this.storeOriginalAccountData();
+  }
+
+  // Add this method to the class
+  storeOriginalAccountData(): void {
+    this.originalAccountData = {
+      username: this.username,
+      gender: this.gender,
+      contactNo: this.contactNo,
+      address1: this.address1,
+      address2: this.address2.trim(),
+      city: this.city,
+      state: this.state,
+      country: this.country,
+      zip: this.zip,
+    };
+    this.accountSaved = this.isFormValid();
+    this.accountHasChanges = false;
+  }
+
+  checkAccountChanges(): void {
+    if (!this.originalAccountData) {
+      this.accountHasChanges = false;
+      return;
+    }
+
+    this.accountHasChanges =
+      this.username !== this.originalAccountData.username ||
+      this.gender !== this.originalAccountData.gender ||
+      this.contactNo !== this.originalAccountData.contactNo ||
+      this.address1 !== this.originalAccountData.address1 ||
+      this.address2 !== this.originalAccountData.address2 ||
+      this.city !== this.originalAccountData.city ||
+      this.state !== this.originalAccountData.state ||
+      this.country !== this.originalAccountData.country ||
+      this.zip !== this.originalAccountData.zip;
+  }
+
+  trimAddress2(): void {
+    this.address2 = this.address2.trim();
+    this.onAccountInfoChange();
+  }
+
+  onAccountInfoChange(): void {
+    this.checkAccountChanges();
   }
 
   getUserProduct(): void {
@@ -135,10 +206,14 @@ export class ProfileComponent {
   }
 
   saveProfile(): void {
+    this.checkAccFormFields();
+
     if (!this.isFormValid()) {
       this.errorMessage = 'Please fill in all required fields.';
       return;
     }
+
+    this.address2 = this.address2.trim();
 
     const updatedData = {
       username: this.username,
@@ -178,6 +253,11 @@ export class ProfileComponent {
         sessionStorage.setItem('zip', this.zip);
         sessionStorage.setItem('avatar', this.avatar);
 
+        // Update saved state
+        this.accountSaved = true;
+        this.accountHasChanges = false;
+        this.storeOriginalAccountData();
+
         alert('Profile saved successfully!');
         window.location.reload();
       },
@@ -186,6 +266,50 @@ export class ProfileComponent {
         console.error('Profile update error:', error);
       }
     );
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    // Check if this is a pet field with an ID
+    const isPetField =
+      fieldName.startsWith('petName') ||
+      fieldName.startsWith('petType') ||
+      fieldName.startsWith('petGender');
+
+    if (isPetField) {
+      // Direct check for the exact field name with ID
+      return this.invalidFields.has(fieldName);
+    }
+
+    return this.invalidFields.has(fieldName);
+  }
+
+  checkAccFormFields() {
+    this.invalidFields.clear();
+
+    if (!this.username) {
+      this.invalidFields.add('username');
+    }
+    if (!this.gender) {
+      this.invalidFields.add('gender');
+    }
+    if (!this.contactNo) {
+      this.invalidFields.add('contactNo');
+    }
+    if (!this.address1) {
+      this.invalidFields.add('address1');
+    }
+    if (!this.city) {
+      this.invalidFields.add('city');
+    }
+    if (!this.state) {
+      this.invalidFields.add('state');
+    }
+    if (!this.country) {
+      this.invalidFields.add('country');
+    }
+    if (!this.zip) {
+      this.invalidFields.add('zip');
+    }
   }
 
   openChangePasswordModal(): void {
@@ -353,6 +477,8 @@ export class ProfileComponent {
   }
 
   savePet(petId: number): void {
+    this.invalidFields.clear();
+
     const pet = this.pets.find((p) => p.id === petId);
 
     if (!pet) {
@@ -365,7 +491,21 @@ export class ProfileComponent {
     const petName = pet.name.trim();
     const petType = pet.type.trim();
 
-    if (!petName || !petType || !pet.gender) {
+    let isValid = true;
+    if (!petName) {
+      this.invalidFields.add('petName' + petId);
+      isValid = false;
+    }
+    if (!petType) {
+      this.invalidFields.add('petType' + petId);
+      isValid = false;
+    }
+    if (!pet.gender) {
+      this.invalidFields.add('petGender' + petId);
+      isValid = false;
+    }
+
+    if (!isValid) {
       pet.errorMessage = 'Please fill in all required fields';
       return;
     }
@@ -384,5 +524,14 @@ export class ProfileComponent {
 
     this.errorPetMessage = '';
     alert(`Pet ${petId} information saved successfully!`);
+  }
+
+  navigateToMarket() {
+    this.router.navigate(['/market'], {
+      queryParams: {
+        openAddForm: 'true',
+        fromProfile: 'true',
+      },
+    });
   }
 }

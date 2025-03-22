@@ -26,14 +26,23 @@ export class SignupComponent {
   errorMessage = '';
   alertMessage = '';
   alertType: 'success' | 'error' = 'success';
+  invalidFields: Set<string> = new Set();
+  passwordMismatch = false;
+  emailExists = false;
 
   constructor(private router: Router, private signupService: SignupService) {}
 
   submit() {
-    if (this.currentStep === 1 && this.validateFirstForm()) {
-      this.checkUserExists();
-    } else if (this.currentStep === 2 && this.validateSecondForm()) {
-      this.registerUser();
+    if (this.currentStep === 1) {
+      this.checkFirstFormFields();
+      if (this.validateFirstForm()) {
+        this.checkUserExists();
+      }
+    } else if (this.currentStep === 2) {
+      this.checkSecondFormFields();
+      if (this.validateSecondForm()) {
+        this.registerUser();
+      }
     }
   }
 
@@ -41,6 +50,61 @@ export class SignupComponent {
     if (this.currentStep > 1) {
       this.currentStep--;
     }
+  }
+
+  checkFirstFormFields() {
+    this.invalidFields.clear();
+
+    if (!this.username) {
+      this.invalidFields.add('username');
+    }
+    if (!this.email) {
+      this.invalidFields.add('email');
+    }
+    if (!this.password) {
+      this.invalidFields.add('password');
+    }
+    if (!this.confirmPassword) {
+      this.invalidFields.add('confirmPassword');
+    }
+
+    this.passwordMismatch =
+      this.password !== this.confirmPassword &&
+      Boolean(this.password) &&
+      Boolean(this.confirmPassword);
+  }
+
+  checkSecondFormFields() {
+    this.invalidFields.clear();
+
+    if (!this.gender) {
+      this.invalidFields.add('gender');
+    }
+    if (!this.contactNo) {
+      this.invalidFields.add('contactNo');
+    }
+    if (!this.address1) {
+      this.invalidFields.add('address1');
+    }
+    if (!this.city) {
+      this.invalidFields.add('city');
+    }
+    if (!this.state) {
+      this.invalidFields.add('state');
+    }
+    if (!this.country) {
+      this.invalidFields.add('country');
+    }
+    if (!this.zip) {
+      this.invalidFields.add('zip');
+    }
+    if (!this.termsAccepted) {
+      this.invalidFields.add('termsAccepted');
+    }
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    return this.invalidFields.has(fieldName);
   }
 
   validateFirstForm(): boolean {
@@ -54,11 +118,8 @@ export class SignupComponent {
       return false;
     }
     if (this.password !== this.confirmPassword) {
+      this.passwordMismatch = true;
       this.errorMessage = 'Passwords do not match.';
-      return false;
-    }
-    if (!this.isGmailAddress(this.email)) {
-      this.errorMessage = 'Email must be a @gmail.com address.';
       return false;
     }
     this.errorMessage = '';
@@ -72,6 +133,7 @@ export class SignupComponent {
       !this.address1 ||
       !this.city ||
       !this.state ||
+      !this.country ||
       !this.zip ||
       !this.termsAccepted
     ) {
@@ -83,11 +145,13 @@ export class SignupComponent {
   }
 
   checkUserExists() {
+    this.emailExists = false;
     this.signupService.checkUserExists(this.email).subscribe(
       (response) => {
         this.currentStep++;
       },
       (error) => {
+        this.emailExists = true;
         this.errorMessage = 'Email already exists.';
       }
     );
@@ -116,7 +180,7 @@ export class SignupComponent {
 
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 1000);
+        }, 800);
       },
       (error) => {
         console.error('Error registering user', error);
@@ -126,18 +190,13 @@ export class SignupComponent {
     );
   }
 
-  isGmailAddress(email: string): boolean {
-    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    return gmailPattern.test(email);
-  }
-
   showAlert(type: 'success' | 'error', message: string) {
     this.alertType = type;
     this.alertMessage = message;
 
     setTimeout(() => {
       this.alertMessage = '';
-    }, 2000);
+    }, 1500);
   }
 
   validateNumberInput(event: KeyboardEvent) {

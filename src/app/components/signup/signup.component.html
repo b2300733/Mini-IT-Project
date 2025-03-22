@@ -25,8 +25,14 @@
           name="username"
           placeholder="Enter your username"
           [(ngModel)]="username"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('username') }"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('username')"
+          class="text-red-500 text-xs leading-0"
+          >Username is required</span
+        >
       </div>
       <div class="flex flex-col gap-3">
         <label for="email">Email</label>
@@ -37,8 +43,19 @@
           name="email"
           placeholder="Enter your email"
           [(ngModel)]="email"
+          [ngClass]="{
+            'border-red-500': isFieldInvalid('email') || emailExists
+          }"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('email')"
+          class="text-red-500 text-xs leading-0"
+          >Email is required</span
+        >
+        <span *ngIf="emailExists" class="text-red-500 text-xs leading-0"
+          >Email already exists. Please use a different email address.</span
+        >
       </div>
 
       <div class="flex flex-col gap-3">
@@ -50,8 +67,14 @@
           name="password"
           placeholder="Enter your password"
           [(ngModel)]="password"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('password') }"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('password')"
+          class="text-red-500 text-xs leading-0"
+          >Password is required</span
+        >
       </div>
       <div class="flex flex-col gap-3">
         <label for="confirmPassword">Confirm Password</label>
@@ -62,8 +85,20 @@
           name="confirmPassword"
           placeholder="Enter your password"
           [(ngModel)]="confirmPassword"
+          [ngClass]="{
+            'border-red-500':
+              isFieldInvalid('confirmPassword') || passwordMismatch
+          }"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('confirmPassword')"
+          class="text-red-500 text-xs leading-0"
+          >Confirm password is required</span
+        >
+        <span *ngIf="passwordMismatch" class="text-red-500 text-xs leading-0"
+          >Passwords do not match</span
+        >
       </div>
       <div class="flex flex-col justify-center items-center gap-3">
         <button
@@ -88,12 +123,18 @@
           class="border-1 rounded-sm h-10 px-3"
           name="gender"
           [(ngModel)]="gender"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('gender') }"
           required
         >
           <option selected disabled value="">Select your gender</option>
           <option value="M">Male</option>
           <option value="F">Female</option>
         </select>
+        <span
+          *ngIf="isFieldInvalid('gender')"
+          class="text-red-500 text-xs leading-0"
+          >Gender is required</span
+        >
       </div>
       <div class="flex flex-col gap-3">
         <label for="contactNo">Contact No</label>
@@ -104,10 +145,16 @@
           name="contactNo"
           placeholder="Enter your contact number +60"
           [(ngModel)]="contactNo"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('contactNo') }"
           (keypress)="validateNumberInput($event)"
           maxlength="10"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('contactNo')"
+          class="text-red-500 text-xs leading-0"
+          >Contact Number is required</span
+        >
       </div>
       <div class="flex flex-col gap-3">
         <label for="address">Address line 1</label>
@@ -118,8 +165,14 @@
           name="address1"
           placeholder="Address line 1"
           [(ngModel)]="address1"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('address1') }"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('address1')"
+          class="text-red-500 text-xs leading-0"
+          >Address1 is required</span
+        >
       </div>
       <div class="flex flex-col gap-3">
         <label for="address">Address line 2 (optional)</label>
@@ -143,8 +196,14 @@
             name="city"
             placeholder="City"
             [(ngModel)]="city"
+            [ngClass]="{ 'border-red-500': isFieldInvalid('city') }"
             required
           />
+          <span
+            *ngIf="isFieldInvalid('city')"
+            class="text-red-500 text-xs leading-0"
+            >City is required</span
+          >
         </div>
         <div class="flex flex-col gap-3 w-full">
           <label for="state">State</label>
@@ -155,8 +214,14 @@
             name="state"
             placeholder="State"
             [(ngModel)]="state"
+            [ngClass]="{ 'border-red-500': isFieldInvalid('state') }"
             required
           />
+          <span
+            *ngIf="isFieldInvalid('state')"
+            class="text-red-500 text-xs leading-0"
+            >State is required</span
+          >
         </div>
       </div>
       <div class="flex flex-col gap-3">
@@ -165,6 +230,7 @@
           class="border-1 rounded-sm h-10 px-3"
           name="country"
           [(ngModel)]="country"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('country') }"
           required
         >
           <option selected disabled value="">Select your country</option>
@@ -173,6 +239,11 @@
         <p class="text-xs px-3 leading-0.5">
           ⚠ L&B Pet Service only available in Malaysia right now
         </p>
+        <span
+          *ngIf="isFieldInvalid('country')"
+          class="text-red-500 text-xs leading-0"
+          >Country is required</span
+        >
       </div>
 
       <div class="flex flex-col gap-3 [-moz-appearance:textfield]">
@@ -184,27 +255,41 @@
           name="zip"
           placeholder="ZIP/Postcode"
           [(ngModel)]="zip"
+          [ngClass]="{ 'border-red-500': isFieldInvalid('zip') }"
           required
         />
+        <span
+          *ngIf="isFieldInvalid('zip')"
+          class="text-red-500 text-xs leading-0"
+          >ZIP/Postcode is required</span
+        >
       </div>
 
-      <div class="flex text-sm">
-        <input
-          class="mx-1"
-          type="checkbox"
-          name="termsAccepted"
-          [(ngModel)]="termsAccepted"
-          required
-        />
-        <label
-          >Yes, I have read and I accept the
-          <a
-            routerLink="/login"
-            class="cursor-pointer font-bold text-orange-700"
-          >
-            Terms and Conditions.</a
-          >
-        </label>
+      <div class="flex flex-col gap-3 w-full">
+        <div class="flex text-sm">
+          <input
+            class="mx-1"
+            type="checkbox"
+            name="termsAccepted"
+            [(ngModel)]="termsAccepted"
+            [ngClass]="{ 'border-red-500': isFieldInvalid('termsAccepted') }"
+            required
+          />
+          <label
+            >Yes, I have read and I accept the
+            <a
+              routerLink="/login"
+              class="cursor-pointer font-bold text-orange-700"
+            >
+              Terms and Conditions.</a
+            >
+          </label>
+        </div>
+        <span
+          *ngIf="isFieldInvalid('termsAccepted')"
+          class="text-red-500 text-xs leading-0"
+          >Terms and Conditions must be accept</span
+        >
       </div>
 
       <div class="flex flex-col justify-center items-center gap-3">

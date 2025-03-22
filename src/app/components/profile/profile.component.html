@@ -82,7 +82,7 @@
     <!--First col------------------------------------------------------------->
     <div class="pt-10">
       <div class="flex flex-col px-10 my-5 gap-5 border-r-1 border-dashed">
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3 relative">
           <label for="username">Username</label>
           <input
             class="border-1 rounded-sm h-10 px-3 hover-selection"
@@ -91,8 +91,15 @@
             name="username"
             placeholder="Enter your username"
             [(ngModel)]="username"
+            [ngClass]="{ 'border-red-500': isFieldInvalid('username') }"
+            (ngModelChange)="onAccountInfoChange()"
             required
           />
+          <span
+            *ngIf="isFieldInvalid('username')"
+            class="text-red-500 text-xs absolute top-19"
+            >Username is required</span
+          >
         </div>
         <div class="flex flex-col gap-3">
           <label for="email">Email</label>
@@ -107,20 +114,27 @@
           />
         </div>
         <div class="flex flex-row gap-5">
-          <div class="flex flex-col gap-3 w-50">
+          <div class="flex flex-col gap-3 w-50 relative">
             <label for="gender">Gender</label>
             <select
               class="border-1 rounded-sm h-10 px-3 cursor-pointer hover-selection"
               name="gender"
               required
               [(ngModel)]="gender"
+              [ngClass]="{ 'border-red-500': isFieldInvalid('gender') }"
+              (ngModelChange)="onAccountInfoChange()"
             >
               <option selected disabled value="">Select your gender</option>
               <option value="M">Male</option>
               <option value="F">Female</option>
             </select>
+            <span
+              *ngIf="isFieldInvalid('gender')"
+              class="text-red-500 text-xs absolute top-19"
+              >Gender is required</span
+            >
           </div>
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3 relative">
             <label for="contactNo">Contact No</label>
             <input
               class="border-1 rounded-sm h-10 px-3 w-50 hover-selection"
@@ -129,11 +143,18 @@
               name="contactNo"
               placeholder="Enter your contact number +60"
               [(ngModel)]="contactNo"
+              [ngClass]="{ 'border-red-500': isFieldInvalid('contactNo') }"
+              (ngModelChange)="onAccountInfoChange()"
               required
             />
+            <span
+              *ngIf="isFieldInvalid('contactNo')"
+              class="text-red-500 text-xs absolute top-19"
+              >Contact Number is required</span
+            >
           </div>
         </div>
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3 relative">
           <label for="password">Change Password</label>
 
           <div class="flex">
@@ -163,7 +184,7 @@
     <!--Second col------------------------------------------------------------>
     <div class="pt-10">
       <div class="flex flex-col px-10 my-5 gap-5">
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3 relative">
           <label for="address1">Address line 1</label>
           <input
             class="border-1 rounded-sm h-10 px-3 hover-selection"
@@ -172,8 +193,15 @@
             name="address1"
             placeholder="Enter your address line 1"
             [(ngModel)]="address1"
+            [ngClass]="{ 'border-red-500': isFieldInvalid('address1') }"
+            (ngModelChange)="onAccountInfoChange()"
             required
           />
+          <span
+            *ngIf="isFieldInvalid('address1')"
+            class="text-red-500 text-xs absolute top-19"
+            >Address1 is required</span
+          >
         </div>
         <div class="flex flex-col gap-3">
           <label for="address2">Address line 2 (optional) </label>
@@ -184,11 +212,13 @@
             name="address2"
             placeholder="Enter your address line 2"
             [(ngModel)]="address2"
+            (ngModelChange)="onAccountInfoChange()"
+            (blur)="trimAddress2()"
             required
           />
         </div>
         <div class="flex flex-row gap-5">
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3 relative">
             <label for="city">City</label>
             <input
               class="border-1 rounded-sm h-10 px-3 hover-selection w-50"
@@ -197,10 +227,17 @@
               name="city"
               placeholder="City"
               [(ngModel)]="city"
+              [ngClass]="{ 'border-red-500': isFieldInvalid('city') }"
+              (ngModelChange)="onAccountInfoChange()"
               required
             />
+            <span
+              *ngIf="isFieldInvalid('city')"
+              class="text-red-500 text-xs absolute top-19"
+              >City is required</span
+            >
           </div>
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3 relative">
             <label for="state">State</label>
             <input
               class="border-1 rounded-sm h-10 px-3 hover-selection w-50"
@@ -209,23 +246,37 @@
               name="state"
               placeholder="State"
               [(ngModel)]="state"
+              [ngClass]="{ 'border-red-500': isFieldInvalid('state') }"
+              (ngModelChange)="onAccountInfoChange()"
               required
             />
+            <span
+              *ngIf="isFieldInvalid('state')"
+              class="text-red-500 text-xs absolute top-19"
+              >State is required</span
+            >
           </div>
         </div>
         <div class="flex flex-row gap-5">
           <div class="flex flex-col">
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-3 relative">
               <label for="country">Country</label>
               <select
                 class="border-1 rounded-sm h-10 px-3 hover-selection w-50 cursor-pointer"
                 name="country"
                 [(ngModel)]="country"
+                [ngClass]="{ 'border-red-500': isFieldInvalid('country') }"
+                (ngModelChange)="onAccountInfoChange()"
                 required
               >
                 <option selected disabled value="">Select your country</option>
                 <option value="Malaysia">Malaysia</option>
               </select>
+              <span
+                *ngIf="isFieldInvalid('country')"
+                class="text-red-500 text-xs absolute top-29"
+                >Country is required</span
+              >
             </div>
             <div class="flex flex-row gap-1 px-2">
               <span class="text-xs">⚠</span>
@@ -236,7 +287,7 @@
               </p>
             </div>
           </div>
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3 relative">
             <label for="zip">ZIP/Postcode</label>
             <input
               class="border-1 rounded-sm h-10 px-3 hover-selection w-50"
@@ -245,8 +296,15 @@
               name="zip"
               placeholder="ZIP"
               [(ngModel)]="zip"
+              [ngClass]="{ 'border-red-500': isFieldInvalid('zip') }"
+              (ngModelChange)="onAccountInfoChange()"
               required
             />
+            <span
+              *ngIf="isFieldInvalid('zip')"
+              class="text-red-500 text-xs absolute top-19"
+              >Zip is required</span
+            >
           </div>
         </div>
       </div>
@@ -255,11 +313,22 @@
     <!--Third col------------------------------------------------------------>
     <div class="col-span-2 flex flex-col justify-center items-center gap-2">
       <button
-        class="bg-orange-700 w-30 h-10 cursor-pointer rounded-sm text-gray-100 hover:bg-orange-800 ease-in-out duration-300"
+        *ngIf="!accountSaved || accountHasChanges"
+        class="w-30 h-10 cursor-pointer rounded-sm text-gray-100 ease-in-out duration-300"
+        [ngClass]="{
+          'bg-orange-700 hover:bg-orange-800': !accountSaved,
+          'bg-green-600 hover:bg-green-700': accountSaved && accountHasChanges
+        }"
         (click)="saveProfile()"
       >
-        Save
+        {{ accountSaved ? "Save Changes" : "Save" }}
       </button>
+      <span
+        *ngIf="accountSaved && !accountHasChanges"
+        class="text-green-600 font-semibold"
+      >
+        Saved
+      </span>
 
       <p *ngIf="errorMessage" class="text-red-600 text-sm">
         {{ errorMessage }}
@@ -301,9 +370,17 @@
                 [name]="'petName' + pet.id"
                 placeholder="Enter your pet name"
                 [(ngModel)]="pet.name"
+                [ngClass]="{
+                  'border-red-500': isFieldInvalid('petName' + pet.id)
+                }"
                 (ngModelChange)="onPetInfoChange(pet)"
                 required
               />
+              <span
+                *ngIf="isFieldInvalid('petName' + pet.id)"
+                class="text-red-500 text-xs leading-0"
+                >Pet Name is required</span
+              >
             </div>
             <div class="flex flex-col gap-3">
               <label [for]="'type' + pet.id">Pet Type</label>
@@ -314,9 +391,17 @@
                 [name]="'type' + pet.id"
                 placeholder="What's your pet type?"
                 [(ngModel)]="pet.type"
+                [ngClass]="{
+                  'border-red-500': isFieldInvalid('petType' + pet.id)
+                }"
                 (ngModelChange)="onPetInfoChange(pet)"
                 required
               />
+              <span
+                *ngIf="isFieldInvalid('petType' + pet.id)"
+                class="text-red-500 text-xs leading-0"
+                >Pet Type is required</span
+              >
             </div>
           </div>
 
@@ -327,6 +412,9 @@
                 class="border-1 rounded-sm h-10 px-3 hover-selection cursor-pointer"
                 [name]="'gender' + pet.id"
                 [(ngModel)]="pet.gender"
+                [ngClass]="{
+                  'border-red-500': isFieldInvalid('petGender' + pet.id)
+                }"
                 (ngModelChange)="onPetInfoChange(pet)"
                 required
               >
@@ -334,6 +422,11 @@
                 <option value="M">Male</option>
                 <option value="F">Female</option>
               </select>
+              <span
+                *ngIf="isFieldInvalid('petGender' + pet.id)"
+                class="text-red-500 text-xs leading-0"
+                >Pet Gender is required</span
+              >
             </div>
             <div class="col-span-2 flex justify-end items-center gap-2">
               <p *ngIf="pet.errorMessage" class="text-red-600 text-sm">
@@ -354,7 +447,7 @@
                 *ngIf="pet.saved && !pet.hasChanges"
                 class="text-green-600 font-semibold"
               >
-                Saved ✓
+                Saved
               </span>
             </div>
           </div>
@@ -380,8 +473,17 @@
     *ngIf="selectedTab === 'listings'"
     class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
   >
-    <div class="w-full text-center">
-      <h1 class="font-bold text-2xl pt-3">My Listings</h1>
+    <div class="grid grid-cols-3 items-center mt-3 px-7">
+      <div></div>
+      <h1 class="font-bold text-center text-2xl">My Listings</h1>
+      <div class="flex justify-end">
+        <button
+          class="bg-orange-300 rounded-lg px-3 cursor-pointer hover:bg-orange-400 ease-in-out duration-300"
+          (click)="navigateToMarket()"
+        >
+          Add item
+        </button>
+      </div>
     </div>
     <div
       *ngIf="userProducts.length === 0"
@@ -394,7 +496,7 @@
     >
       <div
         *ngFor="let product of userProducts"
-        class="rounded-lg p-6 hover:shadow-lg transition duration-300 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400"
+        class="rounded-lg h-fit p-6 hover:shadow-lg transition duration-300 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400"
         (click)="navigateToProduct(product)"
       >
         <div class="flex flex-row gap-2 items-center pb-2">
