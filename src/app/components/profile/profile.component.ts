@@ -3,9 +3,11 @@ import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../../../backend/services/profile.service';
 
 interface Product {
+  _id: string;
   productImg: string[];
   productTitle: string;
   productPrice: number;
+  productQuantity: number;
   username: string;
   userEmail: string;
   userAvatar: string;
@@ -36,6 +38,7 @@ export class ProfileComponent {
   invalidFields: Set<string> = new Set();
   originalAccountData: {
     username: string;
+    avatar: string;
     gender: string;
     contactNo: string;
     address1: string;
@@ -137,6 +140,7 @@ export class ProfileComponent {
   storeOriginalAccountData(): void {
     this.originalAccountData = {
       username: this.username,
+      avatar: this.avatar,
       gender: this.gender,
       contactNo: this.contactNo,
       address1: this.address1,
@@ -158,6 +162,7 @@ export class ProfileComponent {
 
     this.accountHasChanges =
       this.username !== this.originalAccountData.username ||
+      this.avatar !== this.originalAccountData.avatar ||
       this.gender !== this.originalAccountData.gender ||
       this.contactNo !== this.originalAccountData.contactNo ||
       this.address1 !== this.originalAccountData.address1 ||
@@ -360,6 +365,7 @@ export class ProfileComponent {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.avatar = e.target.result; // Update preview
+        this.onAccountInfoChange();
       };
       reader.readAsDataURL(file);
     }
@@ -390,9 +396,11 @@ export class ProfileComponent {
   navigateToProduct(product: Product) {
     this.router.navigate(['/product'], {
       queryParams: {
+        _id: product._id,
         name: product.productTitle,
         price: product.productPrice,
         condition: product.condition,
+        quantity: product.productQuantity,
         img: product.productImg[0],
         user: product.username,
         email: product.userEmail,

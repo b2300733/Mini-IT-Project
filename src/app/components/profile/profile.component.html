@@ -17,6 +17,7 @@
             accept="image/*"
             class="hidden"
             (change)="onImageSelected($event)"
+            (ngModelChange)="onAccountInfoChange()"
             [disabled]="authToken"
           />
           <div

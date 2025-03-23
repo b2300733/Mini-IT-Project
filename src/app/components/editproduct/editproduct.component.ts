@@ -306,10 +306,7 @@ export class EditproductComponent implements OnInit {
     this.communitymarketService.updateProduct(formData).subscribe({
       next: (response: any) => {
         alert('Product updated successfully!');
-        // Navigate back to product page
-        this.router.navigate(['/product'], {
-          queryParams: { id: this.productId },
-        });
+        this.router.navigate(['/market']);
       },
       error: (error) => {
         console.error('Error updating product:', error);
