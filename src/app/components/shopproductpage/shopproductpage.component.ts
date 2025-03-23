@@ -7,6 +7,7 @@ import {
 } from '../../../../backend/services/cart.service';
 
 interface ShopProduct {
+  _id: string;
   id: string;
   title: string;
   price: number;
@@ -34,6 +35,7 @@ interface Review {
 })
 export class ShopproductpageComponent implements OnInit {
   product: ShopProduct = {
+    _id: '',
     id: '',
     title: '',
     price: 0,
@@ -58,6 +60,7 @@ export class ShopproductpageComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.product = {
+        _id: params['_id'] || '',
         id: params['id'] || '',
         title: params['name'] || '',
         price: Number(params['price']) || 0,
@@ -102,6 +105,7 @@ export class ShopproductpageComponent implements OnInit {
       productTitle: this.product.title,
       quantity: this.quantity,
       price: this.product.price * this.quantity,
+      shopProductId: this.product._id,
     };
 
     const userEmail =

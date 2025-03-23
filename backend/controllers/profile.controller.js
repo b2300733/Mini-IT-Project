@@ -130,9 +130,27 @@ const getlistings = async (req, res) => {
   }
 };
 
+const getUserHistory = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return the history array in reverse order (newest first)
+    res.status(200).json(user.history || []);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   requestPasswordReset,
   resetPassword,
   updateProfile,
   getlistings,
+  getUserHistory,
 };

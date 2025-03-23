@@ -33,4 +33,8 @@ export class ProfileService {
   getListings(userEmail: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/listings/${userEmail}`);
   }
+
+  getPurchaseHistory(email: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${email}/history`);
+  }
 }

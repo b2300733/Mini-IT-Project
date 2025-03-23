@@ -195,6 +195,7 @@ export class ProductpageComponent implements OnInit {
       productTitle: this.product.title,
       quantity: this.quantity,
       price: this.product.price * this.quantity,
+      productId: this.product._id,
     };
 
     const userEmail =

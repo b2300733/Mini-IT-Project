@@ -23,6 +23,25 @@ const userSchema = new mongoose.Schema(
         productTitle: String,
         quantity: Number,
         price: Number,
+        productId: String,
+        shopProductId: String,
+      },
+    ],
+    history: [
+      {
+        items: [
+          {
+            productImg: String,
+            productTitle: String,
+            quantity: Number,
+            price: Number,
+            productId: String,
+            shopProductId: String,
+          },
+        ],
+        totalAmount: Number,
+        purchaseDate: { type: Date, default: Date.now },
+        status: { type: String, default: "Completed" },
       },
     ],
   },

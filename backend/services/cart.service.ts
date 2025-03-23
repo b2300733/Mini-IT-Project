@@ -12,6 +12,13 @@ export interface CartItem {
   shopProductId?: string;
 }
 
+export interface CheckoutHistory {
+  items: CartItem[];
+  totalAmount: number;
+  purchaseDate: Date;
+  status: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -124,5 +131,29 @@ export class CartService {
       (total, item) => total + item.price * item.quantity,
       0
     );
+  }
+
+  checkout(): Observable<{
+    message: string;
+    history: CheckoutHistory;
+    failedItems: any[];
+  }> {
+    if (this.userEmail) {
+      return this.http
+        .post<{
+          message: string;
+          history: CheckoutHistory;
+          failedItems: any[];
+        }>(`${this.baseUrl}/${encodeURIComponent(this.userEmail)}/checkout`, {})
+        .pipe(
+          map((response) => {
+            // Refresh the cart after checkout
+            this.loadCart();
+            return response;
+          })
+        );
+    }
+
+    throw new Error('User not logged in');
   }
 }

@@ -20,6 +20,23 @@ interface Product {
   createdAt: string;
 }
 
+interface HistoryItem {
+  productImg: string;
+  productTitle: string;
+  quantity: number;
+  price: number;
+  productId?: string;
+  shopProductId?: string;
+}
+
+interface PurchaseHistory {
+  _id: string;
+  items: HistoryItem[];
+  totalAmount: number;
+  purchaseDate: Date;
+  status: string;
+}
+
 @Component({
   selector: 'app-profile',
   standalone: false,
@@ -75,6 +92,7 @@ export class ProfileComponent {
     },
   ];
   nextPetId = 2;
+  purchaseHistory: PurchaseHistory[] = [];
 
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
@@ -124,6 +142,7 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.getUserProduct();
+    this.getPurchaseHistory();
 
     // Check if there's a tab parameter to switch to a specific tab
     this.route.queryParams.subscribe((params) => {
@@ -543,5 +562,46 @@ export class ProfileComponent {
         fromProfile: 'true',
       },
     });
+  }
+
+  getPurchaseHistory(): void {
+    if (!this.email) {
+      console.error('User email not found in storage');
+      return;
+    }
+
+    this.profileService.getPurchaseHistory(this.email).subscribe(
+      (history) => {
+        this.purchaseHistory = history;
+        // Sort purchase history from newest to oldest
+        this.purchaseHistory.sort((a, b) => {
+          return (
+            new Date(b.purchaseDate).getTime() -
+            new Date(a.purchaseDate).getTime()
+          );
+        });
+      },
+      (error) => {
+        console.error('Error fetching purchase history', error);
+      }
+    );
+  }
+
+  formatDate(dateString: string | Date): string {
+    const date = new Date(dateString);
+
+    // Format: January 1, 2025 at 12:00 PM
+    return (
+      date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }) +
+      ' at ' +
+      date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    );
   }
 }
