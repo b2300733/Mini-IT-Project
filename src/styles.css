@@ -26,8 +26,8 @@
     ease-in-out
     duration-300
     focus:ring-2 
-    focus:ring-orange-700 
-    focus:border-orange-700
+    focus:ring-red-500 
+    focus:border-red-500
      focus:outline-hidden;
   }
 }

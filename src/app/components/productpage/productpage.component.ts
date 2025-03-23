@@ -7,6 +7,7 @@ import {
 } from '../../../../backend/services/cart.service';
 
 interface Product {
+  _id: string;
   id: string;
   title: string;
   price: number;
@@ -37,6 +38,7 @@ export class ProductpageComponent implements OnInit {
   isCurrentUserSeller: boolean = false;
 
   product: Product = {
+    _id: '',
     id: '',
     images: [],
     title: '',
@@ -70,6 +72,7 @@ export class ProductpageComponent implements OnInit {
       const deliveryOpts = params['deliveryOptions']?.split(',') || [];
 
       this.product = {
+        _id: params['_id'] || '',
         id: params['id'] || '',
         title: params['name'] || '',
         price: Number(params['price']) || 0,
@@ -95,15 +98,6 @@ export class ProductpageComponent implements OnInit {
       const currentUserEmail =
         localStorage.getItem('email') || sessionStorage.getItem('email');
       this.isCurrentUserSeller = currentUserEmail === this.seller.email;
-    });
-  }
-
-  editProduct(): void {
-    // Navigate to edit product page with the product ID
-    this.router.navigate(['/edit-product'], {
-      queryParams: {
-        id: this.product.id,
-      },
     });
   }
 
@@ -215,6 +209,24 @@ export class ProductpageComponent implements OnInit {
       alert('Error: User email not found. Please log in again.');
       this.router.navigate(['/login']);
     }
+  }
+
+  editProduct(): void {
+    const productId = this.product._id || this.product.id;
+
+    if (!productId) {
+      console.error('Cannot edit product: missing product ID');
+      alert('Error: Cannot edit this product because the ID is missing');
+      return;
+    }
+
+    // Navigate to edit product page with the product ID
+    console.log('Editing product with ID:', productId);
+    this.router.navigate(['/edit-product'], {
+      queryParams: {
+        id: productId,
+      },
+    });
   }
 
   decreaseQuantity(): void {

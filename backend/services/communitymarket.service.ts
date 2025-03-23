@@ -17,4 +17,12 @@ export class CommunitymarketService {
   getProducts(): Observable<any> {
     return this.http.get(`${this.baseUrl}/all`);
   }
+
+  getProductById(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/product/${id}`);
+  }
+
+  updateProduct(formData: FormData): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update`, formData);
+  }
 }

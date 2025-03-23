@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommunitymarketService } from '../../../../backend/services/communitymarket.service';
 
 interface Product {
+  _id: string;
   productImg: string[];
   productTitle: string;
   productPrice: number;
@@ -151,6 +152,7 @@ export class CommunitymarketComponent {
   navigateToProduct(product: Product) {
     this.router.navigate(['/product'], {
       queryParams: {
+        _id: product._id,
         name: product.productTitle,
         price: product.productPrice,
         quantity: product.productQuantity,
