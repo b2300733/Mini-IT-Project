@@ -35,6 +35,7 @@ import { ShoppageComponent } from './components/shoppage/shoppage.component';
 import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ForumComponent } from './components/forum/forum.component';
+import { EditproductComponent } from './components/editproduct/editproduct.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ForumComponent } from './components/forum/forum.component';
     ShopproductpageComponent,
     CartComponent,
     ForumComponent,
+    EditproductComponent,
   ],
   imports: [
     BrowserModule,

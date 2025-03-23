@@ -12,7 +12,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ShoppageComponent } from './components/shoppage/shoppage.component';
 import { ShopproductpageComponent } from './components/shopproductpage/shopproductpage.component';
 import { CartComponent } from './components/cart/cart.component';
-import { ForumComponent } from './components/forum/forum.component'; 
+import { ForumComponent } from './components/forum/forum.component';
+import { EditproductComponent } from './components/editproduct/editproduct.component';
 
 const routes: Routes = [
   {
@@ -71,6 +72,10 @@ const routes: Routes = [
   {
     path: 'forum',
     component: ForumComponent,
+  },
+  {
+    path: 'edit-product',
+    component: EditproductComponent,
   },
 ];
 

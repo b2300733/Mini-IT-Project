@@ -8,6 +8,7 @@ interface Product {
   productTitle: string;
   productPrice: number;
   username: string;
+  userEmail: string;
   userAvatar: string;
   condition: string;
   productQuantity: number;
@@ -157,6 +158,7 @@ export class CommunitymarketComponent {
         images: product.productImg.join(','), // Pass all images
         img: product.productImg[0], // Keep the first image as default
         user: product.username,
+        email: product.userEmail,
         avatar: product.userAvatar,
         description: product.productDesc,
         category: product.category,

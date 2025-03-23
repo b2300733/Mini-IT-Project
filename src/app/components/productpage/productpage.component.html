@@ -92,7 +92,7 @@
 
         <!-- Quantity and Add to Cart -->
         <div class="mt-6">
-          <div class="flex items-center space-x-4">
+          <div *ngIf="!isCurrentUserSeller" class="flex items-center space-x-4">
             <div class="flex items-center border rounded-lg">
               <button
                 class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
@@ -124,6 +124,16 @@
               Add to Cart
             </button>
           </div>
+
+          <div *ngIf="isCurrentUserSeller">
+            <button
+              (click)="editProduct()"
+              class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-600 transition-colors cursor-pointer"
+            >
+              Edit Product
+            </button>
+          </div>
+
           <div *ngIf="message" style="color: red; margin-top: 5px">
             {{ message }}
           </div>

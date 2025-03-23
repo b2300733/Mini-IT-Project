@@ -7,6 +7,7 @@ interface Product {
   productTitle: string;
   productPrice: number;
   username: string;
+  userEmail: string;
   userAvatar: string;
   condition: string;
   size?: string;
@@ -394,6 +395,7 @@ export class ProfileComponent {
         condition: product.condition,
         img: product.productImg[0],
         user: product.username,
+        email: product.userEmail,
         avatar: product.userAvatar,
         description: product.productDesc,
         category: product.category,

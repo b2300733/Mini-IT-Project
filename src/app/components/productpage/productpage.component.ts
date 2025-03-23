@@ -23,8 +23,7 @@ interface Seller {
   name: string;
   username: string;
   avatar: string;
-  joinDate: string;
-  responseTime: string;
+  email: string;
 }
 
 @Component({
@@ -35,6 +34,7 @@ interface Seller {
 })
 export class ProductpageComponent implements OnInit {
   currentImageIndex: number = 0;
+  isCurrentUserSeller: boolean = false;
 
   product: Product = {
     id: '',
@@ -53,8 +53,7 @@ export class ProductpageComponent implements OnInit {
     name: '',
     username: '',
     avatar: '',
-    joinDate: 'Joined 2 years ago',
-    responseTime: 'Typically responds within 1 hour',
+    email: '',
   };
 
   quantity: number = 1;
@@ -89,9 +88,22 @@ export class ProductpageComponent implements OnInit {
         name: params['user'] || '',
         username: `@${params['user']?.toLowerCase() || 'user'}`,
         avatar: params['avatar'],
-        joinDate: 'Joined 2 years ago',
-        responseTime: 'Typically responds within 1 hour',
+        email: params['email'] || '',
       };
+
+      // Check if current user is the seller
+      const currentUserEmail =
+        localStorage.getItem('email') || sessionStorage.getItem('email');
+      this.isCurrentUserSeller = currentUserEmail === this.seller.email;
+    });
+  }
+
+  editProduct(): void {
+    // Navigate to edit product page with the product ID
+    this.router.navigate(['/edit-product'], {
+      queryParams: {
+        id: this.product.id,
+      },
     });
   }
 
