@@ -13,8 +13,9 @@
           (error)="handleImageError($event)"
         />
 
-        <!-- Navigation Arrows -->
+        <!-- Navigation Arrows - Only show if there's more than one image -->
         <div
+          *ngIf="product.images.length > 1"
           class="absolute inset-y-0 left-0 right-0 flex justify-between items-center px-4"
         >
           <!-- Previous Button -->
@@ -68,8 +69,9 @@
           </div>
         </div>
 
-        <!-- Image Counter -->
+        <!-- Image Counter - Only show if there's more than one image -->
         <div
+          *ngIf="product.images.length > 1"
           class="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm"
         >
           {{ currentImageIndex + 1 }} / {{ product.images.length }}

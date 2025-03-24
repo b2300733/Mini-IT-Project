@@ -50,6 +50,7 @@ export class ShopproductpageComponent implements OnInit {
 
   quantity: number = 1;
   message: string = '';
+  currentImageIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -170,5 +171,21 @@ export class ShopproductpageComponent implements OnInit {
       !!localStorage.getItem('authToken') ||
       !!sessionStorage.getItem('authToken')
     );
+  }
+
+  handleImageError(event: any) {
+    event.target.src = 'assets/default-product-image.png'; // Replace with your default image path
+  }
+
+  previousImage() {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
+  }
+
+  nextImage() {
+    if (this.currentImageIndex < this.product.images.length - 1) {
+      this.currentImageIndex++;
+    }
   }
 }
