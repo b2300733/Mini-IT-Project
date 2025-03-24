@@ -139,15 +139,14 @@
       <div class="flex flex-col gap-3">
         <label for="contactNo">Contact No</label>
         <input
-          class="border-1 rounded-sm h-10 px-3 [-moz-appearance:textfield]"
-          type="number"
+          class="border-1 rounded-sm h-10 px-3"
+          type="text"
           id="contactNo"
           name="contactNo"
           placeholder="Enter your contact number +60"
           [(ngModel)]="contactNo"
           [ngClass]="{ 'border-red-500': isFieldInvalid('contactNo') }"
-          (keypress)="validateNumberInput($event)"
-          maxlength="10"
+          (input)="validateNumberInput($event)"
           required
         />
         <span
@@ -189,7 +188,7 @@
       <div class="flex flex-row gap-6">
         <div class="flex flex-col gap-3 w-full">
           <label for="city">City</label>
-          <input
+          <select
             class="border-1 rounded-sm h-10 px-3"
             type="text"
             id="city"
@@ -198,7 +197,15 @@
             [(ngModel)]="city"
             [ngClass]="{ 'border-red-500': isFieldInvalid('city') }"
             required
-          />
+          >
+            <option selected disabled value="">Select your city</option>
+            <option
+              *ngFor="let cityOption of filteredCities"
+              [value]="cityOption"
+            >
+              {{ cityOption }}
+            </option>
+          </select>
           <span
             *ngIf="isFieldInvalid('city')"
             class="text-red-500 text-xs leading-0"
@@ -207,7 +214,7 @@
         </div>
         <div class="flex flex-col gap-3 w-full">
           <label for="state">State</label>
-          <input
+          <select
             class="border-1 rounded-sm h-10 px-3"
             type="text"
             id="state"
@@ -215,8 +222,17 @@
             placeholder="State"
             [(ngModel)]="state"
             [ngClass]="{ 'border-red-500': isFieldInvalid('state') }"
+            (ngModelChange)="onStateChange()"
             required
-          />
+          >
+            <option selected disabled value="">Select your state</option>
+            <option
+              *ngFor="let stateOption of malaysiaStates"
+              [value]="stateOption"
+            >
+              {{ stateOption }}
+            </option>
+          </select>
           <span
             *ngIf="isFieldInvalid('state')"
             class="text-red-500 text-xs leading-0"
