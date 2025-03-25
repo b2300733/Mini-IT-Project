@@ -45,7 +45,7 @@ export class CommunitymarketComponent {
   showListingForm = false;
   currentStep = 1;
   uploadedPhotos: UploadedPhoto[] = [];
-  selectedCategory: string | null = null;
+  selectedCategories: string[] = [];
   selectedSubcategory: string | null = null;
   isContentHidden = false;
   activeSubcategories: string[] = [];
@@ -260,7 +260,7 @@ export class CommunitymarketComponent {
       priceType: 'sale',
     });
     this.uploadedPhotos = [];
-    this.selectedCategory = null;
+    this.selectedCategories = [];
     this.selectedSubcategory = null;
     this.currentStep = 1;
   }
@@ -344,8 +344,20 @@ export class CommunitymarketComponent {
 
   // Category selection methods
   selectCategory(category: string) {
-    this.selectedCategory = category;
-    this.selectedSubcategory = null; // Reset subcategory when changing main category
+    const index = this.selectedCategories.indexOf(category);
+    if (index === -1) {
+      // Add category if not selected
+      this.selectedCategories.push(category);
+    } else {
+      // Remove category if already selected
+      this.selectedCategories.splice(index, 1);
+    }
+  }
+
+  canProceedToNext(): boolean {
+    return (
+      this.selectedCategories.length > 0 && this.selectedSubcategory !== null
+    );
   }
 
   selectSubcategory(subcategory: string) {
@@ -376,7 +388,7 @@ export class CommunitymarketComponent {
     if (
       this.listingForm.valid &&
       this.uploadedPhotos.length > 0 &&
-      this.selectedCategory &&
+      this.selectedCategories &&
       this.selectedSubcategory
     ) {
       // Prepare the form data
@@ -392,7 +404,7 @@ export class CommunitymarketComponent {
           : this.listingForm.value.price
       );
       formData.append('productQuantity', this.listingForm.value.quantity);
-      formData.append('category', this.selectedCategory);
+      formData.append('category', this.selectedCategories.join(','));
       formData.append('subCategory', this.selectedSubcategory);
       formData.append('condition', this.listingForm.value.condition);
       formData.append(

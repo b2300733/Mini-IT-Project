@@ -471,26 +471,64 @@
 
     <!-- Step 2: Category Selection -->
     <div *ngIf="currentStep === 2" class="mb-6">
-      <h3 class="text-lg font-semibold mb-4">Select Category</h3>
+      <h3 class="text-lg font-semibold mb-4">
+        Select Category (Choose one or more)
+      </h3>
 
       <!-- Main Categories -->
       <div class="grid grid-cols-3 gap-4 mb-6">
         <div
           *ngFor="let category of mainCategories"
           [ngClass]="{
-            'border-red-500 bg-red-50': selectedCategory === category.value,
-            'border-gray-200': selectedCategory !== category.value
+            'border-red-500 bg-red-50': selectedCategories.includes(
+              category.value
+            ),
+            'border-gray-200': !selectedCategories.includes(category.value)
           }"
           class="border-2 rounded-lg p-4 flex flex-col items-center cursor-pointer hover:border-red-300 transition-colors"
           (click)="selectCategory(category.value)"
         >
           <span class="text-2xl mb-2">{{ category.icon }}</span>
           <span class="font-medium">{{ category.label }}</span>
+          <!-- Add checkmark for selected categories -->
+          <svg
+            *ngIf="selectedCategories.includes(category.value)"
+            class="w-6 h-6 text-red-500 absolute top-2 right-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Selected Categories Display -->
+      <div *ngIf="selectedCategories.length > 0" class="mb-4">
+        <h4 class="text-md font-medium mb-2">Selected Categories:</h4>
+        <div class="flex flex-wrap gap-2">
+          <span
+            *ngFor="let category of selectedCategories"
+            class="bg-red-100 text-red-800 px-3 py-1 rounded-full flex items-center"
+          >
+            {{ category }}
+            <button
+              class="ml-2 text-red-600 hover:text-red-800"
+              (click)="selectCategory(category)"
+            >
+              ×
+            </button>
+          </span>
         </div>
       </div>
 
       <!-- Subcategories (only shown when main category is selected) -->
-      <div *ngIf="selectedCategory">
+      <div *ngIf="selectedCategories">
         <h4 class="text-md font-medium mb-3">Select Subcategory</h4>
         <div class="grid grid-cols-3 gap-4">
           <div
@@ -508,6 +546,7 @@
         </div>
       </div>
 
+      <!-- Navigation Buttons -->
       <div class="mt-6 flex justify-between">
         <button
           class="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors cursor-pointer"
@@ -516,12 +555,10 @@
           Back
         </button>
         <button
-          [disabled]="!selectedCategory || !selectedSubcategory"
+          [disabled]="!canProceedToNext()"
           [ngClass]="{
-            'bg-red-500 hover:bg-red-600 cursor-pointer':
-              selectedCategory && selectedSubcategory,
-            'bg-gray-300 cursor-not-allowed':
-              !selectedCategory || !selectedSubcategory
+            'bg-red-500 hover:bg-red-600 cursor-pointer': canProceedToNext(),
+            'bg-gray-300 cursor-not-allowed': !canProceedToNext()
           }"
           class="px-6 py-2 rounded-lg text-white transition-colors"
           (click)="nextStep()"

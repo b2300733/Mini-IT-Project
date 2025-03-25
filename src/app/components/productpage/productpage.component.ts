@@ -140,18 +140,29 @@ export class ProductpageComponent implements OnInit {
       other: 'Other',
     };
 
-    const subcategories: { [key: string]: string } = {
-      accessories: 'Accessories',
-      toys: 'Toys',
-      clothes: 'Clothes',
-    };
+    // Convert to array if category contains multiple values
+    if (category?.includes(',')) {
+      return category
+        .split(',')
+        .map(
+          (cat) =>
+            mainCategories[cat.toLowerCase().trim()] ||
+            this.capitalizeFirstLetter(cat)
+        )
+        .join(' • ');
+    }
 
     return (
-      mainCategories[category] ||
-      subcategories[category] ||
-      category ||
+      mainCategories[category?.toLowerCase()] ||
+      this.capitalizeFirstLetter(category) ||
       'Not Specified'
     );
+  }
+
+  // Add this helper method
+  private capitalizeFirstLetter(text: string): string {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   }
 
   getSubcategoryLabel(subcategory: string): string {
