@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { ForumService } from '../../../../backend/services/forum.service';
 
 interface Comment {
-  id: number; // Required numeric ID
+  id: number;
   userEmail: string;
+  userName: string; // Add this line
   content: string;
   timestamp: string;
   replies: Comment[];
@@ -18,6 +19,7 @@ interface ForumPost {
   title: string;
   content: string;
   userEmail: string;
+  userName: string;
   category: string;
   upvotes: number;
   downvotes: number;
@@ -57,6 +59,7 @@ export class ForumComponent implements OnInit {
   searchQuery: string = '';
   currentStep = 1;
   userEmail: string = '';
+  userName: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -79,6 +82,9 @@ export class ForumComponent implements OnInit {
 
     this.userEmail =
       localStorage.getItem('email') || sessionStorage.getItem('email') || '';
+
+    this.userName =
+    localStorage.getItem('username') || sessionStorage.getItem('username') || '';
   }
 
   ngOnInit() {
@@ -137,8 +143,10 @@ export class ForumComponent implements OnInit {
     if (this.postForm.valid) {
       const userEmail =
         localStorage.getItem('email') || sessionStorage.getItem('email');
+      const username =
+        localStorage.getItem('username') || sessionStorage.getItem('username');
 
-      if (!userEmail) {
+      if (!userEmail || !username) {
         alert('Please login first to create a post');
         this.router.navigate(['/login']);
         return;
@@ -149,12 +157,13 @@ export class ForumComponent implements OnInit {
         content: this.postForm.value.content.trim(),
         category: this.postForm.value.category,
         userEmail: userEmail,
+        userName: username, // Add username
         upvotes: 0,
         downvotes: 0,
         commentCount: 0,
         comments: [],
-        upvotedBy: [], // Add this line
-        downvotedBy: [], // Add this line
+        upvotedBy: [],
+        downvotedBy: [],
         timestamp: new Date().toISOString(),
       };
 
@@ -227,9 +236,13 @@ export class ForumComponent implements OnInit {
 
   submitComment() {
     if (this.commentForm.valid && this.selectedPost) {
+      const userName =
+        localStorage.getItem('username') || sessionStorage.getItem('username');
+
       const comment = {
         content: this.commentForm.value.content.trim(),
         userEmail: this.userEmail,
+        userName: this.userName,
       };
 
       console.log('Submitting comment:', comment);
@@ -265,6 +278,9 @@ export class ForumComponent implements OnInit {
       return;
     }
 
+    const username =
+      localStorage.getItem('username') || sessionStorage.getItem('username');
+
     if (!parentComment.id && parentComment.id !== 0) {
       console.error('Comment missing ID:', parentComment);
       alert('Error: Comment is missing ID');
@@ -282,6 +298,7 @@ export class ForumComponent implements OnInit {
       .addReply(this.selectedPost._id!, parentComment.id.toString(), {
         content: parentComment.replyContent.trim(),
         userEmail: this.userEmail,
+        userName: this.userName,
       })
       .subscribe({
         next: (updatedPost) => {

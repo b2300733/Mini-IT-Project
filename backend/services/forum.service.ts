@@ -8,6 +8,7 @@ export interface ForumPost {
   content: string;
   category: string;
   userEmail: string;
+  userName: string;
   upvotes: number;
   downvotes: number;
   upvotedBy: string[];
@@ -21,6 +22,7 @@ interface Comment {
   _id?: string; // Add MongoDB ID
   id: number; // Keep numeric ID for compatibility
   userEmail: string;
+  userName: string;
   content: string;
   timestamp: string;
   replies: Comment[];
@@ -42,6 +44,7 @@ export class ForumService {
       content: postData.content,
       category: postData.category,
       userEmail: postData.userEmail,
+      userName: postData.userName,
       upvotes: 0,
       downvotes: 0,
       upvotedBy: [],
@@ -60,13 +63,14 @@ export class ForumService {
 
   addComment(
     postId: string,
-    comment: { content: string; userEmail: string }
+    comment: { content: string; userEmail: string; userName: string;}
   ): Observable<ForumPost> {
     return this.http.post<ForumPost>(
       `${this.baseUrl}/posts/${postId}/comments`,
       {
         content: comment.content,
         userEmail: comment.userEmail,
+        userName: comment.userName,
         timestamp: new Date().toISOString(),
       }
     );
@@ -75,7 +79,7 @@ export class ForumService {
   addReply(
     postId: string,
     commentId: string,
-    reply: { content: string; userEmail: string }
+    reply: { content: string; userEmail: string; userName: string;}
   ): Observable<ForumPost> {
     console.log('Service adding reply:', { postId, commentId, reply }); // Debug log
     return this.http.post<ForumPost>(
@@ -83,6 +87,7 @@ export class ForumService {
       {
         content: reply.content,
         userEmail: reply.userEmail,
+        userName: reply.userName,
         timestamp: new Date().toISOString(),
       }
     );

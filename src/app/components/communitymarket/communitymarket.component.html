@@ -490,40 +490,6 @@
         >
           <span class="text-2xl mb-2">{{ category.icon }}</span>
           <span class="font-medium">{{ category.label }}</span>
-          <!-- Add checkmark for selected categories -->
-          <svg
-            *ngIf="selectedCategories.includes(category.value)"
-            class="w-6 h-6 text-red-500 absolute top-2 right-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            ></path>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Selected Categories Display -->
-      <div *ngIf="selectedCategories.length > 0" class="mb-4">
-        <h4 class="text-md font-medium mb-2">Selected Categories:</h4>
-        <div class="flex flex-wrap gap-2">
-          <span
-            *ngFor="let category of selectedCategories"
-            class="bg-red-100 text-red-800 px-3 py-1 rounded-full flex items-center"
-          >
-            {{ category }}
-            <button
-              class="ml-2 text-red-600 hover:text-red-800"
-              (click)="selectCategory(category)"
-            >
-              ×
-            </button>
-          </span>
         </div>
       </div>
 

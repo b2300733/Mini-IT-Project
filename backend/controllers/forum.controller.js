@@ -15,7 +15,7 @@ const getAllPosts = async (req, res) => {
 // Create new post
 const createPost = async (req, res) => {
   try {
-    const { title, content, category, userEmail } = req.body;
+    const { title, content, category, userEmail, userName } = req.body;
     const user = await User.findOne({ email: userEmail });
 
     if (!user) {
@@ -27,6 +27,7 @@ const createPost = async (req, res) => {
       content,
       category,
       userEmail,
+      userName,
       upvotes: 0,
       downvotes: 0,
       upvotedBy: [],
@@ -47,9 +48,9 @@ const createPost = async (req, res) => {
 const addComment = async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, userEmail } = req.body;
+    const { content, userEmail, userName } = req.body;
 
-    console.log("Adding comment:", { postId, content, userEmail });
+    console.log("Adding comment:", { postId, content, userEmail, userName });
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -68,6 +69,7 @@ const addComment = async (req, res) => {
     const newComment = {
       id: maxId + 1, // Ensure unique ID
       userEmail,
+      userName,
       content,
       timestamp: new Date(),
       replies: [],
@@ -96,9 +98,9 @@ const addComment = async (req, res) => {
 const addReply = async (req, res) => {
   try {
     const { postId, commentId } = req.params;
-    const { content, userEmail } = req.body;
+    const { content, userEmail, userName } = req.body;
 
-    console.log("Adding reply:", { postId, commentId, content, userEmail }); // Debug log
+    console.log("Adding reply:", { postId, commentId, content, userName }); // Debug log
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -126,6 +128,7 @@ const addReply = async (req, res) => {
     const newReply = {
       id: newId,
       userEmail,
+      userName,
       content,
       timestamp: new Date(),
     };
