@@ -27,7 +27,7 @@ export class AuthCallbackComponent implements OnInit {
       const address1 = params['address1'] || '';
       const address2 = params['address2'] || '';
       const city = params['city'] || '';
-      const state = params['address1'] || '';
+      const state = params['state'] || '';
       const country = params['country'] || '';
       const zip = params['zip'] || '';
 
