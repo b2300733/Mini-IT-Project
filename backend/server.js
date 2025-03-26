@@ -15,6 +15,7 @@ const shopRoute = require("./routes/shop.route");
 const userRoute = require("./routes/user.route");
 const forumRoute = require("./routes/forum.route");
 const cartRoute = require("./routes/cart.route");
+const jobsRoute = require("./routes/jobs.route");
 
 const app = express();
 
@@ -109,6 +110,9 @@ app.use("/api/cart", cartRoute);
 
 // Forum route--------------------------------------------------------------------------------------------
 app.use("/api/forum", forumRoute);
+
+// Job route--------------------------------------------------------------------------------------------
+app.use("/api/jobs", jobsRoute);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

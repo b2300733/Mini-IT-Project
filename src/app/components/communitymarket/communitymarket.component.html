@@ -193,14 +193,42 @@
 
       <!-- Active Filter Indicator -->
       <div
-        *ngIf="activeCategory"
+        *ngIf="activeCategories.length > 0"
         class="mt-4 flex flex-wrap items-center gap-2 text-sm"
       >
         <span class="text-gray-600">Browsing:</span>
-        <span class="bg-gray-200 px-3 py-1 rounded-full">
-          {{ activeCategory }}
-        </span>
+
+        <!-- Categories -->
+        <div class="flex flex-wrap gap-2">
+          <span
+            *ngFor="let category of activeCategories"
+            class="bg-gray-200 px-3 py-1 rounded-full flex items-center"
+          >
+            {{ category }}
+            <button
+              class="ml-1 text-gray-500 hover:text-red-500"
+              (click)="removeCategory(category)"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </span>
+        </div>
+
         <span class="text-gray-600">></span>
+
+        <!-- Subcategories -->
         <div class="flex flex-wrap gap-2">
           <span
             *ngFor="let subcategory of activeSubcategories"
@@ -227,6 +255,7 @@
             </button>
           </span>
         </div>
+
         <button
           class="ml-2 text-gray-500 hover:text-red-500 flex items-center"
           (click)="clearFilters()"
@@ -471,19 +500,15 @@
 
     <!-- Step 2: Category Selection -->
     <div *ngIf="currentStep === 2" class="mb-6">
-      <h3 class="text-lg font-semibold mb-4">
-        Select Category (Choose one or more)
-      </h3>
+      <h3 class="text-lg font-semibold mb-4">Select a Category</h3>
 
       <!-- Main Categories -->
       <div class="grid grid-cols-3 gap-4 mb-6">
         <div
           *ngFor="let category of mainCategories"
           [ngClass]="{
-            'border-red-500 bg-red-50': selectedCategories.includes(
-              category.value
-            ),
-            'border-gray-200': !selectedCategories.includes(category.value)
+            'border-red-500 bg-red-50': selectedCategory === category.value,
+            'border-gray-200': selectedCategory !== category.value
           }"
           class="border-2 rounded-lg p-4 flex flex-col items-center cursor-pointer hover:border-red-300 transition-colors"
           (click)="selectCategory(category.value)"
@@ -494,7 +519,7 @@
       </div>
 
       <!-- Subcategories (only shown when main category is selected) -->
-      <div *ngIf="selectedCategories">
+      <div *ngIf="selectedCategory">
         <h4 class="text-md font-medium mb-3">Select Subcategory</h4>
         <div class="grid grid-cols-3 gap-4">
           <div

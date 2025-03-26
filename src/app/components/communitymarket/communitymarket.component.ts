@@ -40,15 +40,14 @@ export class CommunitymarketComponent {
   isDogExpanded = false;
   isCatExpanded = false;
   isOtherExpanded = false;
-  activeCategory: string | null = null;
-  activeSubcategory: string | null = null;
+  activeCategories: string[] = [];
+  activeSubcategories: string[] = [];
   showListingForm = false;
   currentStep = 1;
   uploadedPhotos: UploadedPhoto[] = [];
-  selectedCategories: string[] = [];
+  selectedCategory: string | null = null;
   selectedSubcategory: string | null = null;
   isContentHidden = false;
-  activeSubcategories: string[] = [];
   searchQuery: string = '';
 
   email =
@@ -198,7 +197,9 @@ export class CommunitymarketComponent {
     this.isOtherExpanded = false;
 
     // Set active filters
-    this.activeCategory = category;
+    if (!this.activeCategories.includes(category)) {
+      this.activeCategories.push(category);
+    }
 
     // Handle multiple subcategories
     if (!this.activeSubcategories.includes(subcategory)) {
@@ -208,16 +209,35 @@ export class CommunitymarketComponent {
     // Filter products based on category and any of the selected subcategories
     this.products = this.originalProducts.filter((product: Product) => {
       return (
-        product.category === category &&
-        this.activeSubcategories.includes(product.subCategory)
-      ); // Changed from subCategory?
+        this.activeCategories.includes(product.category || '') &&
+        this.activeSubcategories.includes(product.subCategory || '')
+      );
     });
   }
 
   clearFilters() {
-    this.activeCategory = null;
+    this.activeCategories = [];
     this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+  }
+
+  // Add helper method to filter products
+  private filterProducts() {
+    this.products = this.originalProducts.filter((product: Product) => {
+      return (
+        this.activeCategories.includes(product.category || '') &&
+        this.activeSubcategories.includes(product.subCategory || '')
+      );
+    });
+  }
+
+  removeCategory(category: string) {
+    this.activeCategories = this.activeCategories.filter((c) => c !== category);
+    if (this.activeCategories.length === 0) {
+      this.clearFilters();
+    } else {
+      this.filterProducts();
+    }
   }
 
   removeSubcategory(subcategory: string) {
@@ -232,7 +252,7 @@ export class CommunitymarketComponent {
       // Reapply filter with remaining subcategories
       this.products = this.originalProducts.filter((product: Product) => {
         return (
-          product.category === this.activeCategory &&
+          product.category === this.activeCategories[0] &&
           this.activeSubcategories.includes(product.subCategory || '')
         );
       });
@@ -260,7 +280,7 @@ export class CommunitymarketComponent {
       priceType: 'sale',
     });
     this.uploadedPhotos = [];
-    this.selectedCategories = [];
+    this.selectedCategory = null;
     this.selectedSubcategory = null;
     this.currentStep = 1;
   }
@@ -344,20 +364,16 @@ export class CommunitymarketComponent {
 
   // Category selection methods
   selectCategory(category: string) {
-    const index = this.selectedCategories.indexOf(category);
-    if (index === -1) {
-      // Add category if not selected
-      this.selectedCategories.push(category);
+    // Simply assign the new category or toggle off if already selected
+    if (this.selectedCategory === category) {
+      this.selectedCategory = null; // Deselect if clicking the same category
     } else {
-      // Remove category if already selected
-      this.selectedCategories.splice(index, 1);
+      this.selectedCategory = category; // Select the new category
     }
   }
 
   canProceedToNext(): boolean {
-    return (
-      this.selectedCategories.length > 0 && this.selectedSubcategory !== null
-    );
+    return this.selectedCategory !== null && this.selectedSubcategory !== null;
   }
 
   selectSubcategory(subcategory: string) {
@@ -388,7 +404,7 @@ export class CommunitymarketComponent {
     if (
       this.listingForm.valid &&
       this.uploadedPhotos.length > 0 &&
-      this.selectedCategories &&
+      this.selectedCategory &&
       this.selectedSubcategory
     ) {
       // Prepare the form data
@@ -404,7 +420,7 @@ export class CommunitymarketComponent {
           : this.listingForm.value.price
       );
       formData.append('productQuantity', this.listingForm.value.quantity);
-      formData.append('category', this.selectedCategories.join(','));
+      formData.append('category', this.selectedCategory);
       formData.append('subCategory', this.selectedSubcategory);
       formData.append('condition', this.listingForm.value.condition);
       formData.append(
@@ -455,10 +471,13 @@ export class CommunitymarketComponent {
 
     if (query === '') {
       // If search is empty and there are active filters, show filtered results
-      if (this.activeCategory && this.activeSubcategories.length > 0) {
+      if (
+        this.activeCategories.length > 0 &&
+        this.activeSubcategories.length > 0
+      ) {
         this.products = this.originalProducts.filter((product: Product) => {
           return (
-            product.category === this.activeCategory &&
+            product.category === this.activeCategories[0] &&
             this.activeSubcategories.includes(product.subCategory || '')
           );
         });
@@ -473,11 +492,14 @@ export class CommunitymarketComponent {
           .toLowerCase()
           .includes(query);
 
-        if (this.activeCategory && this.activeSubcategories.length > 0) {
+        if (
+          this.activeCategories.length > 0 &&
+          this.activeSubcategories.length > 0
+        ) {
           // Apply both search and category filters
           return (
             matchesSearch &&
-            product.category === this.activeCategory &&
+            product.category === this.activeCategories[0] &&
             this.activeSubcategories.includes(product.subCategory || '')
           );
         }

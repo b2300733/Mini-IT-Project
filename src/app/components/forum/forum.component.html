@@ -100,14 +100,7 @@
                 postForm.get('title')?.touched && postForm.get('title')?.invalid
               "
               class="text-red-500 text-sm mt-1"
-            >
-              <span *ngIf="postForm.get('title')?.errors?.['required']"
-                >Title is required</span
-              >
-              <span *ngIf="postForm.get('title')?.errors?.['minlength']"
-                >Title must be at least 10 characters</span
-              >
-            </div>
+            ></div>
           </div>
 
           <div>
@@ -123,14 +116,7 @@
                 postForm.get('content')?.invalid
               "
               class="text-red-500 text-sm mt-1"
-            >
-              <span *ngIf="postForm.get('content')?.errors?.['required']"
-                >Content is required</span
-              >
-              <span *ngIf="postForm.get('content')?.errors?.['minlength']"
-                >Content must be at least 20 characters</span
-              >
-            </div>
+            ></div>
           </div>
 
           <div>
@@ -190,6 +176,14 @@
               <span class="bg-gray-100 px-2 py-1 rounded">{{
                 post.category
               }}</span>
+              <div class="flex-shrink-0 w-8 h-8">
+                <img
+                  [src]="post.userAvatar"
+                  [alt]="post.userName"
+                  class="w-full h-full rounded-full object-cover"
+                  onerror="this.src='/profilePics/default_user.png'"
+                />
+              </div>
               <span>Posted by {{ post.userName }}</span>
               <span>{{ post.timestamp }}</span>
             </div>
@@ -271,6 +265,14 @@
             <span class="bg-gray-100 px-2 py-1 rounded">{{
               selectedPost.category
             }}</span>
+            <div class="flex-shrink-0 w-8 h-8">
+              <img
+                [src]="selectedPost.userAvatar"
+                [alt]="selectedPost.userName"
+                class="w-full h-full rounded-full object-cover"
+                onerror="this.src='/profilePics/default_user.png'"
+              />
+            </div>
             <span>Posted by {{ selectedPost.userName }}</span>
             <span>{{ selectedPost.timestamp }}</span>
           </div>
@@ -383,12 +385,13 @@
               class="border-b pb-4 last:border-0"
             >
               <div class="flex items-start space-x-2 mb-2">
-                <div
-                  class="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center"
-                >
-                  <span class="text-gray-700 font-semibold">{{
-                    comment.userName.charAt(0)
-                  }}</span>
+                <div class="flex-shrink-0 w-8 h-8">
+                  <img
+                    [src]="comment.userAvatar"
+                    [alt]="comment.userName"
+                    class="w-full h-full rounded-full object-cover"
+                    onerror="this.src='/profilePics/default_user.png'"
+                  />
                 </div>
                 <div class="flex-1 min-w-0">
                   <!-- Added min-w-0 to allow text wrapping -->
@@ -453,6 +456,14 @@
                         <div
                           class="bg-gray-200 rounded-full w-6 h-6 flex-shrink-0 flex items-center justify-center"
                         >
+                          <div class="flex-shrink-0 w-6 h-6">
+                            <img
+                              [src]="reply.userAvatar"
+                              [alt]="reply.userName"
+                              class="w-full h-full rounded-full object-cover"
+                              onerror="this.src='/profilePics/default_user.png'"
+                            />
+                          </div>
                           <span class="text-gray-700 text-xs font-semibold">{{
                             reply.userName.charAt(0)
                           }}</span>

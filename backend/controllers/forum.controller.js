@@ -28,6 +28,7 @@ const createPost = async (req, res) => {
       category,
       userEmail,
       userName,
+      avatar,
       upvotes: 0,
       downvotes: 0,
       upvotedBy: [],
@@ -48,9 +49,9 @@ const createPost = async (req, res) => {
 const addComment = async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, userEmail, userName } = req.body;
+    const { content, userEmail, userName, avatar } = req.body;
 
-    console.log("Adding comment:", { postId, content, userEmail, userName });
+    console.log("Adding comment:", { postId, content, userEmail, userName, avatar });
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -70,6 +71,7 @@ const addComment = async (req, res) => {
       id: maxId + 1, // Ensure unique ID
       userEmail,
       userName,
+      avatar,
       content,
       timestamp: new Date(),
       replies: [],
@@ -98,9 +100,9 @@ const addComment = async (req, res) => {
 const addReply = async (req, res) => {
   try {
     const { postId, commentId } = req.params;
-    const { content, userEmail, userName } = req.body;
+    const { content, userEmail, userName, avatar } = req.body;
 
-    console.log("Adding reply:", { postId, commentId, content, userName }); // Debug log
+    console.log("Adding reply:", { postId, commentId, content, userName, avatar }); // Debug log
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -129,6 +131,7 @@ const addReply = async (req, res) => {
       id: newId,
       userEmail,
       userName,
+      avatar,
       content,
       timestamp: new Date(),
     };

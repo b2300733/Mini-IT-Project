@@ -7,6 +7,7 @@ interface Comment {
   id: number;
   userEmail: string;
   userName: string; // Add this line
+  userAvatar: string;
   content: string;
   timestamp: string;
   replies: Comment[];
@@ -20,6 +21,7 @@ interface ForumPost {
   content: string;
   userEmail: string;
   userName: string;
+  userAvatar: string;
   category: string;
   upvotes: number;
   downvotes: number;
@@ -60,6 +62,7 @@ export class ForumComponent implements OnInit {
   currentStep = 1;
   userEmail: string = '';
   userName: string = '';
+  userAvatar: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -67,8 +70,8 @@ export class ForumComponent implements OnInit {
     private forumService: ForumService
   ) {
     this.postForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(10)]],
-      content: ['', [Validators.required, Validators.minLength(20)]],
+      title: ['', [Validators.required]],
+      content: ['', [Validators.required]],
       category: ['', Validators.required],
     });
 
@@ -84,7 +87,9 @@ export class ForumComponent implements OnInit {
       localStorage.getItem('email') || sessionStorage.getItem('email') || '';
 
     this.userName =
-    localStorage.getItem('username') || sessionStorage.getItem('username') || '';
+      localStorage.getItem('username') ||
+      sessionStorage.getItem('username') ||
+      '';
   }
 
   ngOnInit() {
@@ -157,7 +162,11 @@ export class ForumComponent implements OnInit {
         content: this.postForm.value.content.trim(),
         category: this.postForm.value.category,
         userEmail: userEmail,
-        userName: username, // Add username
+        userName: username,
+        userAvatar:
+          localStorage.getItem('avatar') ||
+          sessionStorage.getItem('avatar') ||
+          '/profilePics/default_user.png',
         upvotes: 0,
         downvotes: 0,
         commentCount: 0,
@@ -243,6 +252,10 @@ export class ForumComponent implements OnInit {
         content: this.commentForm.value.content.trim(),
         userEmail: this.userEmail,
         userName: this.userName,
+        userAvatar:
+          localStorage.getItem('avatar') ||
+          sessionStorage.getItem('avatar') ||
+          '/profilePics/default_user.png',
       };
 
       console.log('Submitting comment:', comment);
@@ -299,6 +312,10 @@ export class ForumComponent implements OnInit {
         content: parentComment.replyContent.trim(),
         userEmail: this.userEmail,
         userName: this.userName,
+        userAvatar:
+          localStorage.getItem('avatar') ||
+          sessionStorage.getItem('avatar') ||
+          '/profilePics/default_user.png',
       })
       .subscribe({
         next: (updatedPost) => {

@@ -9,6 +9,7 @@ export interface ForumPost {
   category: string;
   userEmail: string;
   userName: string;
+  userAvatar: string;
   upvotes: number;
   downvotes: number;
   upvotedBy: string[];
@@ -23,6 +24,7 @@ interface Comment {
   id: number; // Keep numeric ID for compatibility
   userEmail: string;
   userName: string;
+  userAvatar: string;
   content: string;
   timestamp: string;
   replies: Comment[];
@@ -63,7 +65,7 @@ export class ForumService {
 
   addComment(
     postId: string,
-    comment: { content: string; userEmail: string; userName: string;}
+    comment: { content: string; userEmail: string; userName: string; userAvatar: string; }
   ): Observable<ForumPost> {
     return this.http.post<ForumPost>(
       `${this.baseUrl}/posts/${postId}/comments`,
@@ -71,6 +73,7 @@ export class ForumService {
         content: comment.content,
         userEmail: comment.userEmail,
         userName: comment.userName,
+        userAvatar: comment.userAvatar,
         timestamp: new Date().toISOString(),
       }
     );
@@ -79,7 +82,7 @@ export class ForumService {
   addReply(
     postId: string,
     commentId: string,
-    reply: { content: string; userEmail: string; userName: string;}
+    reply: { content: string; userEmail: string; userName: string; userAvatar: string; } 
   ): Observable<ForumPost> {
     console.log('Service adding reply:', { postId, commentId, reply }); // Debug log
     return this.http.post<ForumPost>(
@@ -88,6 +91,7 @@ export class ForumService {
         content: reply.content,
         userEmail: reply.userEmail,
         userName: reply.userName,
+        userAvatar: reply.userAvatar,
         timestamp: new Date().toISOString(),
       }
     );

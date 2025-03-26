@@ -1,1 +1,403 @@
-<p class="min-h-screen">home works!</p>
+<app-banner></app-banner>
+
+<div class="min-h-screen">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-blue-50 to-yellow-50 py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap items-center">
+        <div class="w-full lg:w-1/2 mb-10 lg:mb-0">
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Welcome to L&B Pet Service
+          </h1>
+          <p class="text-xl text-gray-600 mb-8">
+            Your one-stop solution for all pet care needs in Malaysia
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a
+              routerLink="/jobs"
+              class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-all font-medium"
+              >Find Services</a
+            >
+            <a
+              routerLink="/market"
+              class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all font-medium"
+              >Community Market</a
+            >
+          </div>
+        </div>
+        <div class="w-full lg:w-1/2">
+          <img
+            src="assets/images/hero-pets.jpg"
+            alt="Happy pets"
+            class="rounded-lg shadow-xl mx-auto"
+            onerror="this.src='https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80'"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Us Section -->
+  <section id="about" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+        About Us
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">
+            L&B Pet Service
+          </h3>
+          <p class="text-gray-600 mb-4">
+            In Malaysia, pet owners face numerous challenges in caring for their
+            beloved animals. From lack of time for pet walks to uncertainty
+            about appropriate products, and concerns about leaving pets alone at
+            home.
+          </p>
+          <p class="text-gray-600 mb-4">
+            L&B Pet Service is born from these challenges, offering a
+            comprehensive platform that connects pet owners with reliable pet
+            care services and creates a marketplace for new and secondhand pet
+            accessories.
+          </p>
+          <div class="grid grid-cols-2 gap-4 mt-6">
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <div class="text-blue-500 text-2xl mb-2">
+                <i class="fas fa-paw"></i>
+              </div>
+              <h4 class="font-medium text-lg">Pet Sitting</h4>
+              <p class="text-sm text-gray-600">
+                Professional pet sitting and walking services
+              </p>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+              <div class="text-green-500 text-2xl mb-2">
+                <i class="fas fa-exchange-alt"></i>
+              </div>
+              <h4 class="font-medium text-lg">Marketplace</h4>
+              <p class="text-sm text-gray-600">
+                Buy and sell secondhand pet accessories
+              </p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg">
+              <div class="text-yellow-500 text-2xl mb-2">
+                <i class="fas fa-shopping-bag"></i>
+              </div>
+              <h4 class="font-medium text-lg">Pet Shop</h4>
+              <p class="text-sm text-gray-600">
+                Quality products for your pets
+              </p>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <div class="text-purple-500 text-2xl mb-2">
+                <i class="fas fa-users"></i>
+              </div>
+              <h4 class="font-medium text-lg">Community</h4>
+              <p class="text-sm text-gray-600">Connect with other pet lovers</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img
+            src="assets/images/about-pets.jpg"
+            alt="Happy pets with owners"
+            class="rounded-lg shadow-lg w-full h-64 md:h-122 object-cover"
+            onerror="this.src='https://images.unsplash.com/photo-1560807707-8cc77767d783?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80'"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Services Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-800">Featured Services</h2>
+        <a
+          routerLink="/jobs"
+          class="text-red-500 hover:text-red-700 font-medium flex items-center"
+        >
+          View all services
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 ml-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div *ngIf="isServicesLoading" class="text-center py-12">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500 mx-auto"
+        ></div>
+        <p class="text-gray-600 mt-4">Loading services...</p>
+      </div>
+
+      <div *ngIf="!isServicesLoading && serviceError" class="text-center py-12">
+        <p class="text-red-500">{{ serviceError }}</p>
+        <button
+          (click)="loadFeaturedServices()"
+          class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+        >
+          Try Again
+        </button>
+      </div>
+
+      <div
+        *ngIf="!isServicesLoading && !serviceError"
+        class="grid grid-cols-1 md:grid-cols-3 gap-6"
+      >
+        <div
+          *ngFor="let service of featuredServices"
+          class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+        >
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
+                  >{{ service.category }}</span
+                >
+                <h3 class="text-xl font-semibold text-gray-800 mt-2">
+                  {{ service.title }}
+                </h3>
+              </div>
+              <div
+                class="bg-red-50 text-red-700 font-bold px-3 py-1 rounded-lg"
+              >
+                RM{{ service.hourRate }}/hr
+              </div>
+            </div>
+            <div class="text-gray-500 text-sm mb-4">{{ service.address }}</div>
+            <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+              <div>
+                <p class="text-gray-600">Pet Owner</p>
+                <p class="font-medium">{{ service.ownerName }}</p>
+              </div>
+              <div>
+                <p class="text-gray-600">Pet Type</p>
+                <p class="font-medium">{{ service.petType }}</p>
+              </div>
+            </div>
+            <div *ngIf="service.note" class="text-sm text-gray-600 mb-4">
+              <p class="italic">Note: "{{ service.note }}"</p>
+            </div>
+            <div class="mt-4">
+              <a
+                *ngIf="service.userEmail !== userEmail"
+                href="https://wa.me/{{ service.phoneNumber }}"
+                class="block text-center bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
+              >
+                Contact Provider
+              </a>
+              <a
+                *ngIf="service.userEmail === userEmail"
+                routerLink="/jobs"
+                class="block text-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Manage Your Listing
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Market Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-800">Community Market</h2>
+        <a
+          routerLink="/communitymarket"
+          class="text-red-500 hover:text-red-700 font-medium flex items-center"
+        >
+          Browse marketplace
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 ml-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div *ngIf="isMarketLoading" class="text-center py-12">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500 mx-auto"
+        ></div>
+        <p class="text-gray-600 mt-4">Loading market items...</p>
+      </div>
+
+      <div *ngIf="!isMarketLoading && marketError" class="text-center py-12">
+        <p class="text-red-500">{{ marketError }}</p>
+        <button
+          (click)="loadFeaturedMarketItems()"
+          class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+        >
+          Try Again
+        </button>
+      </div>
+
+      <div
+        *ngIf="!isMarketLoading && !marketError"
+        class="grid grid-cols-2 md:grid-cols-4 gap-6"
+      >
+        <div
+          *ngFor="let item of featuredMarketItems"
+          class="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow"
+        >
+          <img
+            [src]="item.photos[0]"
+            [alt]="item.title"
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-4">
+            <span
+              class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mb-2 inline-block"
+              >{{ item.category }} - {{ item.subCategory }}</span
+            >
+            <h3 class="text-lg font-medium text-gray-800 mb-1">
+              {{ item.title }}
+            </h3>
+            <p class="text-red-600 font-bold mb-2">RM{{ item.price }}</p>
+            <p class="text-xs text-gray-500 mb-3">{{ item.location }}</p>
+            <a
+              routerLink="/communitymarket/item/{{ item._id }}"
+              class="block text-center bg-red-500 text-white py-1.5 px-3 rounded-lg text-sm hover:bg-red-600 transition-colors"
+            >
+              View Details
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Products Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-800">Pet Shop</h2>
+        <a
+          routerLink="/shop"
+          class="text-red-500 hover:text-red-700 font-medium flex items-center"
+        >
+          Visit shop
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 ml-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div *ngIf="isShopLoading" class="text-center py-12">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500 mx-auto"
+        ></div>
+        <p class="text-gray-600 mt-4">Loading shop products...</p>
+      </div>
+
+      <div *ngIf="!isShopLoading && shopError" class="text-center py-12">
+        <p class="text-red-500">{{ shopError }}</p>
+        <button
+          (click)="loadFeaturedShopItems()"
+          class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+        >
+          Try Again
+        </button>
+      </div>
+
+      <div
+        *ngIf="!isShopLoading && !shopError"
+        class="grid grid-cols-2 md:grid-cols-4 gap-6"
+      >
+        <div
+          *ngFor="let product of featuredShopItems"
+          class="bg-white rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow"
+        >
+          <div class="relative">
+            <img
+              [src]="
+                product.productImg && product.productImg.length
+                  ? product.productImg[0]
+                  : 'assets/images/no-product-image.jpg'
+              "
+              [alt]="product.productTitle"
+              class="w-full h-48 object-contain bg-white p-2"
+              onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'"
+            />
+          </div>
+          <div class="p-4">
+            <span class="text-xs text-gray-500">{{ product.category }}</span>
+            <h3 class="text-lg font-medium text-gray-800 mb-1 line-clamp-1">
+              {{ product.productTitle }}
+            </h3>
+            <div class="flex items-center mb-2">
+              <p class="text-red-600 font-bold">
+                RM{{ product.productPrice.toFixed(2) }}
+              </p>
+            </div>
+            <div class="flex justify-end mt-3">
+              <button
+                class="bg-red-500 text-white rounded-lg px-3 py-1 text-sm hover:bg-red-600"
+                (click)="addToCart(product)"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-orange-300 text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-6">
+        Join Our Pet-Loving Community Today!
+      </h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">
+        Connect with other pet owners, find services for your furry friends, and
+        explore our marketplace for all your pet needs.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          routerLink="/signup"
+          class="bg-white text-orange-600 px-6 py-3 rounded-lg hover:bg-gray-100 transition-all font-medium"
+          >Sign Up Now</a
+        >
+        <a
+          routerLink="/forum"
+          class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-blue-600 transition-all font-medium"
+          >Join Forum</a
+        >
+      </div>
+    </div>
+  </section>
+</div>
