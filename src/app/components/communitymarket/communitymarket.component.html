@@ -336,6 +336,7 @@
             class="w-9 h-9 rounded-full"
             [src]="product?.userAvatar"
             [alt]="product?.username"
+            onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
           />
           <div class="flex flex-col text-sm">
             <p class="text-black text-left font-[600]">

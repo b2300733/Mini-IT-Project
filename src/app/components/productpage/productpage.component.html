@@ -215,8 +215,8 @@
             <img
               [src]="seller.avatar"
               [alt]="seller.username"
+              onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
               class="w-12 h-12 rounded-full"
-              (error)="handleAvatarError($event)"
             />
             <div>
               <h3 class="font-semibold">{{ seller.name }}</h3>

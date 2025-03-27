@@ -11,6 +11,7 @@
             [src]="avatar"
             alt="{{ username }}"
             class="rounded-full h-35 w-35 mt-2 object-cover border border-gray-300 text-center"
+            onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
           />
           <input
             type="file"

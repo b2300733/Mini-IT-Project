@@ -29,6 +29,7 @@
           [src]="avatar"
           alt="{{ username }}"
           class="cursor-pointer w-6 h-6 rounded-full text-sm"
+          onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
         />
       </ng-container>
       <ng-template #loginIcon>
