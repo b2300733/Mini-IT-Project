@@ -125,10 +125,14 @@ export class JobsComponent implements OnInit {
         Validators.required,
       ],
       phoneNumber: [
-        userPhone,
+        { value: userPhone, disabled: !!userPhone },
+
         [Validators.required, Validators.pattern('^[0-9]{8,}$')],
       ],
-      ownerName: [this.userName || '', Validators.required],
+      ownerName: [
+        { value: this.userName || '', disabled: !!this.userName },
+        Validators.required,
+      ],
       petType: ['', Validators.required],
       note: [''],
       hourRate: ['', [Validators.required, Validators.min(0)]],
@@ -204,11 +208,6 @@ export class JobsComponent implements OnInit {
           address: locationParts,
           phoneNumber: userData.contactNo ? userData.contactNo.toString() : '',
         });
-
-        // Disable address field if we have location data
-        if (locationParts) {
-          this.listingForm.get('address')?.disable();
-        }
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
@@ -288,7 +287,10 @@ export class JobsComponent implements OnInit {
       phoneNumber: listing.phoneNumber,
       ownerName: listing.ownerName,
       petType: listing.petType,
-      note: listing.note || '',
+      note:
+        listing.note && listing.note !== 'Requester did not add any note'
+          ? listing.note
+          : '',
       hourRate: listing.hourRate,
     });
 
@@ -334,10 +336,6 @@ export class JobsComponent implements OnInit {
           address: locationParts,
           phoneNumber: userPhone,
         });
-
-        if (locationParts) {
-          this.listingForm.get('address')?.disable();
-        }
       }
     } else {
       // If closing the form, reset editing state
@@ -347,12 +345,16 @@ export class JobsComponent implements OnInit {
   }
 
   submitListing(): void {
-    if (this.listingForm.valid || this.listingForm.get('address')?.disabled) {
+    if (this.listingForm.valid) {
       // Get both enabled and disabled form values
       const formValue = {
         ...this.listingForm.getRawValue(),
         userEmail: this.userEmail,
       };
+
+      if (!formValue.note || formValue.note.trim() === '') {
+        formValue.note = '*Requester did not add any note';
+      }
 
       const listingData: JobsListing = formValue;
 

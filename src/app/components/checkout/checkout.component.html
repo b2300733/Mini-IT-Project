@@ -1,22 +1,27 @@
-<div class="flex justify-center pt-20 pb-43 font-secondary">
+<div class="flex justify-center pt-20 pb-25 font-secondary">
   <div
     class="border-1 border-gray-400 p-6 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] w-full max-w-4xl"
   >
     <div class="grid grid-cols-2 gap-6">
       <div class="flex flex-col gap-3">
-        <h2 class="text-xl font-semibold mb-4">Billing Address</h2>
-        <label class="block text-sm">Full Name</label>
-        <input
-          type="text"
-          class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
-          placeholder="Joe Jing Yan"
-        />
-
+        <h2 class="text-xl font-semibold mb-4">Shipping Details</h2>
         <label class="block text-sm">Email</label>
         <input
           type="email"
-          class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+          class="w-full p-2 rounded-sm border-1 h-10 px-3 mb-2 bg-gray-200"
           placeholder="joe@gmail.com"
+          [(ngModel)]="email"
+          required
+          disabled
+        />
+
+        <label class="block text-sm">Contact No</label>
+        <input
+          type="text"
+          class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+          placeholder="012345689"
+          [(ngModel)]="contactNo"
+          required
         />
 
         <label class="block text-sm">Address</label>
@@ -24,6 +29,8 @@
           type="text"
           class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
           placeholder="No, 123 Jalan Taman, Seksyen U10/10"
+          [(ngModel)]="address"
+          required
         />
 
         <div class="grid grid-cols-2 gap-2">
@@ -33,6 +40,8 @@
               type="text"
               class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
               placeholder="Kemaman"
+              [(ngModel)]="city"
+              required
             />
           </div>
 
@@ -42,6 +51,8 @@
               type="text"
               class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
               placeholder="Terengganu"
+              [(ngModel)]="state"
+              required
             />
           </div>
         </div>
@@ -52,14 +63,19 @@
               type="text"
               class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
               placeholder="40000"
+              [(ngModel)]="zip"
+              required
             />
           </div>
           <div>
             <label class="block text-sm">Country</label>
             <input
               type="text"
-              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
+              class="w-full p-2 rounded-sm border-1 h-10 px-3 bg-gray-200"
               placeholder="Malaysia"
+              [(ngModel)]="country"
+              required
+              disabled
             />
           </div>
         </div>
@@ -126,9 +142,11 @@
     </div>
 
     <button
+      (click)="checkout()"
       class="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded mt-4 cursor-pointer"
     >
-      Checkout
+      <span *ngIf="!isProcessing">Checkout</span>
+      <span *ngIf="isProcessing">Processing...</span>
     </button>
   </div>
 </div>

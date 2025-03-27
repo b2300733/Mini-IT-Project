@@ -113,6 +113,7 @@ const clearCart = async (req, res) => {
 const checkout = async (req, res) => {
   try {
     const email = req.params.email;
+    const { userDetails } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -205,6 +206,11 @@ const checkout = async (req, res) => {
         totalAmount: totalAmount,
         purchaseDate: new Date(),
         status: "Completed",
+        userDetails: userDetails || {
+          email: user.email,
+          contactNo: user.contactNo || "",
+          address: userDetails?.completeAddress || "",
+        },
       });
 
       // Update cart by keeping only failed items

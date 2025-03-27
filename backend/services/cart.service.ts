@@ -133,7 +133,11 @@ export class CartService {
     );
   }
 
-  checkout(): Observable<{
+  checkout(userDetails?: {
+    email: string;
+    contactNo: string;
+    address: string;
+  }): Observable<{
     message: string;
     history: CheckoutHistory;
     failedItems: any[];
@@ -144,7 +148,9 @@ export class CartService {
           message: string;
           history: CheckoutHistory;
           failedItems: any[];
-        }>(`${this.baseUrl}/${encodeURIComponent(this.userEmail)}/checkout`, {})
+        }>(`${this.baseUrl}/${encodeURIComponent(this.userEmail)}/checkout`, {
+          userDetails,
+        })
         .pipe(
           map((response) => {
             // Refresh the cart after checkout

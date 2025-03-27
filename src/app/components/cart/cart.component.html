@@ -1,6 +1,4 @@
-<app-banner></app-banner>
-
-<div class="container mx-auto px-4 py-8 min-h-screen">
+<div class="container mx-auto px-4 pt-20 min-h-screen">
   <div class="max-w-4xl mx-auto">
     <h1 class="text-2xl font-bold mb-6 font-primary">Shopping Cart</h1>
 
@@ -15,7 +13,7 @@
     <!-- Cart Items -->
     <div
       *ngIf="cartItems.length > 0"
-      class="bg-white rounded-lg shadow-md overflow-hidden mb-6 font-secondary"
+      class="bg-white overflow-hidden mb-6 font-secondary"
     >
       <div
         *ngFor="let item of cartItems; let i = index"
@@ -81,8 +79,7 @@
         (click)="checkout()"
         class="w-full bg-orange-700 text-white py-3 rounded-lg font-medium hover:bg-orange-800 transition-colors cursor-pointer"
       >
-        <span *ngIf="!isProcessing">Proceed to Checkout</span>
-        <span *ngIf="isProcessing">Processing...</span>
+        <span>Proceed to Checkout</span>
       </button>
     </div>
   </div>

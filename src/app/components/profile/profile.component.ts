@@ -35,6 +35,11 @@ interface PurchaseHistory {
   totalAmount: number;
   purchaseDate: Date;
   status: string;
+  userDetails?: {
+    email?: string;
+    contactNo?: number;
+    address?: string;
+  };
 }
 
 @Component({
@@ -828,5 +833,23 @@ export class ProfileComponent {
         minute: '2-digit',
       })
     );
+  }
+
+  navigateToShopProduct(item: any): void {
+    // Check if the item has a productId
+    if (!item.productId) {
+      console.error('Cannot navigate: missing product ID');
+      return;
+    }
+
+    // Navigate to shop product page with the product ID
+    this.router.navigate(['/shop-product'], {
+      queryParams: {
+        _id: item.productId,
+        name: item.productTitle,
+        price: item.price / item.quantity, // Calculate single item price
+        img: item.productImg,
+      },
+    });
   }
 }

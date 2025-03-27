@@ -601,6 +601,7 @@
           <div
             *ngFor="let item of purchase.items"
             class="flex items-center mb-3 py-2 border-b border-gray-100 last:border-b-0"
+            (click)="navigateToShopProduct(item)"
           >
             <div
               class="w-16 h-16 bg-gray-100 rounded mr-4 flex-shrink-0 overflow-hidden"
@@ -620,11 +621,30 @@
           </div>
         </div>
 
+        <!-- Total -->
         <div
           class="flex justify-between items-center pt-3 border-t border-gray-200 mt-2"
         >
           <span class="font-medium">Total:</span>
           <span class="font-bold text-lg">RM{{ purchase.totalAmount }}</span>
+        </div>
+
+        <!-- Shipping Details-->
+        <div
+          class="flex justify-between items-center border-t border-gray-200 mt-2"
+        >
+          <div class="flex gap-2 pt-3">
+            <span class="font-medium">Shipping Address:</span>
+            <span class="w-50">{{ purchase.userDetails?.address }}</span>
+          </div>
+          <a aria-label="Chat on WhatsApp" href="https://wa.me/601169392283">
+            <button
+              class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer"
+            >
+              <i class="fa fa-whatsapp text-2xl"></i>
+              Cantact Seller
+            </button>
+          </a>
         </div>
       </div>
     </div>

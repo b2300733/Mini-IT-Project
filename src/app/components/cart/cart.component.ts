@@ -30,7 +30,6 @@ export class CartComponent {
 
   getTotalItems(): number {
     return this.cartItems.length;
-    // return this.cartItems.reduce((total, item) => total + item.quantity, 0);
   }
 
   getTotalAmount(): number {
@@ -38,36 +37,10 @@ export class CartComponent {
   }
 
   checkout(): void {
+    // if (this.cartItems.length === 0) {
+    //   alert('Your cart is empty!');
+    //   return;
+    // }
     this.router.navigate(['/checkout']);
-
-    // if (this.isProcessing) return;
-
-    // this.isProcessing = true;
-
-    // this.cartService.checkout().subscribe(
-    //   (response) => {
-    //     this.isProcessing = false;
-
-    //     // Display results to the user
-    //     if (response.failedItems && response.failedItems.length > 0) {
-    //       const failedItemNames = response.failedItems
-    //         .map((item) => `${item.productTitle} (${item.reason})`)
-    //         .join('\n');
-
-    //       alert(
-    //         `Checkout completed with some issues:\n${failedItemNames}\n\nOther items were purchased successfully.`
-    //       );
-    //     } else {
-    //       alert('Checkout completed successfully!');
-    //     }
-
-    //     this.router.navigate(['/']);
-    //   },
-    //   (error) => {
-    //     this.isProcessing = false;
-    //     console.error('Error during checkout:', error);
-    //     alert('There was an error processing your checkout. Please try again.');
-    //   }
-    // );
   }
 }

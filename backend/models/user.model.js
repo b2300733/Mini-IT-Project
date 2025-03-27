@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema(
         totalAmount: Number,
         purchaseDate: { type: Date, default: Date.now },
         status: { type: String, default: "Completed" },
+        userDetails: {
+          email: String,
+          contactNo: Number,
+          address: String,
+        },
       },
     ],
   },

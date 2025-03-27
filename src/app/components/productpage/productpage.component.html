@@ -21,7 +21,7 @@
           <!-- Previous Button -->
           <div class="pl-4">
             <button
-              class="bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded-full p-2 transition-all duration-200"
+              class="bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded-full p-2 transition-all duration-200 cursor-pointer"
               [class.opacity-50]="currentImageIndex === 0"
               [disabled]="currentImageIndex === 0"
               (click)="previousImage()"
@@ -45,7 +45,7 @@
           <!-- Next Button -->
           <div class="pr-4">
             <button
-              class="bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded-full p-2 transition-all duration-200"
+              class="bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded-full p-2 transition-all duration-200 cursor-pointer"
               [class.opacity-50]="
                 currentImageIndex === product.images.length - 1
               "
@@ -211,16 +211,26 @@
       <!-- Seller Profile -->
       <div class="bg-white rounded-lg p-6 shadow-sm">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-3 w-full">
             <img
               [src]="seller.avatar"
               [alt]="seller.username"
               onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
               class="w-12 h-12 rounded-full"
             />
-            <div>
+            <div class="flex justify-between w-full items-center">
               <h3 class="font-semibold">{{ seller.name }}</h3>
-              <!-- <p class="text-sm text-gray-500">{{ seller.username }}</p> -->
+              <a
+                aria-label="Chat on WhatsApp"
+                href="https://wa.me/601169392283"
+              >
+                <button
+                  class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer"
+                >
+                  <i class="fa fa-whatsapp text-2xl"></i>
+                  Chat on WhatsApp
+                </button>
+              </a>
             </div>
           </div>
         </div>
