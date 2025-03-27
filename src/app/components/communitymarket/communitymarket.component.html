@@ -327,7 +327,7 @@
       </div>
       <!-- Product Item -->
       <div
-        *ngFor="let product of products"
+        *ngFor="let product of displayedProducts"
         class="rounded-lg p-6 hover:shadow-lg transition duration-300 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400"
         (click)="navigateToProduct(product)"
       >
@@ -360,6 +360,30 @@
 
         <p class="text-gray-600 text-left">{{ product?.condition }}</p>
       </div>
+    </div>
+    <div
+      class="flex justify-center mt-8 mb-4"
+      *ngIf="hasMoreProducts() && !isContentHidden"
+    >
+      <button
+        (click)="loadMoreProducts()"
+        class="bg-orange-400 hover:bg-orange-500 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 flex items-center"
+      >
+        Load More
+        <svg
+          class="w-5 h-5 ml-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
+        </svg>
+      </button>
     </div>
   </div>
 </div>

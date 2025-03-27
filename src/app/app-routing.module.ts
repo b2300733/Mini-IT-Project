@@ -14,6 +14,7 @@ import { ShopproductpageComponent } from './components/shopproductpage/shopprodu
 import { CartComponent } from './components/cart/cart.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { EditproductComponent } from './components/editproduct/editproduct.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const routes: Routes = [
   {
@@ -76,6 +77,10 @@ const routes: Routes = [
   {
     path: 'edit-product',
     component: EditproductComponent,
+  },
+  {
+    path: 'checkout',
+    component: CheckoutComponent,
   },
 ];
 

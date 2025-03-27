@@ -7,7 +7,7 @@
     <!-- Empty Cart Message -->
     <div
       *ngIf="cartItems.length === 0"
-      class="bg-white rounded-lg shadow-md p-6 text-center font-secondary"
+      class="bg-white rounded-lg shadow-md p-6 mb-6 text-center font-secondary"
     >
       <p class="text-gray-600">Your cart is empty</p>
     </div>
@@ -66,10 +66,7 @@
     </div>
 
     <!-- Cart Summary -->
-    <div
-      *ngIf="cartItems.length > 0"
-      class="bg-white rounded-lg shadow-md p-6 font-secondary"
-    >
+    <div class="bg-white rounded-lg shadow-md p-6 font-secondary">
       <div class="flex justify-between mb-4">
         <span class="text-gray-600">Total Items:</span>
         <span class="font-medium">{{ getTotalItems() }}</span>

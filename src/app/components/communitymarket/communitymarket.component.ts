@@ -80,6 +80,9 @@ export class CommunitymarketComponent {
 
   private originalProducts: Product[] = [];
   products: Product[] = [];
+  displayedProducts: Product[] = [];
+  productsPerPage = 12;
+  currentPage = 1;
 
   constructor(
     private fb: FormBuilder,
@@ -135,6 +138,7 @@ export class CommunitymarketComponent {
       (response) => {
         this.products = response;
         this.originalProducts = response;
+        this.loadInitialProducts();
       },
       (error) => {
         console.error('Error fetching products:', error);
@@ -213,12 +217,14 @@ export class CommunitymarketComponent {
         this.activeSubcategories.includes(product.subCategory || '')
       );
     });
+    this.loadInitialProducts();
   }
 
   clearFilters() {
     this.activeCategories = [];
     this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+    this.loadInitialProducts();
   }
 
   // Add helper method to filter products
@@ -237,6 +243,7 @@ export class CommunitymarketComponent {
       this.clearFilters();
     } else {
       this.filterProducts();
+      this.loadInitialProducts();
     }
   }
 
@@ -256,7 +263,26 @@ export class CommunitymarketComponent {
           this.activeSubcategories.includes(product.subCategory || '')
         );
       });
+      this.loadInitialProducts();
     }
+  }
+
+  loadInitialProducts(): void {
+    this.currentPage = 1;
+    this.displayedProducts = this.products.slice(0, this.productsPerPage);
+  }
+
+  loadMoreProducts(): void {
+    const nextProducts = this.products.slice(
+      this.currentPage * this.productsPerPage,
+      (this.currentPage + 1) * this.productsPerPage
+    );
+    this.displayedProducts = [...this.displayedProducts, ...nextProducts];
+    this.currentPage++;
+  }
+
+  hasMoreProducts(): boolean {
+    return this.currentPage * this.productsPerPage < this.products.length;
   }
 
   // Listing form methods
@@ -508,6 +534,7 @@ export class CommunitymarketComponent {
         return matchesSearch;
       });
     }
+    this.loadInitialProducts();
   }
 
   isLoggedIn(): boolean {

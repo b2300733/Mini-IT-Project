@@ -38,34 +38,36 @@ export class CartComponent {
   }
 
   checkout(): void {
-    if (this.isProcessing) return;
+    this.router.navigate(['/checkout']);
 
-    this.isProcessing = true;
+    // if (this.isProcessing) return;
 
-    this.cartService.checkout().subscribe(
-      (response) => {
-        this.isProcessing = false;
+    // this.isProcessing = true;
 
-        // Display results to the user
-        if (response.failedItems && response.failedItems.length > 0) {
-          const failedItemNames = response.failedItems
-            .map((item) => `${item.productTitle} (${item.reason})`)
-            .join('\n');
+    // this.cartService.checkout().subscribe(
+    //   (response) => {
+    //     this.isProcessing = false;
 
-          alert(
-            `Checkout completed with some issues:\n${failedItemNames}\n\nOther items were purchased successfully.`
-          );
-        } else {
-          alert('Checkout completed successfully!');
-        }
+    //     // Display results to the user
+    //     if (response.failedItems && response.failedItems.length > 0) {
+    //       const failedItemNames = response.failedItems
+    //         .map((item) => `${item.productTitle} (${item.reason})`)
+    //         .join('\n');
 
-        this.router.navigate(['/']);
-      },
-      (error) => {
-        this.isProcessing = false;
-        console.error('Error during checkout:', error);
-        alert('There was an error processing your checkout. Please try again.');
-      }
-    );
+    //       alert(
+    //         `Checkout completed with some issues:\n${failedItemNames}\n\nOther items were purchased successfully.`
+    //       );
+    //     } else {
+    //       alert('Checkout completed successfully!');
+    //     }
+
+    //     this.router.navigate(['/']);
+    //   },
+    //   (error) => {
+    //     this.isProcessing = false;
+    //     console.error('Error during checkout:', error);
+    //     alert('There was an error processing your checkout. Please try again.');
+    //   }
+    // );
   }
 }

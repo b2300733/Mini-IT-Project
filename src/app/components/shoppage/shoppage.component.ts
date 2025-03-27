@@ -62,6 +62,9 @@ export class ShoppageComponent {
 
   private originalProducts: ShopProduct[] = [];
   products: ShopProduct[] = [];
+  displayedProducts: ShopProduct[] = [];
+  productsPerPage = 12;
+  currentPage = 1;
 
   constructor(
     private router: Router,
@@ -89,6 +92,7 @@ export class ShoppageComponent {
       (response) => {
         this.products = response;
         this.originalProducts = response;
+        this.loadInitialProducts();
       },
       (error) => {
         console.error('Error fetching products:', error);
@@ -155,12 +159,14 @@ export class ShoppageComponent {
         this.activeSubcategories.includes(product.subCategory || '')
       );
     });
+    this.loadInitialProducts();
   }
 
   clearFilters() {
     this.activeCategory = null;
     this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+    this.loadInitialProducts();
   }
 
   removeSubcategory(subcategory: string) {
@@ -177,6 +183,7 @@ export class ShoppageComponent {
           this.activeSubcategories.includes(product.subCategory || '')
         );
       });
+      this.loadInitialProducts();
     }
   }
 
@@ -212,6 +219,7 @@ export class ShoppageComponent {
         return matchesSearch;
       });
     }
+    this.loadInitialProducts();
   }
 
   navigateToProduct(product: ShopProduct) {
@@ -230,6 +238,24 @@ export class ShoppageComponent {
         quantity: product.productQuantity,
       },
     });
+  }
+
+  loadInitialProducts(): void {
+    this.currentPage = 1;
+    this.displayedProducts = this.products.slice(0, this.productsPerPage);
+  }
+
+  loadMoreProducts(): void {
+    const nextProducts = this.products.slice(
+      this.currentPage * this.productsPerPage,
+      (this.currentPage + 1) * this.productsPerPage
+    );
+    this.displayedProducts = [...this.displayedProducts, ...nextProducts];
+    this.currentPage++;
+  }
+
+  hasMoreProducts(): boolean {
+    return this.currentPage * this.productsPerPage < this.products.length;
   }
 
   // Listing form methods
