@@ -60,7 +60,7 @@ const addUser = async (req, res) => {
       email,
       password: hashedPassword,
       gender,
-      contactNo,
+      contactNo: req.body.contactNo.toString(),
       address1,
       address2,
       city,

@@ -145,7 +145,11 @@
               name="contactNo"
               placeholder="+60123456789"
               [(ngModel)]="contactNo"
-              [ngClass]="{ 'border-red-500': isFieldInvalid('contactNo') }"
+              [ngClass]="{
+                'border-red-500':
+                  isFieldInvalid('contactNo') ||
+                  (contactNo && contactNo.length !== 10)
+              }"
               (ngModelChange)="onAccountInfoChange()"
               (input)="validateContactNo($event)"
               required
@@ -154,6 +158,15 @@
               *ngIf="isFieldInvalid('contactNo')"
               class="text-red-500 text-xs absolute top-19"
               >Contact Number is required</span
+            >
+            <span
+              *ngIf="
+                contactNo &&
+                contactNo.length !== 10 &&
+                !isFieldInvalid('contactNo')
+              "
+              class="text-red-500 text-xs absolute top-19"
+              >Contact Number must be 10 digits (0123456789)</span
             >
           </div>
         </div>
@@ -315,7 +328,11 @@
               name="zip"
               placeholder="ZIP"
               [(ngModel)]="zip"
-              [ngClass]="{ 'border-red-500': isFieldInvalid('zip') }"
+              [ngClass]="{
+                'border-red-500':
+                  isFieldInvalid('zip') || (zip && zip.length !== 5)
+              }"
+              (input)="validateZipInput($event)"
               (ngModelChange)="onAccountInfoChange()"
               required
             />
@@ -323,6 +340,11 @@
               *ngIf="isFieldInvalid('zip')"
               class="text-red-500 text-xs absolute top-19"
               >Zip is required</span
+            >
+            <span
+              *ngIf="zip && zip.length !== 5 && !isFieldInvalid('zip')"
+              class="text-red-500 text-xs absolute top-19"
+              >ZIP/Postcode must be exactly 5 digits</span
             >
           </div>
         </div>

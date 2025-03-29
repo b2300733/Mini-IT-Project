@@ -14,6 +14,7 @@ import {
 export class CheckoutComponent {
   cartItems: CartItem[] = [];
   isProcessing: boolean = false;
+  invalidFields: Set<string> = new Set();
 
   email = '';
   contactNo = '';
@@ -88,17 +89,53 @@ export class CheckoutComponent {
   }
 
   validateUserDetails(): boolean {
-    if (
-      !this.email ||
-      !this.contactNo ||
-      !this.contactNo ||
-      !this.address ||
-      !this.city ||
-      !this.state ||
-      !this.zip ||
-      !this.country
-    ) {
-      alert('Please complete your shipping details before checkout.');
+    this.invalidFields.clear();
+
+    let isValid = true;
+
+    if (!this.email) {
+      this.invalidFields.add('email');
+      isValid = false;
+    }
+
+    if (!this.contactNo) {
+      this.invalidFields.add('contactNo');
+      isValid = false;
+    } else if (this.contactNo.length !== 10) {
+      this.invalidFields.add('contactNo');
+      isValid = false;
+    }
+
+    if (!this.address) {
+      this.invalidFields.add('address');
+      isValid = false;
+    }
+
+    if (!this.city) {
+      this.invalidFields.add('city');
+      isValid = false;
+    }
+
+    if (!this.state) {
+      this.invalidFields.add('state');
+      isValid = false;
+    }
+
+    if (!this.zip) {
+      this.invalidFields.add('zip');
+      isValid = false;
+    } else if (this.zip.length !== 5) {
+      this.invalidFields.add('zip');
+      isValid = false;
+    }
+
+    if (!this.country) {
+      this.invalidFields.add('country');
+      isValid = false;
+    }
+
+    if (!isValid) {
+      // Instead of an alert, we now use inline validation messages
       return false;
     }
     return true;
@@ -143,5 +180,51 @@ export class CheckoutComponent {
         alert('There was an error processing your checkout. Please try again.');
       }
     );
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    return this.invalidFields.has(fieldName);
+  }
+
+  validateContactNo(event: any): void {
+    const input = event.target.value;
+
+    // Allow only digits
+    const digitsOnly = input.replace(/\D/g, '');
+
+    // Limit to 10 digits
+    this.contactNo = digitsOnly.substring(0, 10);
+
+    // Update the input field value to reflect the valid value
+    event.target.value = this.contactNo;
+
+    // Check if the contactNo field is being tracked for validation
+    if (this.invalidFields.has('contactNo')) {
+      // If it's already marked as invalid, check on every input if it's now valid
+      if (this.contactNo.length === 10) {
+        this.invalidFields.delete('contactNo');
+      }
+    }
+  }
+
+  validateZipInput(event: any): void {
+    const input = event.target.value;
+
+    // Allow only digits
+    const digitsOnly = input.replace(/\D/g, '');
+
+    // Limit to 5 digits
+    this.zip = digitsOnly.substring(0, 5);
+
+    // Update the input field value to reflect the valid value
+    event.target.value = this.zip;
+
+    // Check if the zip field is being tracked for validation
+    if (this.invalidFields.has('zip')) {
+      // If it's already marked as invalid, check on every input if it's now valid
+      if (this.zip.length === 5) {
+        this.invalidFields.delete('zip');
+      }
+    }
   }
 }

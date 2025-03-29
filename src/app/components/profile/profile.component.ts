@@ -446,6 +446,19 @@ export class ProfileComponent {
       this.errorMessage = 'Please fill in all required fields.';
       return;
     }
+
+    if (this.contactNo.length !== 10) {
+      this.invalidFields.add('contactNo');
+      this.errorMessage = 'Contact Number must be 10 digits (0123456789)';
+      return;
+    }
+
+    if (this.zip.length !== 5) {
+      this.invalidFields.add('zip');
+      this.errorMessage = 'ZIP/Postcode must be exactly 5 digits';
+      return;
+    }
+
     this.username = this.username.trim();
     this.contactNo = this.contactNo.trim();
     this.address1 = this.address1.trim();
@@ -564,6 +577,21 @@ export class ProfileComponent {
     event.target.value = this.contactNo;
 
     // Trigger change detection for account info
+    this.onAccountInfoChange();
+  }
+
+  validateZipInput(event: any): void {
+    const input = event.target.value;
+
+    // Allow only digits
+    const digitsOnly = input.replace(/\D/g, '');
+
+    // Limit to 5 digits
+    this.zip = digitsOnly.substring(0, 5);
+
+    // Update the input field value to reflect the valid value
+    event.target.value = this.zip;
+
     this.onAccountInfoChange();
   }
 

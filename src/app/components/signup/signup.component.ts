@@ -333,6 +333,19 @@ export class SignupComponent {
       this.errorMessage = 'Please fill in all the fields and accept the terms.';
       return false;
     }
+
+    if (this.contactNo.length !== 10) {
+      this.errorMessage = 'Contact Number must be 10 digits (0123456789)';
+      this.invalidFields.add('contactNo');
+      return false;
+    }
+
+    if (this.zip.length !== 5) {
+      this.errorMessage = 'ZIP/Postcode must be exactly 5 digits';
+      this.invalidFields.add('zip');
+      return false;
+    }
+
     this.errorMessage = '';
     return true;
   }
@@ -403,5 +416,18 @@ export class SignupComponent {
 
     // Update the input field value to reflect the valid value
     event.target.value = this.contactNo;
+  }
+
+  validateZipInput(event: any): void {
+    const input = event.target.value;
+
+    // Allow only digits
+    const digitsOnly = input.replace(/\D/g, '');
+
+    // Limit to 5 digits
+    this.zip = digitsOnly.substring(0, 5);
+
+    // Update the input field value to reflect the valid value
+    event.target.value = this.zip;
   }
 }
