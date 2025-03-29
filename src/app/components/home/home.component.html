@@ -1,6 +1,6 @@
 <app-banner></app-banner>
 
-<div class="min-h-screen">
+<div class="min-h-screen p-5">
   <!-- Hero Section -->
   <div class="bg-gradient-to-r from-blue-50 to-yellow-50 py-16">
     <div class="container mx-auto px-4">
@@ -261,25 +261,47 @@
       >
         <div
           *ngFor="let item of featuredMarketItems"
-          class="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow"
+          class="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow flex flex-col h-full"
         >
+          <!-- Product Image -->
           <img
-            [src]="item.photos[0]"
-            [alt]="item.title"
+            [src]="
+              item.productImg && item.productImg.length
+                ? item.productImg[0]
+                : ''
+            "
+            [alt]="item.productTitle"
             class="w-full h-48 object-cover"
+            onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'"
           />
-          <div class="p-4">
+
+          <!-- Product Info -->
+          <div class="p-4 flex-grow">
             <span
               class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mb-2 inline-block"
-              >{{ item.category }} - {{ item.subCategory }}</span
+              >{{ item.category }}
+              <span *ngIf="item.subCategory"
+                >- {{ item.subCategory }}</span
+              ></span
             >
             <h3 class="text-lg font-medium text-gray-800 mb-1">
-              {{ item.title }}
+              {{ item.productTitle }}
             </h3>
-            <p class="text-red-600 font-bold mb-2">RM{{ item.price }}</p>
-            <p class="text-xs text-gray-500 mb-3">{{ item.location }}</p>
+            <p class="text-red-600 font-bold mb-2">RM{{ item.productPrice }}</p>
+            <p class="text-xs text-gray-500 mb-1">{{ item.condition }}</p>
+            <p class="text-xs text-gray-500">
+              <span *ngIf="item.username">by {{ item.username }}</span>
+              <span class="ml-2" *ngIf="item.createdAt">{{
+                calculateTimeAgo(item.createdAt)
+              }}</span>
+            </p>
+          </div>
+
+          <!-- Action Button (always at bottom) -->
+          <div class="p-4 pt-0 mt-auto">
             <a
-              routerLink="/communitymarket/item/{{ item._id }}"
+              routerLink="/communitymarket"
+              [queryParams]="{ id: item._id }"
               class="block text-center bg-red-500 text-white py-1.5 px-3 rounded-lg text-sm hover:bg-red-600 transition-colors"
             >
               View Details
