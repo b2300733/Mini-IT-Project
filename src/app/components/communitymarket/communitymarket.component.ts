@@ -455,10 +455,25 @@ export class CommunitymarketComponent {
       );
       formData.append('userEmail', this.email);
 
+      // Add the missing sellerContact field
+      const phoneNumber =
+        localStorage.getItem('contactNo') ||
+        localStorage.getItem('phone') ||
+        sessionStorage.getItem('contactNo') ||
+        '0';
+      formData.append('sellerContact', phoneNumber);
+
       // Append photos
       this.uploadedPhotos.forEach((photo) => {
         formData.append('productImg', photo.file);
       });
+
+      // Add loading state
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.setAttribute('disabled', 'true');
+        submitBtn.textContent = 'Uploading...';
+      }
 
       // Send the form data to the backend
       this.communitymarketService.uploadProduct(formData).subscribe(
@@ -486,6 +501,12 @@ export class CommunitymarketComponent {
           // Handle error
           console.error('Error uploading product:', error);
           alert('There was an error listing your item. Please try again.');
+
+          // Reset button state
+          if (submitBtn) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.textContent = 'List Item';
+          }
         }
       );
     }
