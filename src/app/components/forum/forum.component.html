@@ -178,10 +178,10 @@
               }}</span>
               <div class="flex-shrink-0 w-8 h-8">
                 <img
-                  [src]="post.userAvatar"
+                  [src]="post.userAvatar || '/assets/images/default_user.png'"
                   [alt]="post.userName"
                   class="w-full h-full rounded-full object-cover"
-                  onerror="this.src='/profilePics/default_user.png'"
+                  onerror="this.src='assets/images/default_user.png'"
                 />
               </div>
               <span>Posted by {{ post.userName }}</span>
@@ -267,7 +267,9 @@
             }}</span>
             <div class="flex-shrink-0 w-8 h-8">
               <img
-                [src]="selectedPost.userAvatar"
+                [src]="
+                  selectedPost.userAvatar || '/assets/images/default_user.png'
+                "
                 [alt]="selectedPost.userName"
                 class="w-full h-full rounded-full object-cover"
                 onerror="this.src='/profilePics/default_user.png'"
@@ -327,6 +329,27 @@
               </button>
               <span>{{ selectedPost.downvotes }}</span>
             </div>
+            <button
+              *ngIf="selectedPost && userEmail === selectedPost.userEmail"
+              (click)="confirmDeletePost()"
+              class="ml-auto flex items-center space-x-1 text-red-500 hover:text-red-700"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              <span>Delete Post</span>
+            </button>
+
             <div class="flex items-center space-x-1">
               <svg
                 class="w-4 h-4"
@@ -387,7 +410,9 @@
               <div class="flex items-start space-x-2 mb-2">
                 <div class="flex-shrink-0 w-8 h-8">
                   <img
-                    [src]="comment.userAvatar"
+                    [src]="
+                      comment.userAvatar || '/assets/images/default_user.png'
+                    "
                     [alt]="comment.userName"
                     class="w-full h-full rounded-full object-cover"
                     onerror="this.src='/profilePics/default_user.png'"
@@ -458,7 +483,10 @@
                         >
                           <div class="flex-shrink-0 w-6 h-6">
                             <img
-                              [src]="reply.userAvatar"
+                              [src]="
+                                reply.userAvatar ||
+                                '/assets/images/default_user.png'
+                              "
                               [alt]="reply.userName"
                               class="w-full h-full rounded-full object-cover"
                               onerror="this.src='/profilePics/default_user.png'"

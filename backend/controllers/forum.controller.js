@@ -15,7 +15,8 @@ const getAllPosts = async (req, res) => {
 // Create new post
 const createPost = async (req, res) => {
   try {
-    const { title, content, category, userEmail, userName } = req.body;
+    const { title, content, category, userEmail, userName, userAvatar } =
+      req.body;
     const user = await User.findOne({ email: userEmail });
 
     if (!user) {
@@ -28,7 +29,7 @@ const createPost = async (req, res) => {
       category,
       userEmail,
       userName,
-      avatar,
+      userAvatar: userAvatar || "/profilePics/default_user.png", // Fix: use userAvatar from request
       upvotes: 0,
       downvotes: 0,
       upvotedBy: [],
@@ -51,7 +52,13 @@ const addComment = async (req, res) => {
     const { postId } = req.params;
     const { content, userEmail, userName, avatar } = req.body;
 
-    console.log("Adding comment:", { postId, content, userEmail, userName, avatar });
+    console.log("Adding comment:", {
+      postId,
+      content,
+      userEmail,
+      userName,
+      avatar,
+    });
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -102,7 +109,13 @@ const addReply = async (req, res) => {
     const { postId, commentId } = req.params;
     const { content, userEmail, userName, avatar } = req.body;
 
-    console.log("Adding reply:", { postId, commentId, content, userName, avatar }); // Debug log
+    console.log("Adding reply:", {
+      postId,
+      commentId,
+      content,
+      userName,
+      avatar,
+    }); // Debug log
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -221,10 +234,40 @@ const handleVote = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({ message: `Invalid post ID: ${postId}` });
+    }
+
+    const post = await ForumPost.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // In a production app, you would check user permissions here
+    // For example, verify that the requesting user is the post owner
+
+    await ForumPost.findByIdAndDelete(postId);
+
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).json({
+      message: "Error deleting post",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllPosts,
   createPost,
   addComment,
   handleVote,
   addReply,
+  deletePost,
 };

@@ -47,6 +47,7 @@ export class ForumService {
       category: postData.category,
       userEmail: postData.userEmail,
       userName: postData.userName,
+      userAvatar: postData.userAvatar, // Add this line to include avatar
       upvotes: 0,
       downvotes: 0,
       upvotedBy: [],
@@ -65,7 +66,12 @@ export class ForumService {
 
   addComment(
     postId: string,
-    comment: { content: string; userEmail: string; userName: string; userAvatar: string; }
+    comment: {
+      content: string;
+      userEmail: string;
+      userName: string;
+      userAvatar: string;
+    }
   ): Observable<ForumPost> {
     return this.http.post<ForumPost>(
       `${this.baseUrl}/posts/${postId}/comments`,
@@ -82,7 +88,12 @@ export class ForumService {
   addReply(
     postId: string,
     commentId: string,
-    reply: { content: string; userEmail: string; userName: string; userAvatar: string; } 
+    reply: {
+      content: string;
+      userEmail: string;
+      userName: string;
+      userAvatar: string;
+    }
   ): Observable<ForumPost> {
     console.log('Service adding reply:', { postId, commentId, reply }); // Debug log
     return this.http.post<ForumPost>(
@@ -115,5 +126,9 @@ export class ForumService {
       userEmail,
       voteType: 'downvote',
     });
+  }
+
+  deletePost(postId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/posts/${postId}`);
   }
 }

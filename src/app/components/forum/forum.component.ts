@@ -94,6 +94,10 @@ export class ForumComponent implements OnInit {
 
   ngOnInit() {
     this.fetchForumPosts();
+    this.userAvatar =
+      localStorage.getItem('avatar') ||
+      sessionStorage.getItem('avatar') ||
+      'assets/images/default_user.png';
   }
 
   fetchForumPosts() {
@@ -150,11 +154,22 @@ export class ForumComponent implements OnInit {
         localStorage.getItem('email') || sessionStorage.getItem('email');
       const username =
         localStorage.getItem('username') || sessionStorage.getItem('username');
+      const avatar =
+        localStorage.getItem('avatar') ||
+        sessionStorage.getItem('avatar') ||
+        'assets/images/default_user.png';
 
       if (!userEmail || !username) {
         alert('Please login first to create a post');
         this.router.navigate(['/login']);
         return;
+      }
+
+      // Show loading indicator or disable button
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.setAttribute('disabled', 'true');
+        submitBtn.textContent = 'Posting...';
       }
 
       const postData: Omit<ForumPost, 'id'> = {
@@ -163,10 +178,7 @@ export class ForumComponent implements OnInit {
         category: this.postForm.value.category,
         userEmail: userEmail,
         userName: username,
-        userAvatar:
-          localStorage.getItem('avatar') ||
-          sessionStorage.getItem('avatar') ||
-          '/profilePics/default_user.png',
+        userAvatar: avatar,
         upvotes: 0,
         downvotes: 0,
         commentCount: 0,
@@ -176,31 +188,39 @@ export class ForumComponent implements OnInit {
         timestamp: new Date().toISOString(),
       };
 
-      console.log('Sending post data:', postData);
+      console.log('Sending post data with avatar:', postData);
 
       this.forumService.createPost(postData).subscribe({
-        next: (response) => {
-          console.log('Post created successfully:', response);
-          this.fetchForumPosts();
-          this.postForm.reset();
+        next: (newPost) => {
+          console.log('Post created successfully:', newPost);
+
+          // Add success message
+          alert('Post created successfully!');
+
+          // Add the new post to the beginning of the posts array
+          this.posts.unshift(newPost);
+          this.originalPosts.unshift(newPost);
+
+          // Reset form and hide new post form
+          this.resetListingForm();
           this.showNewPostForm = false;
-          alert('Your post has been created successfully!');
+
+          // Re-enable submit button
+          if (submitBtn) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.textContent = 'Post';
+          }
         },
         error: (error) => {
-          console.error('Error details:', error);
-          const errorMessage =
-            error.error?.message ||
-            'There was an error creating your post. Please try again.';
-          alert(errorMessage);
+          console.error('Error creating post:', error);
+          alert('Failed to create post. Please try again.');
+
+          // Re-enable submit button
+          if (submitBtn) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.textContent = 'Post';
+          }
         },
-      });
-    } else {
-      // Form validation failed
-      Object.keys(this.postForm.controls).forEach((key) => {
-        const control = this.postForm.get(key);
-        if (control?.invalid) {
-          console.log(`${key} is invalid:`, control.errors);
-        }
       });
     }
   }
@@ -245,17 +265,16 @@ export class ForumComponent implements OnInit {
 
   submitComment() {
     if (this.commentForm.valid && this.selectedPost) {
-      const userName =
-        localStorage.getItem('username') || sessionStorage.getItem('username');
+      const avatar =
+        localStorage.getItem('avatar') ||
+        sessionStorage.getItem('avatar') ||
+        'assets/images/default_user.png';
 
       const comment = {
         content: this.commentForm.value.content.trim(),
         userEmail: this.userEmail,
         userName: this.userName,
-        userAvatar:
-          localStorage.getItem('avatar') ||
-          sessionStorage.getItem('avatar') ||
-          '/profilePics/default_user.png',
+        userAvatar: avatar,
       };
 
       console.log('Submitting comment:', comment);
@@ -307,15 +326,17 @@ export class ForumComponent implements OnInit {
       userEmail: this.userEmail,
     });
 
+    const avatar =
+      localStorage.getItem('avatar') ||
+      sessionStorage.getItem('avatar') ||
+      'assets/images/default_user.png';
+
     this.forumService
       .addReply(this.selectedPost._id!, parentComment.id.toString(), {
         content: parentComment.replyContent.trim(),
         userEmail: this.userEmail,
         userName: this.userName,
-        userAvatar:
-          localStorage.getItem('avatar') ||
-          sessionStorage.getItem('avatar') ||
-          '/profilePics/default_user.png',
+        userAvatar: avatar,
       })
       .subscribe({
         next: (updatedPost) => {
@@ -433,5 +454,59 @@ export class ForumComponent implements OnInit {
     if (this.selectedPost?._id === updatedPost._id) {
       this.selectedPost = updatedPost;
     }
+  }
+
+  confirmDeletePost() {
+    if (!this.selectedPost) return;
+
+    // Ask for confirmation
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this post? This action cannot be undone.'
+    );
+
+    if (confirmDelete) {
+      this.deletePost();
+    }
+  }
+
+  deletePost() {
+    if (!this.selectedPost || !this.selectedPost._id) return;
+
+    // Show loading state
+    const deleteBtn = document.querySelector('button.text-red-500');
+    if (deleteBtn) {
+      deleteBtn.setAttribute('disabled', 'true');
+      deleteBtn.innerHTML =
+        '<svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"></svg> Deleting...';
+    }
+
+    this.forumService.deletePost(this.selectedPost._id).subscribe({
+      next: () => {
+        // Remove from posts arrays
+        this.posts = this.posts.filter(
+          (post) => post._id !== this.selectedPost?._id
+        );
+        this.originalPosts = this.originalPosts.filter(
+          (post) => post._id !== this.selectedPost?._id
+        );
+
+        // Show success message
+        alert('Post deleted successfully');
+
+        // Go back to listing view
+        this.backToListing();
+      },
+      error: (error) => {
+        console.error('Error deleting post:', error);
+        alert('Failed to delete post. Please try again.');
+
+        // Reset button state
+        if (deleteBtn) {
+          deleteBtn.removeAttribute('disabled');
+          deleteBtn.innerHTML =
+            '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Delete Post';
+        }
+      },
+    });
   }
 }
