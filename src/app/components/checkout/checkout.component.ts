@@ -28,6 +28,189 @@ export class CheckoutComponent {
 
   completeAddress = '';
 
+  malaysiaStates: string[] = [
+    'Johor',
+    'Kedah',
+    'Kelantan',
+    'Kuala Lumpur',
+    'Labuan',
+    'Melaka',
+    'Negeri Sembilan',
+    'Pahang',
+    'Penang',
+    'Perak',
+    'Perlis',
+    'Putrajaya',
+    'Sabah',
+    'Sarawak',
+    'Selangor',
+    'Terengganu',
+  ];
+
+  malaysianCities: { [state: string]: string[] } = {
+    Johor: [
+      'Johor Bahru',
+      'Batu Pahat',
+      'Muar',
+      'Kluang',
+      'Segamat',
+      'Pontian',
+      'Kota Tinggi',
+      'Kulai',
+      'Pasir Gudang',
+      'Iskandar Puteri',
+    ],
+    Kedah: [
+      'Alor Setar',
+      'Sungai Petani',
+      'Kulim',
+      'Langkawi',
+      'Kubang Pasu',
+      'Baling',
+      'Pendang',
+      'Yan',
+      'Pokok Sena',
+      'Bandar Baharu',
+    ],
+    Kelantan: [
+      'Kota Bharu',
+      'Pasir Mas',
+      'Tumpat',
+      'Pasir Puteh',
+      'Bachok',
+      'Kuala Krai',
+      'Machang',
+      'Tanah Merah',
+      'Jeli',
+      'Gua Musang',
+    ],
+    'Kuala Lumpur': [
+      'Kuala Lumpur',
+      'Wangsa Maju',
+      'Batu',
+      'Kepong',
+      'Cheras',
+      'Titiwangsa',
+      'Setiawangsa',
+      'Bukit Bintang',
+      'Lembah Pantai',
+      'Seputeh',
+      'Bandar Tun Razak',
+    ],
+    Labuan: ['Labuan', 'Victoria'],
+    Melaka: [
+      'Melaka City',
+      'Alor Gajah',
+      'Jasin',
+      'Masjid Tanah',
+      'Merlimau',
+      'Ayer Keroh',
+    ],
+    'Negeri Sembilan': [
+      'Seremban',
+      'Port Dickson',
+      'Nilai',
+      'Bahau',
+      'Rembau',
+      'Kuala Pilah',
+      'Tampin',
+      'Jempol',
+    ],
+    Pahang: [
+      'Kuantan',
+      'Temerloh',
+      'Bentong',
+      'Mentakab',
+      'Raub',
+      'Jerantut',
+      'Pekan',
+      'Cameron Highlands',
+      'Rompin',
+      'Maran',
+      'Lipis',
+    ],
+    Penang: [
+      'George Town',
+      'Butterworth',
+      'Bukit Mertajam',
+      'Nibong Tebal',
+      'Balik Pulau',
+      'Kepala Batas',
+      'Air Itam',
+      'Bayan Lepas',
+      'Seberang Perai',
+    ],
+    Perak: [
+      'Ipoh',
+      'Taiping',
+      'Teluk Intan',
+      'Batu Gajah',
+      'Sitiawan',
+      'Manjung',
+      'Kuala Kangsar',
+      'Kampar',
+      'Tapah',
+      'Bidor',
+      'Parit Buntar',
+      'Lumut',
+    ],
+    Perlis: ['Kangar', 'Arau', 'Padang Besar', 'Kuala Perlis'],
+    Putrajaya: ['Putrajaya'],
+    Sabah: [
+      'Kota Kinabalu',
+      'Sandakan',
+      'Tawau',
+      'Lahad Datu',
+      'Keningau',
+      'Semporna',
+      'Kudat',
+      'Beaufort',
+      'Papar',
+      'Ranau',
+      'Kunak',
+      'Kota Belud',
+    ],
+    Sarawak: [
+      'Kuching',
+      'Miri',
+      'Sibu',
+      'Bintulu',
+      'Limbang',
+      'Sarikei',
+      'Sri Aman',
+      'Kapit',
+      'Samarahan',
+      'Marudi',
+      'Bau',
+      'Serian',
+    ],
+    Selangor: [
+      'Shah Alam',
+      'Petaling Jaya',
+      'Klang',
+      'Subang Jaya',
+      'Ampang Jaya',
+      'Kajang',
+      'Selayang',
+      'Rawang',
+      'Sepang',
+      'Hulu Selangor',
+      'Kuala Selangor',
+      'Sabak Bernam',
+    ],
+    Terengganu: [
+      'Kuala Terengganu',
+      'Kemaman',
+      'Dungun',
+      'Besut',
+      'Marang',
+      'Hulu Terengganu',
+      'Setiu',
+    ],
+  };
+
+  filteredCities: string[] = [];
+
   constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
@@ -62,8 +245,26 @@ export class CheckoutComponent {
     this.zip =
       localStorage.getItem('zip') || sessionStorage.getItem('zip') || '';
 
+    if (this.state) {
+      this.filteredCities = this.malaysianCities[this.state] || [];
+      console.log('State from storage:', this.state);
+      console.log('Filtered cities:', this.filteredCities);
+    }
+
     this.combineAddressForDisplay();
     this.generateCompleteAddress();
+  }
+
+  onStateChange(): void {
+    // Update cities based on selected state
+    this.filteredCities = this.malaysianCities[this.state] || [];
+    console.log('State changed to:', this.state);
+    console.log('Updated filtered cities:', this.filteredCities);
+
+    // Reset city if current city is not in the new state's city list
+    if (this.city && !this.filteredCities.includes(this.city)) {
+      this.city = '';
+    }
   }
 
   combineAddressForDisplay(): void {

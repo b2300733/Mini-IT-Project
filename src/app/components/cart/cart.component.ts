@@ -37,10 +37,10 @@ export class CartComponent {
   }
 
   checkout(): void {
-    // if (this.cartItems.length === 0) {
-    //   alert('Your cart is empty!');
-    //   return;
-    // }
+    if (this.cartItems.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
     this.router.navigate(['/checkout']);
   }
 }

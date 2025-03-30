@@ -3,13 +3,13 @@
     class="border-1 border-gray-400 p-6 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] w-full max-w-4xl"
   >
     <div class="grid grid-cols-2 gap-6">
-      <div class="flex flex-col gap-0">
+      <div class="flex flex-col gap-3">
         <h2 class="text-xl font-semibold mb-4">Shipping Details</h2>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3">
           <label class="block text-sm">Email</label>
           <input
             type="email"
-            class="w-full p-2 rounded-sm border-1 h-10 px-3 bg-gray-200"
+            class="w-full p-2 rounded-sm border-1 h-10 px-3 bg-gray-200 mb-2"
             placeholder="joe@gmail.com"
             [(ngModel)]="email"
             required
@@ -20,7 +20,7 @@
             <label class="block text-sm">Contact No</label>
             <input
               type="text"
-              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
+              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
               placeholder="+60123456789"
               [(ngModel)]="contactNo"
               [ngClass]="{
@@ -34,7 +34,7 @@
             <span
               *ngIf="isFieldInvalid('contactNo')"
               class="text-red-500 text-xs absolute top-18"
-              >Contact Number is required</span
+              >Contact Number must be 10 digits (0123456789)</span
             >
             <span
               *ngIf="
@@ -51,7 +51,7 @@
             <label class="block text-sm">Address</label>
             <input
               type="text"
-              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
+              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
               placeholder="No, 123 Jalan Taman, Seksyen U10/10"
               [(ngModel)]="address"
               [ngClass]="{ 'border-red-500': isFieldInvalid('address') }"
@@ -67,14 +67,22 @@
           <div class="grid grid-cols-2 gap-2">
             <div class="relative flex flex-col gap-3">
               <label class="block text-sm">City</label>
-              <input
+              <select
                 type="text"
-                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
-                placeholder="Kemaman"
+                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+                placeholder="City"
                 [(ngModel)]="city"
                 [ngClass]="{ 'border-red-500': isFieldInvalid('city') }"
                 required
-              />
+              >
+                <option selected disabled value="">Select your city</option>
+                <option
+                  *ngFor="let cityOption of filteredCities"
+                  [value]="cityOption"
+                >
+                  {{ cityOption }}
+                </option>
+              </select>
               <span
                 *ngIf="isFieldInvalid('city')"
                 class="text-red-500 text-xs absolute top-18"
@@ -84,14 +92,23 @@
 
             <div class="relative flex flex-col gap-3">
               <label class="block text-sm">State</label>
-              <input
+              <select
                 type="text"
-                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
-                placeholder="Terengganu"
+                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+                placeholder="State"
                 [(ngModel)]="state"
                 [ngClass]="{ 'border-red-500': isFieldInvalid('state') }"
+                (ngModelChange)="onStateChange()"
                 required
-              />
+              >
+                <option selected disabled value="">Select your state</option>
+                <option
+                  *ngFor="let stateOption of malaysiaStates"
+                  [value]="stateOption"
+                >
+                  {{ stateOption }}
+                </option>
+              </select>
               <span
                 *ngIf="isFieldInvalid('state')"
                 class="text-red-500 text-xs absolute top-18"
@@ -105,7 +122,7 @@
               <label class="block text-sm">Zip</label>
               <input
                 type="text"
-                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
+                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
                 placeholder="40000"
                 [(ngModel)]="zip"
                 [ngClass]="{
@@ -118,7 +135,7 @@
               <span
                 *ngIf="isFieldInvalid('zip')"
                 class="text-red-500 text-xs absolute top-18"
-                >ZIP is required</span
+                >ZIP must be exactly 5 digits</span
               >
               <span
                 *ngIf="zip && zip.length !== 5 && !isFieldInvalid('zip')"
@@ -128,14 +145,17 @@
             </div>
             <div class="relative flex flex-col gap-3">
               <label class="block text-sm">Country</label>
-              <input
+              <select
                 type="text"
-                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
+                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
                 placeholder="Malaysia"
                 [(ngModel)]="country"
                 [ngClass]="{ 'border-red-500': isFieldInvalid('country') }"
                 required
-              />
+              >
+                <option selected disabled value="">Select your country</option>
+                <option value="Malaysia">Malaysia</option>
+              </select>
               <span
                 *ngIf="isFieldInvalid('country')"
                 class="text-red-500 text-xs absolute top-18"
@@ -148,59 +168,61 @@
 
       <div class="flex flex-col gap-3">
         <h2 class="text-xl font-semibold mb-4">Payment</h2>
-        <p class="mb-2">Accepted Cards</p>
-        <div class="flex space-x-2 mb-2">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-            class="h-6"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg"
-            class="h-6"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg"
-            class="h-6"
-          />
-        </div>
-
-        <label class="block text-sm">Name on Card</label>
-        <input
-          type="text"
-          class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
-          placeholder="Joe Jing Yan"
-        />
-
-        <label class="block text-sm">Credit card number</label>
-        <input
-          type="text"
-          class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
-          placeholder="1111-2222-3333-4444"
-        />
-
-        <label class="block text-sm">Exp Month</label>
-        <input
-          type="text"
-          class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
-          placeholder="September"
-        />
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-sm">Exp Year</label>
-            <input
-              type="text"
-              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
-              placeholder="2028"
+        <div class="flex flex-col gap-3">
+          <label class="block text-sm">Accepted Cards</label>
+          <div class="flex space-x-2 h-10 mb-2">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
+              class="h-6"
+            />
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg"
+              class="h-6"
+            />
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg"
+              class="h-6"
             />
           </div>
-          <div>
-            <label class="block text-sm">CVV</label>
-            <input
-              type="text"
-              class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3"
-              placeholder="352"
-            />
+
+          <label class="block text-sm">Name on Card</label>
+          <input
+            type="text"
+            class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+            placeholder="Joe Jing Yan"
+          />
+
+          <label class="block text-sm">Credit card number</label>
+          <input
+            type="text"
+            class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+            placeholder="1111-2222-3333-4444"
+          />
+
+          <label class="block text-sm">Exp Month</label>
+          <input
+            type="text"
+            class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+            placeholder="September"
+          />
+
+          <div class="grid grid-cols-2 gap-2">
+            <div class="flex flex-col gap-3">
+              <label class="block text-sm">Exp Year</label>
+              <input
+                type="text"
+                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+                placeholder="2028"
+              />
+            </div>
+            <div class="flex flex-col gap-3">
+              <label class="block text-sm">CVV</label>
+              <input
+                type="text"
+                class="w-full p-2 rounded-sm border-1 hover-selection h-10 px-3 mb-2"
+                placeholder="352"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -208,7 +230,7 @@
 
     <button
       (click)="checkout()"
-      class="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded mt-4 cursor-pointer"
+      class="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded mt-6 cursor-pointer"
     >
       <span *ngIf="!isProcessing">Checkout</span>
       <span *ngIf="isProcessing">Processing...</span>

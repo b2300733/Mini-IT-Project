@@ -35,7 +35,7 @@ export class ShoppageComponent {
   isDogExpanded = false;
   isCatExpanded = false;
   isOtherExpanded = false;
-  activeCategory: string | null = null;
+  activeCategories: string[] = [];
   activeSubcategories: string[] = [];
   searchQuery: string = '';
   isContentHidden = false;
@@ -58,6 +58,7 @@ export class ShoppageComponent {
     { value: 'accessories', label: 'Accessories' },
     { value: 'toys', label: 'Toys' },
     { value: 'clothes', label: 'Clothes' },
+    { value: 'food', label: 'Food' },
   ];
 
   private originalProducts: ShopProduct[] = [];
@@ -147,7 +148,9 @@ export class ShoppageComponent {
     this.isCatExpanded = false;
     this.isOtherExpanded = false;
 
-    this.activeCategory = category;
+    if (!this.activeCategories.includes(category)) {
+      this.activeCategories.push(category);
+    }
 
     if (!this.activeSubcategories.includes(subcategory)) {
       this.activeSubcategories.push(subcategory);
@@ -155,18 +158,38 @@ export class ShoppageComponent {
 
     this.products = this.originalProducts.filter((product: ShopProduct) => {
       return (
-        product.category === category &&
+        this.activeCategories.includes(product.category || '') &&
         this.activeSubcategories.includes(product.subCategory || '')
       );
     });
+
     this.loadInitialProducts();
   }
 
   clearFilters() {
-    this.activeCategory = null;
+    this.activeCategories = [];
     this.activeSubcategories = [];
     this.products = [...this.originalProducts];
     this.loadInitialProducts();
+  }
+
+  private filterProducts() {
+    this.products = this.originalProducts.filter((product: ShopProduct) => {
+      return (
+        this.activeCategories.includes(product.category || '') &&
+        this.activeSubcategories.includes(product.subCategory || '')
+      );
+    });
+  }
+
+  removeCategory(category: string) {
+    this.activeCategories = this.activeCategories.filter((c) => c !== category);
+    if (this.activeCategories.length === 0) {
+      this.clearFilters();
+    } else {
+      this.filterProducts();
+      this.loadInitialProducts();
+    }
   }
 
   removeSubcategory(subcategory: string) {
@@ -179,7 +202,7 @@ export class ShoppageComponent {
     } else {
       this.products = this.originalProducts.filter((product: ShopProduct) => {
         return (
-          product.category === this.activeCategory &&
+          product.category === this.activeCategories[0] &&
           this.activeSubcategories.includes(product.subCategory || '')
         );
       });
@@ -192,10 +215,10 @@ export class ShoppageComponent {
     this.searchQuery = query;
 
     if (query === '') {
-      if (this.activeCategory && this.activeSubcategories.length > 0) {
+      if (this.activeCategories && this.activeSubcategories.length > 0) {
         this.products = this.originalProducts.filter((product: ShopProduct) => {
           return (
-            product.category === this.activeCategory &&
+            product.category === this.activeCategories[0] &&
             this.activeSubcategories.includes(product.subCategory || '')
           );
         });
@@ -208,10 +231,10 @@ export class ShoppageComponent {
           .toLowerCase()
           .includes(query);
 
-        if (this.activeCategory && this.activeSubcategories.length > 0) {
+        if (this.activeCategories && this.activeSubcategories.length > 0) {
           return (
             matchesSearch &&
-            product.category === this.activeCategory &&
+            product.category === this.activeCategories[0] &&
             this.activeSubcategories.includes(product.subCategory || '')
           );
         }
@@ -261,6 +284,20 @@ export class ShoppageComponent {
   // Listing form methods
   toggleContent() {
     this.isContentHidden = !this.isContentHidden;
+    if (this.isContentHidden) {
+      // Reset form when opening
+      this.currentStep = 1;
+    } else {
+      // Reset form when closing
+      this.resetProductForm();
+    }
+  }
+
+  resetProductForm() {
+    this.productForm.reset();
+    this.uploadedPhotos = [];
+    this.selectedCategory = null;
+    this.selectedSubcategory = null;
   }
 
   // Photo upload methods
