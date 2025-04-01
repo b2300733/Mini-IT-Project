@@ -5,6 +5,7 @@ import {
 } from '../../../../backend/services/jobs.service';
 import { CommunitymarketService } from '../../../../backend/services/communitymarket.service';
 import { ShopService } from '../../../../backend/services/shop.service';
+import { Router } from '@angular/router';
 
 interface ShopProduct {
   _id: string;
@@ -45,6 +46,7 @@ export class HomeComponent implements OnInit {
   userEmail: string = '';
 
   constructor(
+    private router: Router,
     private jobsService: JobsService,
     private communitymarketService: CommunitymarketService,
     private shopService: ShopService
@@ -120,6 +122,68 @@ export class HomeComponent implements OnInit {
     // Implement your cart functionality here
     alert(`${product.productTitle} added to cart!`);
     // this.shopService.addToCart(product);
+  }
+
+  viewProductDetails(item: any): void {
+    console.log('Navigating to product details:', item._id);
+    this.communitymarketService.getProductById(item._id).subscribe({
+      next: (productDetails) => {
+        // Navigate to the product component with all required details
+        this.router.navigate(['/product'], {
+          queryParams: {
+            _id: productDetails._id,
+            name: productDetails.productTitle,
+            price: productDetails.productPrice,
+            quantity: productDetails.productQuantity,
+            condition: productDetails.condition,
+            images: productDetails.productImg?.join(',') || '',
+            img: productDetails.productImg?.[0] || '',
+            user: productDetails.username || '',
+            email: productDetails.userEmail,
+            avatar: productDetails.userAvatar || '',
+            description: productDetails.productDesc || '',
+            category: productDetails.category || '',
+            subcategory: productDetails.subCategory || '',
+            deliveryOptions: productDetails.deliveryOpt?.join(',') || '',
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching product details:', err);
+        alert('Error loading product details.');
+      },
+    });
+  }
+
+  viewShopProductDetails(product: ShopProduct): void {
+    console.log('Navigating to shop product details:', product._id);
+
+    // Navigate to the product component with all required details
+    this.router.navigate(['/product'], {
+      queryParams: {
+        _id: product._id,
+        name: product.productTitle,
+        price: product.productPrice,
+        quantity: product.productQuantity,
+        images: product.productImg?.join(',') || '',
+        img: product.productImg?.[0] || '',
+        brand: product.productBrand || '',
+        description: product.productDesc || '',
+        specification: product.productSpec || '',
+        category: product.category || '',
+        subcategory: product.subCategory || '',
+      },
+    });
+  }
+
+  navigateToCommunityMarket(): void {
+    console.log('Navigating to community market');
+    this.router.navigate(['/market']);
+  }
+
+  navigateToShop(): void {
+    console.log('Navigating to shop');
+    this.router.navigate(['/products']);
   }
 
   calculateTimeAgo(dateString: string): string {
