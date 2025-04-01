@@ -138,7 +138,7 @@ const checkout = async (req, res) => {
         if (!product) {
           failedItems.push({
             ...item,
-            reason: `Product ${item.productTitle} not found.`,
+            reason: "Product not found",
           });
           continue;
         }
@@ -146,16 +146,18 @@ const checkout = async (req, res) => {
         if (product.productQuantity < item.quantity) {
           failedItems.push({
             ...item,
-            reason: `Not enough ${product.productTitle} in stock. Available: ${product.productQuantity}`,
+            reason: "Not enough quantity available",
           });
           continue;
         }
 
-        // Update the product quantity
-        const newQuantity = product.productQuantity - item.quantity;
-        await Market.findByIdAndUpdate(item.productId, {
-          productQuantity: newQuantity,
-        });
+        // Update product quantity
+        product.productQuantity -= item.quantity;
+        if (product.productQuantity === 0) {
+          await Market.findByIdAndDelete(item.productId);
+        } else {
+          await product.save();
+        }
 
         // Add to successful items
         successItems.push(item);
