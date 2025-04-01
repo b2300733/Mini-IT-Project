@@ -35,4 +35,46 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-module.exports = { addProduct, getAllProducts };
+const updateProduct = async (req, res) => {
+  try {
+    const { productId } = req.body;
+
+    // Find the existing product
+    const product = await Shop.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Handle existing images - parse them from JSON string
+    const existingImages = JSON.parse(req.body.existingImages || "[]");
+
+    // New uploaded images
+    const newImages = req.files.map((file) => `/shopImgs/${file.filename}`);
+
+    // Combine existing and new images
+    const productImg = [...existingImages, ...newImages];
+
+    // Update product with new values
+    product.productBrand = req.body.productBrand;
+    product.productTitle = req.body.productTitle;
+    product.productDesc = req.body.productDesc;
+    product.productSpec = req.body.productSpec;
+    product.productPrice = req.body.productPrice;
+    product.productQuantity = req.body.productQuantity;
+    product.category = req.body.category;
+    product.subCategory = req.body.subCategory;
+    product.productImg = productImg;
+    product.updatedAt = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
+
+    await product.save();
+
+    res.status(200).json({
+      message: "Product updated successfully!",
+      product,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { addProduct, getAllProducts, updateProduct };

@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const shopController = require("../controllers/shop.controller");
 const multer = require("multer");
+const path = require("path");
 
 const {
   addProduct,
   getAllProducts,
+  updateProduct,
 } = require("../controllers/shop.controller");
 
 // Multer Storage Configuration
@@ -25,5 +28,6 @@ const upload = multer({
 
 router.post("/add", upload.array("productImg", 10), addProduct);
 router.get("/all", getAllProducts);
+router.put("/update", upload.array("productImg"), shopController.updateProduct);
 
 module.exports = router;

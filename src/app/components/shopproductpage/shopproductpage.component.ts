@@ -1,10 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import {
   CartService,
   CartItem,
 } from '../../../../backend/services/cart.service';
+import { ShopService } from '../../../../backend/services/shop.service';
+
+interface UploadedPhoto {
+  url: string;
+  file?: File;
+  isExisting?: boolean;
+}
 
 interface ShopProduct {
   _id: string;
@@ -48,17 +56,51 @@ export class ShopproductpageComponent implements OnInit {
     subcategory: '',
   };
 
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  isEditing: boolean = false;
+  productForm: FormGroup;
+  uploadedPhotos: UploadedPhoto[] = [];
+  selectedCategory: string | null = null;
+  selectedSubcategory: string | null = null;
+
+  mainCategories = [
+    { value: 'dog', label: 'Dog', icon: '🐶' },
+    { value: 'cat', label: 'Cat', icon: '🐱' },
+    { value: 'other', label: 'Other', icon: '🐾' },
+  ];
+  subcategories = [
+    { value: 'accessories', label: 'Accessories' },
+    { value: 'toys', label: 'Toys' },
+    { value: 'clothes', label: 'Clothes' },
+    { value: 'food', label: 'Food' },
+  ];
+
+  isAdminUser: boolean = false;
   quantity: number = 1;
   message: string = '';
   currentImageIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private http: HttpClient,
     private cartService: CartService,
-    private router: Router
-  ) {}
+    private fb: FormBuilder,
+    private shopService: ShopService
+  ) {
+    // Initialize form
+    this.productForm = this.fb.group({
+      brand: ['', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      specification: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0.01)]],
+      quantity: ['', [Validators.required, Validators.min(1)]],
+    });
+  }
 
   ngOnInit(): void {
+    // Keep your existing initialization code
     this.route.queryParams.subscribe((params) => {
       this.product = {
         _id: params['_id'] || '',
@@ -68,12 +110,178 @@ export class ShopproductpageComponent implements OnInit {
         images: params['images']?.split(',') || [params['img']] || [],
         brand: params['brand'] || '',
         description: params['description'] || 'No description available',
-        specification: params['specification'] || 'No description available',
+        specification: params['specification'] || 'No specification available',
         quantity: Number(params['quantity']) || 0,
         category: params['category'] || '',
         subcategory: params['subcategory'] || '',
       };
     });
+
+    // Check if user is admin
+    this.fetchUserData();
+  }
+
+  showValidationError(field: string): boolean {
+    const control = this.productForm.get(field);
+    return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
+  fetchUserData(): void {
+    const email =
+      localStorage.getItem('email') || sessionStorage.getItem('email');
+    if (!email) return;
+
+    this.http
+      .get<{ isAdmin: boolean }>(
+        `http://localhost:3000/api/users?email=${email}`
+      )
+      .subscribe(
+        (response) => {
+          this.isAdminUser = response.isAdmin;
+          console.log('User is admin:', this.isAdminUser);
+        },
+        (error) => {
+          console.error('Error fetching user data:', error);
+        }
+      );
+  }
+
+  editListing(): void {
+    this.isEditing = true;
+
+    // Populate form with current product details
+    this.productForm.patchValue({
+      brand: this.product.brand,
+      title: this.product.title,
+      description: this.product.description,
+      specification: this.product.specification,
+      price: this.product.price,
+      quantity: this.product.quantity,
+    });
+
+    // Set category and subcategory
+    this.selectedCategory = this.product.category;
+    this.selectedSubcategory = this.product.subcategory;
+
+    // Load existing images
+    this.uploadedPhotos = this.product.images.map((img) => ({
+      url: img,
+      isExisting: true,
+    }));
+
+    // Scroll to form
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  }
+
+  cancelEdit(): void {
+    this.isEditing = false;
+    this.uploadedPhotos = [];
+  }
+
+  // Photo management methods
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any) {
+    const files = event.target.files;
+
+    if (files) {
+      // Ensure we don't exceed 10 photos
+      const remainingSlots = 10 - this.uploadedPhotos.length;
+      const filesToProcess = Math.min(remainingSlots, files.length);
+
+      for (let i = 0; i < filesToProcess; i++) {
+        const file = files[i];
+        if (file.size > 3 * 1024 * 1024) {
+          // 3MB limit
+          alert('File size exceeds 3MB! Please upload a smaller file.');
+          continue;
+        }
+
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            this.uploadedPhotos.push({
+              url: e.target.result,
+              file: file,
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    }
+    // Reset input
+    this.fileInput.nativeElement.value = '';
+  }
+
+  removePhoto(index: number) {
+    this.uploadedPhotos.splice(index, 1);
+  }
+
+  // Category selection methods
+  selectCategory(category: string) {
+    this.selectedCategory = category;
+  }
+
+  selectSubcategory(subcategory: string) {
+    this.selectedSubcategory = subcategory;
+  }
+
+  // Form submission
+  submitProductUpdate() {
+    if (
+      this.productForm.valid &&
+      this.uploadedPhotos.length > 0 &&
+      this.selectedCategory &&
+      this.selectedSubcategory
+    ) {
+      // Create FormData for the request
+      const formData = new FormData();
+
+      // Add basic fields
+      formData.append('productId', this.product._id);
+      formData.append('productBrand', this.productForm.value.brand);
+      formData.append('productTitle', this.productForm.value.title);
+      formData.append('productDesc', this.productForm.value.description);
+      formData.append('productSpec', this.productForm.value.specification);
+      formData.append('productPrice', this.productForm.value.price);
+      formData.append('productQuantity', this.productForm.value.quantity);
+      formData.append('category', this.selectedCategory);
+      formData.append('subCategory', this.selectedSubcategory);
+
+      // Track existing images to keep
+      const existingImages = this.uploadedPhotos
+        .filter((p) => p.isExisting)
+        .map((p) => p.url);
+      formData.append('existingImages', JSON.stringify(existingImages));
+
+      // Add new images
+      const newPhotos = this.uploadedPhotos.filter((p) => p.file);
+      newPhotos.forEach((photo) => {
+        if (photo.file) {
+          formData.append('productImg', photo.file);
+        }
+      });
+
+      // Send update request
+      this.http
+        .put(`http://localhost:3000/api/shop/update`, formData)
+        .subscribe(
+          (response) => {
+            alert('Product updated successfully!');
+            this.isEditing = false;
+            // Refresh the page to show updated information
+            window.location.reload();
+          },
+          (error) => {
+            console.error('Error updating product:', error);
+            alert('Error updating product. Please try again.');
+          }
+        );
+    }
   }
 
   decreaseQuantity(): void {
