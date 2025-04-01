@@ -356,6 +356,15 @@
         </h3>
         <p class="text-gray-600 text-left">RM{{ product?.productPrice }}</p>
         <p class="text-black text-left">{{ product?.productBrand }}</p>
+        <p *ngIf="product.productQuantity > 0" class="text-gray-600 text-sm">
+          Quantity: {{ product.productQuantity }}
+        </p>
+        <p
+          *ngIf="product.productQuantity <= 0"
+          class="text-red-500 text-sm font-medium"
+        >
+          Out of Stock
+        </p>
       </div>
     </div>
     <div

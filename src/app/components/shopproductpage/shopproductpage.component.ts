@@ -93,11 +93,20 @@ export class ShopproductpageComponent implements OnInit {
     }
   }
 
+  isProductInStock(): boolean {
+    return this.product.quantity > 0;
+  }
+
   addToCart(): void {
     if (!this.isLoggedIn()) {
       // Redirect to login page if not logged in
       alert('Please login first to sell items');
       this.router.navigate(['/login']);
+      return;
+    }
+
+    if (!this.isProductInStock()) {
+      alert('Sorry, this item is out of stock.');
       return;
     }
 

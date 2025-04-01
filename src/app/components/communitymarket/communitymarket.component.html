@@ -353,12 +353,23 @@
           [src]="product?.productImg?.[0]"
           [alt]="product?.productTitle"
         />
+
         <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
           {{ product?.productTitle }}
         </h3>
-        <p class="text-gray-600 text-left">RM{{ product?.productPrice }}</p>
+        <p class="text-gray-600">RM{{ product?.productPrice }}</p>
 
-        <p class="text-gray-600 text-left">{{ product?.condition }}</p>
+        <p class="text-gray-600">{{ product?.condition }}</p>
+
+        <p *ngIf="product.productQuantity > 0" class="text-gray-600 text-sm">
+          Quantity: {{ product.productQuantity }}
+        </p>
+        <p
+          *ngIf="product.productQuantity <= 0"
+          class="text-red-500 text-sm font-medium"
+        >
+          Out of Stock
+        </p>
       </div>
     </div>
     <div
