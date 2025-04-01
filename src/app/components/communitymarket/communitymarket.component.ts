@@ -136,8 +136,8 @@ export class CommunitymarketComponent {
   fetchProducts(): void {
     this.communitymarketService.getProducts().subscribe(
       (response) => {
-        this.products = response;
         this.originalProducts = response;
+        this.products = [...this.originalProducts];
         this.loadInitialProducts();
       },
       (error) => {
