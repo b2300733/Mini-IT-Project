@@ -6,6 +6,10 @@ import {
 import { CommunitymarketService } from '../../../../backend/services/communitymarket.service';
 import { ShopService } from '../../../../backend/services/shop.service';
 import { Router } from '@angular/router';
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 interface ShopProduct {
   _id: string;
@@ -49,7 +53,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private jobsService: JobsService,
     private communitymarketService: CommunitymarketService,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private cartService: CartService
   ) {
     // Get user email from storage
     this.userEmail =
@@ -118,10 +123,55 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  addToCart(product: ShopProduct): void {
-    // Implement your cart functionality here
+  addToCart(product: ShopProduct, event?: Event): void {
+    // Prevent navigation to product page if clicked on Add to Cart
+    if (event) {
+      event.stopPropagation();
+    }
+
+    // Check if user is logged in
+    if (!this.isLoggedIn()) {
+      alert('Please login first to add items to cart');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const cartItem: CartItem = {
+      productImg:
+        product.productImg?.[0] || 'assets/images/no-product-image.jpg',
+      productTitle: product.productTitle,
+      quantity: 1,
+      price: product.productPrice,
+      shopProductId: product._id,
+    };
+
+    this.cartService.addToCart(cartItem);
     alert(`${product.productTitle} added to cart!`);
-    // this.shopService.addToCart(product);
+  }
+
+  addMarketItemToCart(item: any, event?: Event): void {
+    // Prevent navigation to product page if clicked on Add to Cart
+    if (event) {
+      event.stopPropagation();
+    }
+
+    // Check if user is logged in
+    if (!this.isLoggedIn()) {
+      alert('Please login first to add items to cart');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const cartItem: CartItem = {
+      productImg: item.productImg?.[0] || 'assets/images/no-product-image.jpg',
+      productTitle: item.productTitle,
+      quantity: 1,
+      price: parseFloat(item.productPrice),
+      productId: item._id,
+    };
+
+    this.cartService.addToCart(cartItem);
+    alert(`${item.productTitle} added to cart!`);
   }
 
   viewProductDetails(item: any): void {
@@ -184,6 +234,13 @@ export class HomeComponent implements OnInit {
   navigateToShop(): void {
     console.log('Navigating to shop');
     this.router.navigate(['/products']);
+  }
+
+  isLoggedIn(): boolean {
+    return (
+      !!localStorage.getItem('authToken') ||
+      !!sessionStorage.getItem('authToken')
+    );
   }
 
   calculateTimeAgo(dateString: string): string {
