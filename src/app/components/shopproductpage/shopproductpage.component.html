@@ -110,12 +110,8 @@
 
         <!-- Quantity and Add to Cart -->
         <div class="mt-6">
-          <div class="flex items-center space-x-4">
-            <!-- Quantity selector - only show for regular users, not for admins -->
-            <div
-              class="flex items-center border rounded-lg"
-              *ngIf="!isAdminUser"
-            >
+          <div *ngIf="isProductInStock()" class="flex items-center space-x-4">
+            <div class="flex items-center border rounded-lg">
               <button
                 class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
                 (click)="decreaseQuantity()"
@@ -158,10 +154,25 @@
               Edit Listing
             </button>
           </div>
+
+          <div
+            *ngIf="!isProductInStock()"
+            class="flex items-center justify-center py-3"
+          >
+            <div
+              class="bg-gray-100 text-gray-800 py-4 px-6 rounded-lg w-full text-center font-medium"
+            >
+              <span class="text-red-500 font-bold">OUT OF STOCK</span>
+            </div>
+          </div>
+
           <div *ngIf="message" style="color: red; margin-top: 5px">
             {{ message }}
           </div>
-          <div>Quantity: {{ product.quantity }}</div>
+          <div *ngIf="isProductInStock()">Quantity: {{ product.quantity }}</div>
+          <div *ngIf="!isProductInStock()" class="text-red-500 font-medium">
+            Currently Out of Stock
+          </div>
         </div>
 
         <!-- Product Description -->
