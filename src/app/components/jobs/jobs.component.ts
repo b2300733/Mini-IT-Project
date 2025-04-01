@@ -401,6 +401,7 @@ export class JobsComponent implements OnInit {
               this.showListingForm = false;
               this.isEditing = false;
               this.editingListingId = null;
+              this.filterListings();
             },
             error: (err) => {
               console.error('Error updating job:', err);
@@ -421,6 +422,7 @@ export class JobsComponent implements OnInit {
             // Reset form and close
             this.listingForm.reset();
             this.showListingForm = false;
+            this.filterListings();
           },
           error: (err) => {
             console.error('Error creating job:', err);
