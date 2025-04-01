@@ -178,10 +178,10 @@
               }}</span>
               <div class="flex-shrink-0 w-8 h-8">
                 <img
-                  [src]="post.userAvatar || '/assets/images/default_user.png'"
+                  [src]="post.userAvatar || '/profilePics/unnamed.png'"
                   [alt]="post.userName"
                   class="w-full h-full rounded-full object-cover"
-                  onerror="this.src='assets/images/default_user.png'"
+                  onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
                 />
               </div>
               <span>Posted by {{ post.userName }}</span>
@@ -267,12 +267,10 @@
             }}</span>
             <div class="flex-shrink-0 w-8 h-8">
               <img
-                [src]="
-                  selectedPost.userAvatar || '/assets/images/default_user.png'
-                "
+                [src]="selectedPost.userAvatar || '/profilePics/unnamed.png'"
                 [alt]="selectedPost.userName"
                 class="w-full h-full rounded-full object-cover"
-                onerror="this.src='/profilePics/default_user.png'"
+                onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
               />
             </div>
             <span>Posted by {{ selectedPost.userName }}</span>
@@ -410,9 +408,7 @@
               <div class="flex items-start space-x-2 mb-2">
                 <div class="flex-shrink-0 w-8 h-8">
                   <img
-                    [src]="
-                      comment.userAvatar || '/assets/images/default_user.png'
-                    "
+                    [src]="comment.userAvatar || '/profilePics/unnamed.png'"
                     [alt]="comment.userName"
                     class="w-full h-full rounded-full object-cover"
                     onerror="this.src='/profilePics/default_user.png'"
@@ -484,8 +480,7 @@
                           <div class="flex-shrink-0 w-6 h-6">
                             <img
                               [src]="
-                                reply.userAvatar ||
-                                '/assets/images/default_user.png'
+                                reply.userAvatar || '/profilePics/unnamed.png'
                               "
                               [alt]="reply.userName"
                               class="w-full h-full rounded-full object-cover"
