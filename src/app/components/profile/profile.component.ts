@@ -73,23 +73,25 @@ export class ProfileComponent {
   accountSaved = false;
   accountHasChanges = false;
   pets: {
+    _id?: string;
     id: number;
     name: string;
-    type: string;
+    breed: string;
     gender: string;
     saved: boolean;
     errorMessage?: string;
     originalData?: {
       name: string;
-      type: string;
+      breed: string;
       gender: string;
     };
     hasChanges?: boolean;
+    createdAt?: Date;
   }[] = [
     {
       id: 1,
       name: '',
-      type: '',
+      breed: '',
       gender: '',
       saved: false,
       errorMessage: '',
@@ -98,6 +100,8 @@ export class ProfileComponent {
   ];
   nextPetId = 2;
   purchaseHistory: PurchaseHistory[] = [];
+  historyFilter: string = 'all';
+  filteredPurchaseHistory: PurchaseHistory[] = [];
 
   malaysiaStates: string[] = [
     'Johor',
@@ -331,6 +335,7 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.getUserProduct();
     this.getPurchaseHistory();
+    this.getUserPets();
 
     // Check if there's a tab parameter to switch to a specific tab
     this.route.queryParams.subscribe((params) => {
@@ -524,7 +529,7 @@ export class ProfileComponent {
     // Check if this is a pet field with an ID
     const isPetField =
       fieldName.startsWith('petName') ||
-      fieldName.startsWith('petType') ||
+      fieldName.startsWith('petBreed') ||
       fieldName.startsWith('petGender');
 
     if (isPetField) {
@@ -689,6 +694,39 @@ export class ProfileComponent {
     });
   }
 
+  getUserPets(): void {
+    if (!this.email) {
+      console.error('User email not found in storage');
+      return;
+    }
+
+    this.profileService.getUserPets(this.email).subscribe(
+      (pets) => {
+        if (pets && pets.length > 0) {
+          this.pets = pets.map((pet, index) => ({
+            id: index + 1,
+            _id: pet._id,
+            name: pet.name,
+            breed: pet.breed,
+            gender: pet.gender,
+            saved: true,
+            hasChanges: false,
+            createdAt: pet.createdAt,
+            originalData: {
+              name: pet.name,
+              breed: pet.breed,
+              gender: pet.gender,
+            },
+          }));
+          this.nextPetId = this.pets.length + 1;
+        }
+      },
+      (error) => {
+        console.error('Error fetching pets', error);
+      }
+    );
+  }
+
   checkPetChanges(pet: any): void {
     if (!pet.originalData) {
       pet.hasChanges = !pet.saved; // If no original data, consider changed if not saved
@@ -697,7 +735,7 @@ export class ProfileComponent {
 
     pet.hasChanges =
       pet.name !== pet.originalData.name ||
-      pet.type !== pet.originalData.type ||
+      pet.breed !== pet.originalData.breed ||
       pet.gender !== pet.originalData.gender;
   }
 
@@ -723,7 +761,7 @@ export class ProfileComponent {
     this.pets.push({
       id: this.nextPetId,
       name: '',
-      type: '',
+      breed: '',
       gender: '',
       saved: false,
       errorMessage: '',
@@ -733,6 +771,31 @@ export class ProfileComponent {
   }
 
   removePet(id: number): void {
+    const petToRemove = this.pets.find((p) => p.id === id);
+
+    if (!petToRemove) {
+      return;
+    }
+
+    // If pet has a database ID, delete it from database
+    if (petToRemove._id) {
+      this.profileService.removePet(this.email, petToRemove._id).subscribe(
+        () => {
+          this.performLocalPetRemoval(id);
+          alert(`Pet ${id} has been removed`);
+        },
+        (error) => {
+          console.error('Error removing pet from database', error);
+          alert('Failed to remove pet from database');
+        }
+      );
+    } else {
+      // If not saved to database yet, just remove locally
+      this.performLocalPetRemoval(id);
+    }
+  }
+
+  performLocalPetRemoval(id: number): void {
     if (this.pets.length > 1) {
       this.pets = this.pets.filter((pet) => pet.id !== id);
       alert(`You have removed pet ${id}`);
@@ -753,10 +816,11 @@ export class ProfileComponent {
         {
           id: 1,
           name: '',
-          type: '',
+          breed: '',
           gender: '',
           saved: false,
           errorMessage: '',
+          hasChanges: false,
         },
       ];
       this.nextPetId = 2;
@@ -767,7 +831,6 @@ export class ProfileComponent {
     this.invalidFields.clear();
 
     const pet = this.pets.find((p) => p.id === petId);
-
     if (!pet) {
       return;
     }
@@ -776,15 +839,15 @@ export class ProfileComponent {
 
     // Trim whitespace from string fields to check if they're truly empty
     const petName = pet.name.trim();
-    const petType = pet.type.trim();
+    const petBreed = pet.breed.trim();
 
     let isValid = true;
     if (!petName) {
       this.invalidFields.add('petName' + petId);
       isValid = false;
     }
-    if (!petType) {
-      this.invalidFields.add('petType' + petId);
+    if (!petBreed) {
+      this.invalidFields.add('petBreed' + petId);
       isValid = false;
     }
     if (!pet.gender) {
@@ -798,19 +861,47 @@ export class ProfileComponent {
     }
 
     pet.name = petName;
-    pet.type = petType;
-    pet.saved = true;
-    pet.hasChanges = false;
+    pet.breed = petBreed;
 
-    // Store original data to detect future changes
-    pet.originalData = {
-      name: petName,
-      type: petType,
+    const petData = {
+      name: pet.name,
+      breed: pet.breed,
       gender: pet.gender,
     };
 
-    this.errorPetMessage = '';
-    alert(`Pet ${petId} information saved successfully!`);
+    // If pet has a database ID, update it; otherwise create a new one
+    if (pet._id) {
+      this.profileService.updatePet(this.email, pet._id, petData).subscribe(
+        (response) => {
+          pet.saved = true;
+          pet.hasChanges = false;
+          // Store original data to detect future changes
+          pet.originalData = { ...petData };
+          this.errorPetMessage = '';
+          alert(`Pet ${petId} information updated successfully!`);
+        },
+        (error) => {
+          console.error('Error updating pet', error);
+          pet.errorMessage = 'Failed to update pet information';
+        }
+      );
+    } else {
+      this.profileService.addPet(this.email, petData).subscribe(
+        (response) => {
+          pet._id = response.pet._id;
+          pet.saved = true;
+          pet.hasChanges = false;
+          // Store original data to detect future changes
+          pet.originalData = { ...petData };
+          this.errorPetMessage = '';
+          alert(`Pet ${petId} information saved successfully!`);
+        },
+        (error) => {
+          console.error('Error saving pet', error);
+          pet.errorMessage = 'Failed to save pet information';
+        }
+      );
+    }
   }
 
   navigateToMarket() {
@@ -838,11 +929,49 @@ export class ProfileComponent {
             new Date(a.purchaseDate).getTime()
           );
         });
+        this.filteredPurchaseHistory = [...this.purchaseHistory];
       },
       (error) => {
         console.error('Error fetching purchase history', error);
       }
     );
+  }
+
+  applyHistoryFilter(): void {
+    // First create a copy of the original purchase history
+    let filtered = [...this.purchaseHistory];
+
+    // Apply filters based on selection
+    switch (this.historyFilter) {
+      case 'highToLow':
+        filtered.sort((a, b) => b.totalAmount - a.totalAmount);
+        break;
+      case 'lowToHigh':
+        filtered.sort((a, b) => a.totalAmount - b.totalAmount);
+        break;
+      case 'completed':
+        filtered = filtered.filter((p) => p.status === 'Completed');
+        break;
+      case 'cancelled':
+        filtered = filtered.filter((p) => p.status === 'Cancelled');
+        break;
+      case 'processing':
+        filtered = filtered.filter((p) => p.status === 'Processing');
+        break;
+      default:
+        // 'all' - just keep the default sorting (newest first)
+        filtered.sort(
+          (a, b) =>
+            new Date(b.purchaseDate).getTime() -
+            new Date(a.purchaseDate).getTime()
+        );
+    }
+
+    this.filteredPurchaseHistory = filtered;
+  }
+
+  hasHistoryWithStatus(status: string): boolean {
+    return this.purchaseHistory.some((p) => p.status === status);
   }
 
   formatDate(dateString: string | Date): string {

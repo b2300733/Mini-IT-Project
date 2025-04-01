@@ -147,10 +147,118 @@ const getUserHistory = async (req, res) => {
   }
 };
 
+// Get user pets
+const getUserPets = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user.pets || []);
+  } catch (error) {
+    console.error("Error fetching user pets:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Add a new pet
+const addPet = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const petData = req.body;
+
+    if (!petData.name || !petData.breed || !petData.gender) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.pets.push(petData);
+    await user.save();
+
+    res.status(201).json({
+      message: "Pet added successfully",
+      pet: user.pets[user.pets.length - 1],
+    });
+  } catch (error) {
+    console.error("Error adding pet:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update a pet
+const updatePet = async (req, res) => {
+  try {
+    const { email, petId } = req.params;
+    const updatedPetData = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const petIndex = user.pets.findIndex((pet) => pet._id.toString() === petId);
+    if (petIndex === -1) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    // Update pet fields
+    user.pets[petIndex].name = updatedPetData.name || user.pets[petIndex].name;
+    user.pets[petIndex].breed =
+      updatedPetData.breed || user.pets[petIndex].breed;
+    user.pets[petIndex].gender =
+      updatedPetData.gender || user.pets[petIndex].gender;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Pet updated successfully",
+      pet: user.pets[petIndex],
+    });
+  } catch (error) {
+    console.error("Error updating pet:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Remove a pet
+const removePet = async (req, res) => {
+  try {
+    const { email, petId } = req.params;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const petIndex = user.pets.findIndex((pet) => pet._id.toString() === petId);
+    if (petIndex === -1) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    // Remove the pet from the array
+    user.pets.splice(petIndex, 1);
+    await user.save();
+
+    res.status(200).json({ message: "Pet removed successfully" });
+  } catch (error) {
+    console.error("Error removing pet:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   requestPasswordReset,
   resetPassword,
   updateProfile,
   getlistings,
   getUserHistory,
+  getUserPets,
+  addPet,
+  updatePet,
+  removePet,
 };

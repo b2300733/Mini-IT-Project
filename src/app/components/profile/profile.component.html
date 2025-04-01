@@ -424,24 +424,24 @@
               >
             </div>
             <div class="flex flex-col gap-3">
-              <label [for]="'type' + pet.id">Pet Type</label>
+              <label [for]="'breed' + pet.id">Pet Breed</label>
               <input
                 class="border-1 rounded-sm h-10 px-3 hover-selection"
                 type="text"
-                [id]="'type' + pet.id"
-                [name]="'type' + pet.id"
-                placeholder="What's your pet type?"
-                [(ngModel)]="pet.type"
+                [id]="'breed' + pet.id"
+                [name]="'breed' + pet.id"
+                placeholder="What's your pet breed?"
+                [(ngModel)]="pet.breed"
                 [ngClass]="{
-                  'border-red-500': isFieldInvalid('petType' + pet.id)
+                  'border-red-500': isFieldInvalid('petBreed' + pet.id)
                 }"
                 (ngModelChange)="onPetInfoChange(pet)"
                 required
               />
               <span
-                *ngIf="isFieldInvalid('petType' + pet.id)"
+                *ngIf="isFieldInvalid('petBreed' + pet.id)"
                 class="text-red-500 text-xs leading-0"
-                >Pet Type is required</span
+                >Pet Breed is required</span
               >
             </div>
           </div>
@@ -576,11 +576,33 @@
     *ngIf="selectedTab === 'history'"
     class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
   >
-    <div class="w-full text-center">
-      <h1 class="font-bold text-2xl pt-3">Purchase History</h1>
+    <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
+      <div></div>
+      <h1 class="font-bold text-2xl text-center">Purchase History</h1>
+      <div class="flex justify-end">
+        <select
+          class="w-fit border-1 rounded-lg px-3 cursor-pointer"
+          [(ngModel)]="historyFilter"
+          name="historyFilter"
+          (change)="applyHistoryFilter()"
+        >
+          <option value="all">All</option>
+          <option value="highToLow">High > Low</option>
+          <option value="lowToHigh">Low > High</option>
+          <option value="completed" *ngIf="hasHistoryWithStatus('Completed')">
+            Completed
+          </option>
+          <option value="cancelled" *ngIf="hasHistoryWithStatus('Cancelled')">
+            Cancelled
+          </option>
+          <option value="processing" *ngIf="hasHistoryWithStatus('Processing')">
+            Processing
+          </option>
+        </select>
+      </div>
     </div>
     <div
-      *ngIf="purchaseHistory.length === 0"
+      *ngIf="filteredPurchaseHistory.length === 0"
       class="col-span-full text-center text-gray-500 mt-10"
     >
       No purchase history found.
@@ -588,17 +610,19 @@
 
     <!-- Purchase history list -->
     <div
-      *ngIf="purchaseHistory.length > 0"
+      *ngIf="filteredPurchaseHistory.length > 0"
       class="overflow-auto h-[500px] px-5 py-4"
     >
       <!-- Order card for each purchase entry -->
       <div
-        *ngFor="let purchase of purchaseHistory; let i = index"
+        *ngFor="let purchase of filteredPurchaseHistory; let i = index"
         class="mb-6 border-2 border-dashed border-orange-300 rounded-lg p-4 hover:border-solid hover:border-orange-400 transition-all"
       >
         <div class="flex justify-between items-center mb-3">
           <div>
-            <h3 class="font-bold">Order #{{ purchaseHistory.length - i }}</h3>
+            <h3 class="font-bold">
+              Order #{{ filteredPurchaseHistory.length - i }}
+            </h3>
             <p class="text-sm text-gray-600">
               {{ formatDate(purchase.purchaseDate) }}
             </p>

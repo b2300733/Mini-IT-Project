@@ -49,6 +49,14 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    pets: [
+      {
+        name: String,
+        breed: String,
+        gender: String,
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
