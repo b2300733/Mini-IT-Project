@@ -408,10 +408,12 @@
               <div class="flex items-start space-x-2 mb-2">
                 <div class="flex-shrink-0 w-8 h-8">
                   <img
-                    [src]="comment.userAvatar || '/profilePics/unnamed.png'"
+                    [src]="
+                      comment.userAvatar || 'assets/images/default_user.png'
+                    "
                     [alt]="comment.userName"
                     class="w-full h-full rounded-full object-cover"
-                    onerror="this.src='/profilePics/default_user.png'"
+                    onerror="this.src='assets/images/default_user.png'"
                   />
                 </div>
                 <div class="flex-1 min-w-0">
@@ -480,16 +482,14 @@
                           <div class="flex-shrink-0 w-6 h-6">
                             <img
                               [src]="
-                                reply.userAvatar || '/profilePics/unnamed.png'
+                                reply.userAvatar ||
+                                'assets/images/default_user.png'
                               "
                               [alt]="reply.userName"
                               class="w-full h-full rounded-full object-cover"
-                              onerror="this.src='/profilePics/default_user.png'"
+                              onerror="this.src='assets/images/default_user.png'"
                             />
                           </div>
-                          <span class="text-gray-700 text-xs font-semibold">{{
-                            reply.userName.charAt(0)
-                          }}</span>
                         </div>
                         <div class="flex-1 min-w-0">
                           <!-- Added min-w-0 to allow text wrapping -->

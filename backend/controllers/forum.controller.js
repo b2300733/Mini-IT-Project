@@ -50,14 +50,14 @@ const createPost = async (req, res) => {
 const addComment = async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, userEmail, userName, avatar } = req.body;
+    const { content, userEmail, userName, userAvatar } = req.body; // Changed from avatar to userAvatar
 
     console.log("Adding comment:", {
       postId,
       content,
       userEmail,
       userName,
-      avatar,
+      userAvatar,
     });
 
     const post = await ForumPost.findById(postId);
@@ -75,10 +75,10 @@ const addComment = async (req, res) => {
     });
 
     const newComment = {
-      id: maxId + 1, // Ensure unique ID
+      id: maxId + 1,
       userEmail,
       userName,
-      avatar,
+      userAvatar,
       content,
       timestamp: new Date(),
       replies: [],
@@ -107,15 +107,15 @@ const addComment = async (req, res) => {
 const addReply = async (req, res) => {
   try {
     const { postId, commentId } = req.params;
-    const { content, userEmail, userName, avatar } = req.body;
+    const { content, userEmail, userName, userAvatar } = req.body; // Changed from avatar to userAvatar
 
     console.log("Adding reply:", {
       postId,
       commentId,
       content,
       userName,
-      avatar,
-    }); // Debug log
+      userAvatar,
+    });
 
     const post = await ForumPost.findById(postId);
     if (!post) {
@@ -144,7 +144,7 @@ const addReply = async (req, res) => {
       id: newId,
       userEmail,
       userName,
-      avatar,
+      userAvatar,
       content,
       timestamp: new Date(),
     };

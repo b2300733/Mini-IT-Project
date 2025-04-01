@@ -265,7 +265,7 @@ export class ForumComponent implements OnInit {
 
   submitComment() {
     if (this.commentForm.valid && this.selectedPost) {
-      const avatar =
+      const userAvatar =
         localStorage.getItem('avatar') ||
         sessionStorage.getItem('avatar') ||
         'assets/images/default_user.png';
@@ -274,7 +274,7 @@ export class ForumComponent implements OnInit {
         content: this.commentForm.value.content.trim(),
         userEmail: this.userEmail,
         userName: this.userName,
-        userAvatar: avatar,
+        userAvatar: userAvatar,
       };
 
       console.log('Submitting comment:', comment);
