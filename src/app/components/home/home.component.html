@@ -49,7 +49,7 @@
             src="assets/images/hero-pets.jpg"
             alt="Happy pets"
             class="rounded-2xl shadow-2xl mx-auto w-full object-cover max-h-96 transform hover:scale-[1.02] transition-transform duration-300"
-            onerror="this.src='https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80'"
+            onerror="this.src='https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8MHx8fHx8&auto=format&fit=crop&w=1050&q=80'"
           />
         </div>
       </div>
@@ -122,7 +122,7 @@
             src="assets/images/about-pets.jpg"
             alt="Happy pets with owners"
             class="rounded-lg shadow-lg w-full h-64 md:h-122 object-cover"
-            onerror="this.src='https://images.unsplash.com/photo-1560807707-8cc77767d783?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80'"
+            onerror="this.src='https://images.unsplash.com/photo-1560807707-8cc77767d783?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8MHx8fHx8&auto=format&fit=crop&w=1050&q=80'"
           />
         </div>
       </div>
@@ -494,16 +494,16 @@
             </div>
           </div>
 
-          <div class="p-5 flex-grow" (click)="viewShopProductDetails(product)">
-            <span class="text-xs text-gray-500 block mb-1">{{
-              product.category
-            }}</span>
+          <div class="p-5 flex-grow">
+            <span class="text-xs text-gray-500 block mb-1">
+              {{ product.category }}
+            </span>
             <h3 class="text-lg font-medium text-gray-800 mb-2 line-clamp-2">
               {{ product.productTitle }}
             </h3>
             <div class="flex items-center mb-2">
               <p class="text-red-600 font-bold text-lg">
-                RM{{ product.productPrice.toFixed(2) }}
+                RM{{ formatPrice(product.productPrice) }}
               </p>
             </div>
 
@@ -564,7 +564,7 @@
         fill="currentColor"
       >
         <path
-          d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 5c3.866 0 7 3.134 7 7s-3.134 7-7 7-7-3.134-7-7 3.134-7 7-7z"
+          d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 5c3.866 0 7 3.134 7 7s-3.134 7-7-7-7-3.134-7-7z"
         ></path>
       </svg>
     </div>

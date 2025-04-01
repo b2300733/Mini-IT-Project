@@ -268,13 +268,50 @@ export class ShopproductpageComponent implements OnInit {
 
       // Send update request
       this.http
-        .put(`http://localhost:3000/api/shop/update`, formData)
+        .put<{ message: string; product: any }>(
+          `http://localhost:3000/api/shop/update`,
+          formData
+        )
         .subscribe(
           (response) => {
             alert('Product updated successfully!');
             this.isEditing = false;
-            // Refresh the page to show updated information
-            window.location.reload();
+
+            // Instead of reloading the page, update the URL and product object with new data
+            const updatedProduct = response.product;
+            this.product = {
+              _id: updatedProduct._id,
+              id: updatedProduct._id,
+              title: updatedProduct.productTitle,
+              price: parseFloat(updatedProduct.productPrice),
+              images: updatedProduct.productImg,
+              brand: updatedProduct.productBrand,
+              description: updatedProduct.productDesc,
+              specification: updatedProduct.productSpec,
+              quantity: parseInt(updatedProduct.productQuantity),
+              category: updatedProduct.category,
+              subcategory: updatedProduct.subCategory,
+            };
+
+            // Update URL with new product data
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {
+                _id: this.product._id,
+                name: this.product.title,
+                price: this.product.price,
+                images: this.product.images.join(','),
+                img: this.product.images[0],
+                brand: this.product.brand,
+                description: this.product.description,
+                specification: this.product.specification,
+                category: this.product.category,
+                subcategory: this.product.subcategory,
+                quantity: this.product.quantity,
+              },
+              queryParamsHandling: 'merge',
+              replaceUrl: true,
+            });
           },
           (error) => {
             console.error('Error updating product:', error);

@@ -113,6 +113,7 @@ export class HomeComponent implements OnInit {
       next: (products: ShopProduct[]) => {
         // Get the latest 4 shop products
         this.featuredShopItems = products.slice(0, 4);
+        console.log('Featured Shop Items:', this.featuredShopItems); // Debugging
         this.isShopLoading = false;
       },
       error: (err) => {
@@ -208,8 +209,8 @@ export class HomeComponent implements OnInit {
   viewShopProductDetails(product: ShopProduct): void {
     console.log('Navigating to shop product details:', product._id);
 
-    // Navigate to the product component with all required details
-    this.router.navigate(['/product'], {
+    // Navigate to the shop-product component with all required details
+    this.router.navigate(['/shop-product'], {
       queryParams: {
         _id: product._id,
         name: product.productTitle,
@@ -262,5 +263,11 @@ export class HomeComponent implements OnInit {
     } else {
       return 'Just now';
     }
+  }
+
+  // Price formatting utility method
+  formatPrice(price: any): string {
+    // Convert to number and format to 2 decimal places
+    return parseFloat(price).toFixed(2);
   }
 }
