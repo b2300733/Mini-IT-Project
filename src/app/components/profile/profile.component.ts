@@ -42,6 +42,21 @@ interface PurchaseHistory {
   };
 }
 
+interface SalesItem {
+  productId: string;
+  productTitle: string;
+  productImg: string;
+  quantity: number;
+  price: number;
+  purchaseDate: Date;
+  status: string;
+  buyer: {
+    email: string;
+    contactNo: string;
+    address: string;
+  };
+}
+
 @Component({
   selector: 'app-profile',
   standalone: false,
@@ -286,6 +301,11 @@ export class ProfileComponent {
 
   filteredCities: string[] = [];
 
+  salesHistory: SalesItem[] = [];
+  filteredSalesHistory: SalesItem[] = [];
+  salesFilter: string = 'all';
+  isLoadingSales: boolean = false;
+
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
     '';
@@ -336,6 +356,7 @@ export class ProfileComponent {
     this.getUserProduct();
     this.getPurchaseHistory();
     this.getUserPets();
+    this.getSalesHistory();
 
     // Check if there's a tab parameter to switch to a specific tab
     this.route.queryParams.subscribe((params) => {
@@ -1008,5 +1029,68 @@ export class ProfileComponent {
         img: item.productImg,
       },
     });
+  }
+
+  getSalesHistory(): void {
+    if (!this.email) {
+      console.error('User email not found in storage');
+      return;
+    }
+    this.isLoadingSales = true;
+    this.profileService.getUserSales(this.email).subscribe(
+      (sales) => {
+        this.salesHistory = sales;
+        // Sort sales history from newest to oldest
+        this.salesHistory.sort((a, b) => {
+          return (
+            new Date(b.purchaseDate).getTime() -
+            new Date(a.purchaseDate).getTime()
+          );
+        });
+        this.filteredSalesHistory = [...this.salesHistory];
+        this.isLoadingSales = false;
+      },
+      (error) => {
+        console.error('Error fetching sales history:', error);
+        this.isLoadingSales = false;
+      }
+    );
+  }
+
+  applySalesFilter(): void {
+    switch (this.salesFilter) {
+      case 'all':
+        this.filteredSalesHistory = [...this.salesHistory];
+        break;
+      case 'highToLow':
+        this.filteredSalesHistory = [...this.salesHistory].sort(
+          (a, b) => b.price - a.price
+        );
+        break;
+      case 'lowToHigh':
+        this.filteredSalesHistory = [...this.salesHistory].sort(
+          (a, b) => a.price - b.price
+        );
+        break;
+      case 'completed':
+        this.filteredSalesHistory = this.salesHistory.filter(
+          (item) => item.status === 'Completed'
+        );
+        break;
+      case 'processing':
+        this.filteredSalesHistory = this.salesHistory.filter(
+          (item) => item.status === 'Processing'
+        );
+        break;
+      case 'cancelled':
+        this.filteredSalesHistory = this.salesHistory.filter(
+          (item) => item.status === 'Cancelled'
+        );
+        break;
+    }
+  }
+
+  hasSalesWithStatus(status: string): boolean {
+    return this.salesHistory.some((item) => item.status === status);
   }
 }

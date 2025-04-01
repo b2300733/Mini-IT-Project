@@ -251,6 +251,77 @@ const removePet = async (req, res) => {
   }
 };
 
+const getUserSales = async (req, res) => {
+  try {
+    const email = req.params.email;
+
+    // First, find all products created by this user
+    const userProducts = await Market.find({ userEmail: email });
+
+    if (!userProducts || userProducts.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    const productIds = userProducts.map((product) => product._id.toString());
+
+    // Find all users who have purchased these products
+    const usersWithPurchases = await User.find({
+      "history.items": {
+        $elemMatch: {
+          productId: { $in: productIds },
+        },
+      },
+    });
+
+    // Extract relevant sales data
+    const salesData = [];
+
+    usersWithPurchases.forEach((user) => {
+      user.history.forEach((purchase) => {
+        const relevantItems = purchase.items.filter(
+          (item) =>
+            item.productId && productIds.includes(item.productId.toString())
+        );
+
+        if (relevantItems.length > 0) {
+          relevantItems.forEach((item) => {
+            // Find the original product for additional details
+            const originalProduct = userProducts.find(
+              (p) => p._id.toString() === item.productId.toString()
+            );
+
+            salesData.push({
+              productId: item.productId,
+              productTitle: item.productTitle,
+              productImg: item.productImg,
+              quantity: item.quantity,
+              price: item.price,
+              purchaseDate: purchase.purchaseDate,
+              status: purchase.status,
+              buyer: {
+                email: user.email,
+                contactNo:
+                  purchase.userDetails?.contactNo || user.contactNo || "",
+                address: purchase.userDetails?.address || "",
+              },
+            });
+          });
+        }
+      });
+    });
+
+    // Sort by most recent
+    salesData.sort(
+      (a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate)
+    );
+
+    res.status(200).json(salesData);
+  } catch (error) {
+    console.error("Error getting user sales:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   requestPasswordReset,
   resetPassword,
@@ -261,4 +332,5 @@ module.exports = {
   addPet,
   updatePet,
   removePet,
+  getUserSales,
 };

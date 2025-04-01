@@ -53,4 +53,8 @@ export class ProfileService {
   removePet(email: string, petId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${email}/pets/${petId}`);
   }
+
+  getUserSales(email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/sales/${email}`);
+  }
 }
