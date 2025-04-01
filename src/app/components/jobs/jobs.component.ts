@@ -47,6 +47,9 @@ export class JobsComponent implements OnInit {
   userZip: string = '';
   userCountry: string = '';
 
+  displayLimit: number = 6;
+  hasMoreListings: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private jobsService: JobsService,
@@ -223,8 +226,9 @@ export class JobsComponent implements OnInit {
     this.isLoading = true;
     this.jobsService.getAllJobs().subscribe({
       next: (jobs) => {
-        this.listings = jobs;
         this.originalListings = [...jobs];
+        this.displayLimit = 6;
+        this.filterListings();
         this.isLoading = false;
       },
       error: (err) => {
@@ -237,39 +241,49 @@ export class JobsComponent implements OnInit {
 
   onCategoryChange(event: any): void {
     this.selectedCategory = event.target.value;
+    this.displayLimit = 6;
     this.filterListings();
   }
 
   onLocationSearch(event: any): void {
     this.searchLocation = event.target.value.toLowerCase();
+    this.displayLimit = 6;
     this.filterListings();
   }
 
   private filterListings(): void {
+    let filteredList: JobsListing[] = [];
+
     if (!this.selectedCategory && !this.searchLocation) {
-      this.listings = [...this.originalListings];
-      return;
-    }
-
-    if (this.selectedCategory && !this.searchLocation) {
-      this.jobsService.getJobsByCategory(this.selectedCategory).subscribe({
-        next: (jobs) => {
-          this.listings = jobs;
-        },
-        error: (err) => console.error('Error filtering by category:', err),
+      filteredList = [...this.originalListings];
+    } else if (this.selectedCategory && !this.searchLocation) {
+      filteredList = this.originalListings.filter(
+        (listing) => listing.category === this.selectedCategory
+      );
+    } else {
+      // Client-side filtering for more complex cases
+      filteredList = this.originalListings.filter((listing) => {
+        const matchesCategory =
+          !this.selectedCategory || listing.category === this.selectedCategory;
+        const matchesLocation =
+          !this.searchLocation ||
+          listing.address.toLowerCase().includes(this.searchLocation);
+        return matchesCategory && matchesLocation;
       });
-      return;
     }
 
-    // Client-side filtering for more complex cases
-    this.listings = this.originalListings.filter((listing) => {
-      const matchesCategory =
-        !this.selectedCategory || listing.category === this.selectedCategory;
-      const matchesLocation =
-        !this.searchLocation ||
-        listing.address.toLowerCase().includes(this.searchLocation);
-      return matchesCategory && matchesLocation;
-    });
+    // Check if there are more listings beyond the display limit
+    this.hasMoreListings = filteredList.length > this.displayLimit;
+
+    // Apply the display limit
+    this.listings = filteredList.slice(0, this.displayLimit);
+  }
+
+  loadMoreListings(): void {
+    // Increase the display limit
+    this.displayLimit += 6;
+    // Re-apply the filters with the new limit
+    this.filterListings();
   }
 
   clearFilters(): void {
