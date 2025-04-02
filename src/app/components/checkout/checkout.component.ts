@@ -373,7 +373,7 @@ export class CheckoutComponent {
           alert('Checkout completed successfully!');
         }
 
-        this.router.navigate(['/']);
+        this.router.navigate(['/cart']);
       },
       (error) => {
         this.isProcessing = false;

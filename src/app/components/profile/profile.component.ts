@@ -816,7 +816,16 @@ export class ProfileComponent {
     }
   }
 
+  clearPetValidationErrors(petId: number): void {
+    // Remove all validation errors related to this pet ID
+    this.invalidFields.delete('petName' + petId);
+    this.invalidFields.delete('petBreed' + petId);
+    this.invalidFields.delete('petGender' + petId);
+  }
+
   performLocalPetRemoval(id: number): void {
+    this.clearPetValidationErrors(id);
+
     if (this.pets.length > 1) {
       this.pets = this.pets.filter((pet) => pet.id !== id);
       alert(`You have removed pet ${id}`);
