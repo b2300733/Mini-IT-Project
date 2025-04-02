@@ -3,6 +3,14 @@
     class="border-1 border-gray-400 rounded-xl w-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
   >
     <div class="relative py-6">
+      <a *ngIf="currentStep === 1" routerLink="/login">
+        <button
+          type="button"
+          class="absolute ml-10 top-1/2 transform -translate-y-1/2 cursor-pointer"
+        >
+          <lucide-icon name="chevron-left"></lucide-icon>
+        </button>
+      </a>
       <button
         *ngIf="currentStep === 2"
         type="button"

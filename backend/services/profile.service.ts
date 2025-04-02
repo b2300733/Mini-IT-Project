@@ -57,4 +57,12 @@ export class ProfileService {
   getUserSales(email: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/sales/${email}`);
   }
+
+  verifyCode(email: string, code: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/verify-code`, { email, code });
+  }
+
+  checkAccountType(email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/check-account/${email}`);
+  }
 }
