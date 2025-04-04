@@ -37,6 +37,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { EditproductComponent } from './components/editproduct/editproduct.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { TacComponent } from './components/tac/tac.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     ForumComponent,
     EditproductComponent,
     CheckoutComponent,
+    TacComponent,
   ],
   imports: [
     BrowserModule,

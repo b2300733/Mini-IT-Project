@@ -15,6 +15,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { EditproductComponent } from './components/editproduct/editproduct.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { TacComponent } from './components/tac/tac.component';
 
 const routes: Routes = [
   {
@@ -81,6 +82,10 @@ const routes: Routes = [
   {
     path: 'checkout',
     component: CheckoutComponent,
+  },
+  {
+    path: 'tac',
+    component: TacComponent,
   },
 ];
 

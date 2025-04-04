@@ -430,4 +430,9 @@ export class SignupComponent {
     // Update the input field value to reflect the valid value
     event.target.value = this.zip;
   }
+
+  openTermsAndConditions(event: Event) {
+    event.preventDefault();
+    window.open('/tac', '_blank');
+  }
 }
