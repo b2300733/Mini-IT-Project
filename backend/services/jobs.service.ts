@@ -54,4 +54,8 @@ export class JobsService {
   updateJob(id: string, jobData: JobsListing): Observable<JobsListing> {
     return this.http.put<JobsListing>(`${this.baseUrl}/${id}`, jobData);
   }
+
+  getJobById(id: string): Observable<JobsListing> {
+    return this.http.get<JobsListing>(`${this.baseUrl}/${id}`);
+  }
 }

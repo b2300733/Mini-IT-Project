@@ -2,6 +2,10 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommunitymarketService } from '../../../../backend/services/communitymarket.service';
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 interface Product {
   _id: string;
@@ -88,7 +92,8 @@ export class CommunitymarketComponent {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private communitymarketService: CommunitymarketService
+    private communitymarketService: CommunitymarketService,
+    private cartService: CartService
   ) {
     this.listingForm = this.fb.group({
       title: ['', Validators.required],
@@ -283,6 +288,52 @@ export class CommunitymarketComponent {
 
   hasMoreProducts(): boolean {
     return this.currentPage * this.productsPerPage < this.products.length;
+  }
+
+  addToCart(product: Product, event?: Event): void {
+    // Prevent navigation to product page if clicked on Add to Cart button
+    if (event) {
+      event.stopPropagation();
+    }
+
+    // Check if user is logged in
+    if (!this.isLoggedIn()) {
+      alert('Please login first to add items to cart');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const cartItem: CartItem = {
+      productImg: product.productImg?.[0],
+      productTitle: product.productTitle,
+      quantity: 1,
+      price: product.productPrice,
+      productId: product._id,
+    };
+
+    this.cartService.addToCart(cartItem);
+    alert(`${product.productTitle} added to cart!`);
+  }
+
+  isCurrentUserProduct(product: Product): boolean {
+    const currentUserEmail =
+      localStorage.getItem('email') || sessionStorage.getItem('email') || '';
+    return product.userEmail === currentUserEmail;
+  }
+
+  editProduct(product: Product, event?: Event): void {
+    // Prevent navigation to product details page
+    if (event) {
+      event.stopPropagation();
+    }
+
+    console.log('Editing product with ID:', product._id);
+
+    this.router.navigate(['/edit-product'], {
+      queryParams: {
+        id: product._id,
+      },
+    });
   }
 
   // Listing form methods

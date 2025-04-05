@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import {
   JobsService,
   JobsListing,
@@ -53,7 +54,8 @@ export class JobsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private jobsService: JobsService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute
   ) {
     // Get user data from storage
     this.userEmail =
@@ -220,6 +222,22 @@ export class JobsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['editService'] === 'true' && params['serviceId']) {
+        // Fetch the specific service to edit
+        this.jobsService.getJobById(params['serviceId']).subscribe({
+          next: (job) => {
+            if (job) {
+              this.editListing(job);
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching job to edit:', err);
+          },
+        });
+      }
+    });
   }
 
   loadJobs(): void {

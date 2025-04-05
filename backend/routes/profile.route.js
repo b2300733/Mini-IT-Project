@@ -12,6 +12,7 @@ const {
   updatePet,
   removePet,
   getUserSales,
+  getUserServices,
 } = require("../controllers/profile.controller");
 
 const router = express.Router();
@@ -28,5 +29,6 @@ router.post("/:email/pets", addPet);
 router.put("/:email/pets/:petId", updatePet);
 router.delete("/:email/pets/:petId", removePet);
 router.get("/sales/:email", getUserSales);
+router.get("/:email/services", getUserServices);
 
 module.exports = router;

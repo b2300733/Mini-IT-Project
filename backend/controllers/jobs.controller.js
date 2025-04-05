@@ -105,6 +105,22 @@ const updateJob = async (req, res) => {
   }
 };
 
+const getJobById = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    res.status(200).json(job);
+  } catch (error) {
+    console.error("Error fetching job by ID:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllJobs,
   getJobsByCategory,
@@ -112,4 +128,5 @@ module.exports = {
   createJob,
   deleteJob,
   updateJob,
+  getJobById,
 };

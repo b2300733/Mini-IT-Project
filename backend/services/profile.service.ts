@@ -65,4 +65,8 @@ export class ProfileService {
   checkAccountType(email: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/check-account/${email}`);
   }
+
+  getUserServiceListings(email: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${email}/services`);
+  }
 }

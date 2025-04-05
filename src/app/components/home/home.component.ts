@@ -138,8 +138,7 @@ export class HomeComponent implements OnInit {
     }
 
     const cartItem: CartItem = {
-      productImg:
-        product.productImg?.[0] || 'assets/images/no-product-image.jpg',
+      productImg: product.productImg?.[0],
       productTitle: product.productTitle,
       quantity: 1,
       price: product.productPrice,
@@ -164,7 +163,7 @@ export class HomeComponent implements OnInit {
     }
 
     const cartItem: CartItem = {
-      productImg: item.productImg?.[0] || 'assets/images/no-product-image.jpg',
+      productImg: item.productImg?.[0],
       productTitle: item.productTitle,
       quantity: 1,
       price: parseFloat(item.productPrice),
@@ -232,6 +231,34 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/market']);
   }
 
+  editMarketItem(item: any, event?: Event): void {
+    // Prevent event bubbling if event is provided
+    if (event) {
+      event.stopPropagation();
+    }
+
+    // Check if user is logged in
+    if (!this.isLoggedIn()) {
+      alert('Please login first to edit your items');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Verify user is the owner
+    if (item.userEmail !== this.userEmail) {
+      alert('You can only edit your own items');
+      return;
+    }
+
+    // Navigate to edit product page with product ID
+    console.log('Editing product with ID:', item._id);
+    this.router.navigate(['/edit-product'], {
+      queryParams: {
+        id: item._id,
+      },
+    });
+  }
+
   navigateToShop(): void {
     console.log('Navigating to shop');
     this.router.navigate(['/products']);
@@ -269,5 +296,22 @@ export class HomeComponent implements OnInit {
   formatPrice(price: any): string {
     // Convert to number and format to 2 decimal places
     return parseFloat(price).toFixed(2);
+  }
+
+  handleSignupClick(event: Event): void {
+    event.preventDefault();
+
+    if (this.isLoggedIn()) {
+      alert('You are already logged in.');
+    } else {
+      this.router.navigate(['/signup']);
+    }
+  }
+
+  navigateToProfileServiceListings(event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/profile'], {
+      queryParams: { tab: 'serviceListings' },
+    });
   }
 }

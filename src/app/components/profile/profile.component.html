@@ -55,9 +55,17 @@
         <div class="w-full flex justify-center items-center font-[600] text-xl">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
+            (click)="selectedTab = 'serviceListings'"
+          >
+            Service Listings
+          </button>
+        </div>
+        <div class="w-full flex justify-center items-center font-[600] text-xl">
+          <button
+            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'listings'"
           >
-            Listings
+            Item Listings
           </button>
         </div>
         <div class="w-full flex justify-center items-center font-[600] text-xl">
@@ -405,7 +413,7 @@
         </div>
 
         <div
-          class="grid grid-cols-2 gap-3 mx-10 rounded-sm pb-1.5 border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400"
+          class="grid grid-cols-2 gap-3 mx-10 rounded-sm pb-1.5 border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 hover:shadow-xl transition-all duration-300 transform"
         >
           <!-- grid grid-cols-2 gap-3 border-2 border-dashed border-gray-400 mx-10 rounded-sm pb-1.5 hover:border-orange-300 -->
 
@@ -517,6 +525,133 @@
     </div>
   </form>
 
+  <!--Job Listings Tabs-------------------------------------------------------------------------------------------------------->
+  <form
+    *ngIf="selectedTab === 'serviceListings'"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+  >
+    <div class="grid grid-cols-3 items-center mt-3 px-7">
+      <div></div>
+      <h1 class="font-bold text-center text-2xl">Service Listings</h1>
+      <div class="flex justify-end">
+        <button
+          class="bg-orange-300 rounded-lg px-3 cursor-pointer hover:bg-orange-400 ease-in-out duration-300"
+          (click)="navigateToJobs()"
+        >
+          Add service
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="userServices.length === 0"
+      class="col-span-full text-center text-gray-500 mt-10"
+    >
+      No services found.
+    </div>
+
+    <div
+      *ngIf="userServices.length > 0"
+      class="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-auto h-[500px] px-5 pt-1"
+    >
+      <!-- Individual Service Card -->
+      <div
+        *ngFor="let service of userServices"
+        class="bg-white p-6 shadow relative overflow-clip rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 flex flex-col h-full"
+      >
+        <!-- Category badge -->
+        <div class="absolute top-0 right-0">
+          <span
+            class="px-3 py-1 bg-red-500 text-white rounded-bl-xl font-medium text-sm"
+          >
+            {{ service.category }}
+          </span>
+        </div>
+
+        <!-- Service details -->
+        <div class="mb-6 mt-2">
+          <h3 class="text-xl font-bold text-gray-800 mb-2">
+            {{ service.title }}
+          </h3>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-green-600 font-semibold"
+              >RM{{ service.hourRate }}/hr</span
+            >
+          </div>
+
+          <div class="flex items-center gap-2 mb-1">
+            <svg
+              class="w-4 h-4 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <span class="text-gray-700 text-sm">{{ service.address }}</span>
+          </div>
+
+          <div class="flex items-center mb-2">
+            <svg
+              class="w-4 h-4 text-gray-500 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              />
+            </svg>
+            <span class="text-gray-700 text-sm">{{ service.petType }}</span>
+          </div>
+        </div>
+
+        <!-- Notes section -->
+        <div class="bg-gray-50 p-3 rounded-lg mb-4">
+          <p class="text-sm font-medium text-gray-500 mb-1">Notes</p>
+          <p class="text-gray-800 text-sm">{{ service.note }}</p>
+        </div>
+
+        <!-- Action button -->
+        <div class="flex justify-end mt-auto">
+          <button
+            (click)="editService(service)"
+            class="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2 cursor-pointer transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+            Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
   <!--Listings Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'listings'"
@@ -524,7 +659,7 @@
   >
     <div class="grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
-      <h1 class="font-bold text-center text-2xl">My Listings</h1>
+      <h1 class="font-bold text-center text-2xl">Item Listings</h1>
       <div class="flex justify-end">
         <button
           class="bg-orange-300 rounded-lg px-3 cursor-pointer hover:bg-orange-400 ease-in-out duration-300"
@@ -541,14 +676,14 @@
       No products found.
     </div>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 overflow-auto h-[500px] px-5"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 overflow-auto h-[500px] px-5 pt-1"
     >
       <div
         *ngFor="let product of userProducts"
-        class="rounded-lg h-full p-6 hover:shadow-lg transition duration-300 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400"
+        class="bg-white rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 flex flex-col h-full"
         (click)="navigateToProduct(product)"
       >
-        <div class="flex flex-row gap-2 items-center pb-2">
+        <div class="flex flex-row gap-2 items-center px-5 py-2">
           <img
             class="w-9 h-9 rounded-full"
             [src]="product?.userAvatar"
@@ -566,24 +701,41 @@
         </div>
 
         <img
-          class="w-full h-48 object-cover rounded-xl"
+          class="w-full h-48 object-cover"
           [src]="product?.productImg?.[0]"
           [alt]="product?.productTitle"
         />
-        <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
-          {{ product?.productTitle }}
-        </h3>
-        <p class="text-gray-600 text-left">RM{{ product?.productPrice }}</p>
-        <p class="text-gray-600 text-left">{{ product?.condition }}</p>
-        <p *ngIf="product.productQuantity > 0" class="text-gray-600 text-sm">
-          Quantity: {{ product.productQuantity }}
-        </p>
-        <p
-          *ngIf="product.productQuantity <= 0"
-          class="text-red-500 text-sm font-medium"
-        >
-          Out of Stock
-        </p>
+
+        <div class="p-5 flex flex-col h-full">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2 text-left">
+            {{ product?.productTitle }}
+          </h3>
+          <p class="text-red-600 font-bold text-lg">
+            RM{{ product?.productPrice }}
+          </p>
+          <p class="text-gray-600 text-left">{{ product?.condition }}</p>
+          <p
+            *ngIf="product.productQuantity > 0"
+            class="text-gray-600 text-s mb-3"
+          >
+            Quantity: {{ product.productQuantity }}
+          </p>
+          <p
+            *ngIf="product.productQuantity <= 0"
+            class="text-red-500 text-sm font-medium mb-3"
+          >
+            Out of Stock
+          </p>
+
+          <div class="mt-auto">
+            <button
+              class="w-full bg-blue-500 text-white py-2.5 px-4 rounded-lg hover:bg-blue-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+              (click)="editProduct(product)"
+            >
+              Edit Item
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </form>
@@ -641,7 +793,7 @@
       <!-- Sales card for each entry -->
       <div
         *ngFor="let sale of filteredSalesHistory; let i = index"
-        class="mb-6 border-2 border-dashed border-blue-300 rounded-lg p-4 hover:border-solid hover:border-blue-400 transition-all"
+        class="mb-6 border-2 border-dashed border-orange-300 rounded-lg p-4 hover:border-solid hover:border-orange-400 hover:shadow-xl transition-all duration-300 transform"
       >
         <div class="flex justify-between items-center mb-3">
           <div>
@@ -751,7 +903,7 @@
       <!-- Order card for each purchase entry -->
       <div
         *ngFor="let purchase of filteredPurchaseHistory; let i = index"
-        class="mb-6 border-2 border-dashed border-orange-300 rounded-lg p-4 hover:border-solid hover:border-orange-400 transition-all"
+        class="mb-6 border-2 border-dashed border-orange-300 rounded-lg p-4 hover:border-solid hover:border-orange-400 hover:shadow-xl transition-all duration-300 transform"
       >
         <div class="flex justify-between items-center mb-3">
           <div>
@@ -782,7 +934,6 @@
           <div
             *ngFor="let item of purchase.items"
             class="flex items-center mb-3 py-2 border-b border-gray-100 last:border-b-0"
-            (click)="navigateToShopProduct(item)"
           >
             <div
               class="w-16 h-16 bg-gray-100 rounded mr-4 flex-shrink-0 overflow-hidden"
@@ -795,7 +946,7 @@
               />
             </div>
             <div class="flex-grow">
-              <h4 class="font-medium">{{ item.productTitle }}</h4>
+              <h4 class="font-medium w-180">{{ item.productTitle }}</h4>
               <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
             </div>
             <div class="text-right font-medium">RM{{ item.price }}</div>

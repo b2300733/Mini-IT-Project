@@ -306,6 +306,8 @@ export class ProfileComponent {
   salesFilter: string = 'all';
   isLoadingSales: boolean = false;
 
+  userServices: any[] = [];
+
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
     '';
@@ -357,6 +359,7 @@ export class ProfileComponent {
     this.getPurchaseHistory();
     this.getUserPets();
     this.getSalesHistory();
+    this.getUserServices();
 
     // Check if there's a tab parameter to switch to a specific tab
     this.route.queryParams.subscribe((params) => {
@@ -705,12 +708,31 @@ export class ProfileComponent {
         condition: product.condition,
         quantity: product.productQuantity,
         img: product.productImg[0],
+        images: product.productImg.join(','),
         user: product.username,
         email: product.userEmail,
         avatar: product.userAvatar,
         description: product.productDesc,
         category: product.category,
         deliveryOptions: product.deliveryOpt?.join(','),
+      },
+    });
+  }
+
+  editProduct(product: any): void {
+    const productId = product._id;
+
+    if (!productId) {
+      console.error('Cannot edit product: missing product ID');
+      alert('Error: Cannot edit this product because the ID is missing');
+      return;
+    }
+
+    // Navigate to edit product page with the product ID
+    console.log('Editing product with ID:', productId);
+    this.router.navigate(['/edit-product'], {
+      queryParams: {
+        id: productId,
       },
     });
   }
@@ -1022,24 +1044,6 @@ export class ProfileComponent {
     );
   }
 
-  navigateToShopProduct(item: any): void {
-    // Check if the item has a productId
-    if (!item.productId) {
-      console.error('Cannot navigate: missing product ID');
-      return;
-    }
-
-    // Navigate to shop product page with the product ID
-    this.router.navigate(['/shop-product'], {
-      queryParams: {
-        _id: item.productId,
-        name: item.productTitle,
-        price: item.price / item.quantity, // Calculate single item price
-        img: item.productImg,
-      },
-    });
-  }
-
   getSalesHistory(): void {
     if (!this.email) {
       console.error('User email not found in storage');
@@ -1101,5 +1105,36 @@ export class ProfileComponent {
 
   hasSalesWithStatus(status: string): boolean {
     return this.salesHistory.some((item) => item.status === status);
+  }
+
+  getUserServices(): void {
+    if (!this.email) {
+      console.error('User email not found in storage');
+      return;
+    }
+
+    this.profileService.getUserServiceListings(this.email).subscribe({
+      next: (services) => {
+        this.userServices = services;
+        console.log('Fetched user services:', services);
+      },
+      error: (error) => {
+        console.error('Error fetching services', error);
+      },
+    });
+  }
+
+  navigateToJobs(): void {
+    this.router.navigate(['/jobs']);
+  }
+
+  editService(service: any): void {
+    // Navigate to jobs page with query parameters to trigger edit mode
+    this.router.navigate(['/jobs'], {
+      queryParams: {
+        editService: 'true',
+        serviceId: service._id,
+      },
+    });
   }
 }

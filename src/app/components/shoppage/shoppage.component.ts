@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ShopService } from '../../../../backend/services/shop.service';
 import { HttpClient } from '@angular/common/http';
+import {
+  CartService,
+  CartItem,
+} from '../../../../backend/services/cart.service';
 
 interface ShopProduct {
   _id: string;
@@ -71,7 +75,8 @@ export class ShoppageComponent {
     private router: Router,
     private fb: FormBuilder,
     private shopService: ShopService,
-    private http: HttpClient
+    private http: HttpClient,
+    private cartService: CartService
   ) {
     this.productForm = this.fb.group({
       brand: ['', Validators.required],
@@ -398,5 +403,49 @@ export class ShoppageComponent {
 
   isAdmin(): boolean {
     return this.isAdminUser;
+  }
+
+  // Add to cart functionality
+  addToCart(product: ShopProduct, event?: Event): void {
+    // Prevent navigation to product page if clicked on Add to Cart button
+    if (event) {
+      event.stopPropagation();
+    }
+
+    // Check if user is logged in
+    if (!this.isLoggedIn()) {
+      alert('Please login first to add items to cart');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Check if product is in stock
+    if (!this.isProductInStock(product)) {
+      alert('Sorry, this item is out of stock.');
+      return;
+    }
+
+    const cartItem: CartItem = {
+      productImg: product.productImg[0] || 'assets/images/no-product-image.jpg',
+      productTitle: product.productTitle,
+      quantity: 1,
+      price: product.productPrice,
+      shopProductId: product._id,
+    };
+
+    this.cartService.addToCart(cartItem);
+    alert(`${product.productTitle} added to cart!`);
+  }
+
+  // Function to check if product is in stock
+  isProductInStock(product: ShopProduct): boolean {
+    return product.productQuantity > 0;
+  }
+
+  isLoggedIn(): boolean {
+    return (
+      !!localStorage.getItem('authToken') ||
+      !!sessionStorage.getItem('authToken')
+    );
   }
 }

@@ -13,11 +13,9 @@
   </ul>
   <div class="flex gap-3 flex-1 justify-end pr-3">
     <div class="flex">
-      <lucide-icon
-        name="shopping-cart"
-        routerLink="/cart"
-        class="cursor-pointer"
-      ></lucide-icon>
+      <a href="/cart"
+        ><lucide-icon name="shopping-cart" class="cursor-pointer"></lucide-icon
+      ></a>
 
       <span *ngIf="getTotalItems() > 0" class="pl-1">{{
         getTotalItems()

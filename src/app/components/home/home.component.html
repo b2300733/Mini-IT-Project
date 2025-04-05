@@ -177,7 +177,7 @@
       >
         <div
           *ngFor="let service of featuredServices"
-          class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full border border-gray-100"
+          class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 flex flex-col h-full"
         >
           <div class="p-6 flex-grow">
             <div class="flex justify-between items-start mb-4">
@@ -245,16 +245,16 @@
             <a
               *ngIf="service.userEmail !== userEmail"
               href="https://wa.me/{{ service.phoneNumber }}"
-              class="block text-center bg-red-500 text-white py-3 px-4 rounded-xl hover:bg-red-600 transition-colors shadow-md hover:shadow-lg"
+              class="block text-center bg-red-500 text-white py-3 px-4 rounded-xl hover:bg-red-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
-              Contact Provider
+              Contact Pet Owner
             </a>
             <a
               *ngIf="service.userEmail === userEmail"
-              routerLink="/jobs"
-              class="block text-center bg-blue-500 text-white py-3 px-4 rounded-xl hover:bg-blue-600 transition-colors shadow-md hover:shadow-lg"
+              (click)="navigateToProfileServiceListings($event)"
+              class="block text-center bg-blue-500 text-white py-3 px-4 rounded-xl hover:bg-blue-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer"
             >
-              Manage Your Listing
+              Manage Your Listings
             </a>
           </div>
         </div>
@@ -310,7 +310,7 @@
       >
         <div
           *ngFor="let item of featuredMarketItems"
-          class="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+          class="bg-white rounded-xl overflow-hidden border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer"
         >
           <!-- Product Image -->
           <div
@@ -325,16 +325,7 @@
               "
               [alt]="item.productTitle"
               class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-              onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'"
             />
-
-            <div class="absolute top-2 right-2">
-              <span
-                class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded-full"
-              >
-                {{ item.condition }}
-              </span>
-            </div>
           </div>
 
           <!-- Product Info -->
@@ -346,12 +337,20 @@
               <span *ngIf="item.subCategory">- {{ item.subCategory }}</span>
             </span>
 
-            <h3 class="text-lg font-medium text-gray-800 mb-2 line-clamp-2">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
               {{ item.productTitle }}
             </h3>
 
-            <p class="text-red-600 font-bold text-lg mb-3">
+            <p class="text-red-600 font-bold text-lg">
               RM{{ item.productPrice }}
+            </p>
+            <p class="text-gray-600">{{ item.condition }}</p>
+
+            <p
+              *ngIf="item.productQuantity > 0"
+              class="text-gray-600 text-sm mb-3"
+            >
+              Quantity: {{ item.productQuantity }}
             </p>
 
             <div class="flex items-center text-xs text-gray-500 mb-1">
@@ -394,6 +393,29 @@
           <!-- Action Button -->
           <div class="p-5 pt-0 mt-auto">
             <button
+              *ngIf="item.userEmail === userEmail"
+              (click)="editMarketItem(item, $event)"
+              class="w-full text-center bg-blue-500 text-white py-2.5 px-4 rounded-xl hover:bg-blue-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+              Edit Item
+            </button>
+
+            <button
+              *ngIf="item.userEmail !== userEmail"
               (click)="addMarketItemToCart(item, $event)"
               class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
             >
@@ -467,7 +489,7 @@
       >
         <div
           *ngFor="let product of featuredShopItems"
-          class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+          class="bg-white rounded-xl overflow-hidden border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer"
         >
           <div
             class="relative overflow-hidden"
@@ -494,11 +516,11 @@
             </div>
           </div>
 
-          <div class="p-5 flex-grow">
+          <div class="p-5 flex-grow" (click)="viewShopProductDetails(product)">
             <span class="text-xs text-gray-500 block mb-1">
               {{ product.category }}
             </span>
-            <h3 class="text-lg font-medium text-gray-800 mb-2 line-clamp-2">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
               {{ product.productTitle }}
             </h3>
             <div class="flex items-center mb-2">
@@ -511,14 +533,14 @@
               <span
                 class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
               >
-                {{ product.productQuantity }} in stock
+                Quantity: {{ product.productQuantity }}
               </span>
             </div>
           </div>
 
           <div class="p-5 pt-0 mt-auto">
             <button
-              class="w-full bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
               (click)="addToCart(product, $event)"
             >
               <svg
@@ -580,7 +602,7 @@
         </p>
         <div class="flex flex-wrap justify-center gap-6">
           <a
-            routerLink="/signup"
+            (click)="handleSignupClick($event)"
             class="bg-white text-orange-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             Sign Up Now

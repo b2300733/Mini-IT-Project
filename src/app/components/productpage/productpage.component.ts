@@ -224,7 +224,7 @@ export class ProductpageComponent implements OnInit {
     if (userEmail) {
       this.cartService.addToCart(cartItem);
       console.log('Added to cart:', cartItem);
-      alert('Item added to cart successfully!');
+      alert(`${this.product.title} added to cart!`);
     } else {
       // This shouldn't happen if isLoggedIn() returns true, but just in case
       alert('Error: User email not found. Please log in again.');

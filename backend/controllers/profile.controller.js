@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const Market = require("../models/communitymarket.model");
+const Job = require("../models/jobs.model");
 
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer"); //ONLY SUPPORT GMAIL
@@ -374,6 +375,25 @@ const getUserSales = async (req, res) => {
   }
 };
 
+const getUserServices = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const services = await Job.find({ userEmail: email }).sort({
+      createdAt: -1,
+    });
+
+    if (!services) {
+      return res.status(200).json([]);
+    }
+
+    res.status(200).json(services);
+  } catch (error) {
+    console.error("Error fetching user services:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   requestPasswordReset,
   resetPassword,
@@ -387,4 +407,5 @@ module.exports = {
   updatePet,
   removePet,
   getUserSales,
+  getUserServices,
 };
