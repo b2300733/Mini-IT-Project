@@ -308,6 +308,31 @@ export class ProfileComponent {
 
   userServices: any[] = [];
 
+  // Analysis properties
+  analysisPeriod: string = 'all';
+  analysisPeriodLabel: string = 'All Time';
+  isLoadingAnalysis: boolean = false;
+
+  // Summary metrics
+  totalSalesCount: number = 0;
+  totalRevenue: number = 0;
+  netIncome: number = 0;
+  commissionPaid: number = 0;
+  salesGrowth: number = 0;
+  revenueGrowth: number = 0;
+
+  // Sales by status
+  statusCounts: { [key: string]: number } = {
+    Completed: 0,
+    Processing: 0,
+    Cancelled: 0,
+  };
+
+  topProducts: { title: string; unitsSold: number; revenue: number }[] = [];
+  averageOrderValue: number = 0;
+  inventoryValue: number = 0;
+  totalInventoryItems: number = 0;
+
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
     '';
@@ -375,6 +400,10 @@ export class ProfileComponent {
       this.filteredCities = this.malaysianCities[this.state] || [];
       console.log('State from storage:', this.state);
       console.log('Filtered cities:', this.filteredCities);
+    }
+
+    if (this.selectedTab === 'analysis') {
+      this.updateAnalytics();
     }
   }
 
@@ -1136,5 +1165,167 @@ export class ProfileComponent {
         serviceId: service._id,
       },
     });
+  }
+
+  // Add this to your ngOnInit or where appropriate
+  updateAnalytics(): void {
+    this.isLoadingAnalysis = true;
+
+    if (this.salesHistory.length === 0 && !this.isLoadingSales) {
+      this.getSalesHistory();
+
+      setTimeout(() => {
+        this.updateAnalytics();
+      }, 300);
+      return;
+    }
+
+    // Update the period label
+    switch (this.analysisPeriod) {
+      case 'month':
+        this.analysisPeriodLabel = 'This Month';
+        break;
+      case 'quarter':
+        this.analysisPeriodLabel = 'Last 3 Months';
+        break;
+      case 'year':
+        this.analysisPeriodLabel = 'This Year';
+        break;
+      default:
+        this.analysisPeriodLabel = 'All Time';
+    }
+
+    // Filter sales data based on selected period
+    const filteredSales = this.filterSalesByPeriod(
+      this.salesHistory,
+      this.analysisPeriod
+    );
+
+    // Calculate metrics
+    this.calculateSummaryMetrics(filteredSales);
+    this.calculateStatusMetrics(filteredSales);
+    this.calculateTopProducts(filteredSales);
+    this.calculateInventoryValue();
+
+    this.isLoadingAnalysis = false;
+  }
+
+  filterSalesByPeriod(sales: any[], period: string): any[] {
+    if (!sales || sales.length === 0) return [];
+    if (period === 'all') return sales;
+
+    const now = new Date();
+    const filtered = sales.filter((sale) => {
+      const saleDate = new Date(sale.purchaseDate);
+
+      switch (period) {
+        case 'month':
+          return (
+            saleDate.getMonth() === now.getMonth() &&
+            saleDate.getFullYear() === now.getFullYear()
+          );
+
+        case 'quarter':
+          const threeMonthsAgo = new Date();
+          threeMonthsAgo.setMonth(now.getMonth() - 3);
+          return saleDate >= threeMonthsAgo;
+
+        case 'year':
+          return saleDate.getFullYear() === now.getFullYear();
+
+        default:
+          return true;
+      }
+    });
+
+    return filtered;
+  }
+
+  calculateSummaryMetrics(filteredSales: any[]): void {
+    // Calculate total sales count
+    this.totalSalesCount = filteredSales.length;
+
+    // Calculate total revenue
+    this.totalRevenue = filteredSales.reduce((total, sale) => {
+      return total + sale.price * sale.quantity;
+    }, 0);
+
+    this.commissionPaid = this.totalRevenue * 0.1;
+    this.netIncome = this.totalRevenue - this.commissionPaid;
+
+    this.salesGrowth = 0;
+    this.revenueGrowth = 0;
+
+    this.averageOrderValue =
+      this.totalSalesCount > 0 ? this.totalRevenue / this.totalSalesCount : 0;
+  }
+
+  calculateStatusMetrics(filteredSales: any[]): void {
+    this.statusCounts = {
+      Completed: 0,
+      Processing: 0,
+      Cancelled: 0,
+    };
+
+    filteredSales.forEach((sale) => {
+      if (this.statusCounts[sale.status] !== undefined) {
+        this.statusCounts[sale.status]++;
+      }
+    });
+  }
+
+  getStatusCount(status: string): number {
+    return this.statusCounts[status] || 0;
+  }
+
+  getStatusPercentage(status: string): number {
+    if (this.totalSalesCount === 0) return 0;
+    return Math.round(
+      ((this.statusCounts[status] || 0) / this.totalSalesCount) * 100
+    );
+  }
+
+  calculateTopProducts(filteredSales: any[]): void {
+    // Group sales by product and calculate units sold and revenue
+    const productMap = new Map();
+
+    filteredSales.forEach((sale) => {
+      const key = sale.productTitle;
+      if (!productMap.has(key)) {
+        productMap.set(key, {
+          title: sale.productTitle,
+          unitsSold: sale.quantity,
+          revenue: sale.price * sale.quantity,
+        });
+      } else {
+        const product = productMap.get(key);
+        product.unitsSold += sale.quantity;
+        product.revenue += sale.price * sale.quantity;
+        productMap.set(key, product);
+      }
+    });
+
+    // Convert map to array and sort by revenue
+    this.topProducts = Array.from(productMap.values())
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 5); // Get top 5 products
+  }
+
+  calculateInventoryValue(): void {
+    this.inventoryValue = this.userProducts.reduce((total, product) => {
+      return total + product.productPrice * product.productQuantity;
+    }, 0);
+
+    this.totalInventoryItems = this.userProducts.reduce((total, product) => {
+      return total + product.productQuantity;
+    }, 0);
+  }
+
+  onTabChange(tab: string): void {
+    this.selectedTab = tab;
+
+    if (tab === 'analysis') {
+      this.updateAnalytics();
+    }
   }
 }

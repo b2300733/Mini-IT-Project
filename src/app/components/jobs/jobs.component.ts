@@ -70,28 +70,17 @@ export class JobsComponent implements OnInit {
     console.log('Available localStorage keys:', Object.keys(localStorage));
 
     this.userState =
-      localStorage.getItem('state') ||
-      localStorage.getItem('State') ||
-      localStorage.getItem('user_state') ||
-      '';
+      localStorage.getItem('state') || sessionStorage.getItem('state') || '';
 
     this.userCity =
-      localStorage.getItem('city') ||
-      localStorage.getItem('City') ||
-      localStorage.getItem('user_city') ||
-      '';
+      localStorage.getItem('city') || sessionStorage.getItem('city') || '';
 
     this.userZip =
-      localStorage.getItem('zip') ||
-      localStorage.getItem('Zip') ||
-      localStorage.getItem('zipCode') ||
-      localStorage.getItem('postalCode') ||
-      '';
+      localStorage.getItem('zip') || sessionStorage.getItem('zip') || '';
 
     this.userCountry =
       localStorage.getItem('country') ||
-      localStorage.getItem('Country') ||
-      localStorage.getItem('user_country') ||
+      sessionStorage.getItem('country') ||
       '';
 
     // Log what we found

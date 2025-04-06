@@ -2,19 +2,52 @@
   class="bg-orange-300 h-12 border-t-2 flex items-center justify-between relative"
 >
   <ul
-    class="flex gap-4 text-xl font-[600] leading-none absolute left-1/2 transform -translate-x-1/2"
+    class="flex gap-4 text-lg font-[600] leading-none absolute left-1/2 transform -translate-x-1/2"
   >
-    <li><a routerLink="/home">Home</a></li>
-    <li><a routerLink="/jobs">Jobs/Services</a></li>
-    <li><a routerLink="/market">Community Market</a></li>
-    <li><a routerLink="/products">Products</a></li>
-    <li><a routerLink="/forum">Forum</a></li>
+    <li>
+      <a
+        routerLink="/home"
+        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+        >Home</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/jobs"
+        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+        >Jobs/Services</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/market"
+        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+        >Community Market</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/products"
+        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+        >Products</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/forum"
+        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+        >Forum</a
+      >
+    </li>
     <!-- <lucide-icon name="search" class="cursor-pointer"></lucide-icon> -->
   </ul>
   <div class="flex gap-3 flex-1 justify-end pr-3">
     <div class="flex">
       <a href="/cart"
-        ><lucide-icon name="shopping-cart" class="cursor-pointer"></lucide-icon
+        ><lucide-icon
+          name="shopping-cart"
+          class="cursor-pointer hover:text-red-500 hover:scale-125 transition-transform duration-200"
+        ></lucide-icon
       ></a>
 
       <span *ngIf="getTotalItems() > 0" class="pl-1">{{
@@ -26,7 +59,7 @@
         <img
           [src]="avatar"
           alt="{{ username }}"
-          class="cursor-pointer w-6 h-6 rounded-full text-sm"
+          class="cursor-pointer w-6 h-6 rounded-full text-sm hover:scale-125 transition-transform duration-200"
           onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
         />
       </ng-container>
@@ -34,7 +67,7 @@
         <lucide-icon
           name="circle-user-round"
           routerLink="/login"
-          class="cursor-pointer w-6 h-6"
+          class="cursor-pointer w-6 h-6 hover:text-red-500 hover:scale-125 transition-transform duration-200"
         ></lucide-icon>
       </ng-template>
       <div
@@ -50,13 +83,13 @@
           <li>
             <a
               routerLink="/profile"
-              class="block px-4 py-2 text-gray-800 hover:bg-gray-300 ease-in-out duration-300"
+              class="block px-4 py-2 text-gray-800 hover:bg-orange-200 ease-in-out duration-200"
               >Profile</a
             >
           </li>
           <li>
             <button
-              class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-300 cursor-pointer ease-in-out duration-300"
+              class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-orange-200 cursor-pointer ease-in-out duration-200"
               (click)="logout()"
               [disabled]="!isUserInfoComplete()"
               [class.bg-gray-200]="!isUserInfoComplete()"

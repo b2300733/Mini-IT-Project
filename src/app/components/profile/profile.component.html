@@ -1,9 +1,9 @@
 <section class="flex flex-row gap-10 justify-center items-start pt-20 pb-31.5">
   <!--Side Profile-------------------------------------------------------------------------------------------------------->
   <form
-    class="border-1 border-gray-400 h-140 w-65 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-primary"
+    class="border-1 border-gray-400 h-140 w-65 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
-    <h1 class="text-4xl font-bold py-3 text-center">Profile</h1>
+    <h1 class="text-3xl font-bold py-3 text-center">Profile</h1>
     <div>
       <div class="flex justify-center items-center gap-2 relative">
         <label class="relative group">
@@ -32,11 +32,11 @@
 
       <div class="flex justify-center items-center my-2 text-xl">
         <h1>
-          Welcome, <span class="font-bold text-2xl">{{ username }}</span>
+          Welcome, <span class="font-semibold text-1xl">{{ username }}</span>
         </h1>
       </div>
-      <div class="flex flex-col justify-center items-center py-10 border-t-1">
-        <div class="w-full flex justify-center items-center font-[600] text-xl">
+      <div class="flex flex-col justify-center items-center border-t-1">
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'account'"
@@ -44,7 +44,7 @@
             Account
           </button>
         </div>
-        <div class="w-full flex justify-center items-center font-[600] text-xl">
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'myPet'"
@@ -52,7 +52,7 @@
             My Pet
           </button>
         </div>
-        <div class="w-full flex justify-center items-center font-[600] text-xl">
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'serviceListings'"
@@ -60,7 +60,7 @@
             Service Listings
           </button>
         </div>
-        <div class="w-full flex justify-center items-center font-[600] text-xl">
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'listings'"
@@ -68,7 +68,7 @@
             Item Listings
           </button>
         </div>
-        <div class="w-full flex justify-center items-center font-[600] text-xl">
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'sales'"
@@ -76,7 +76,7 @@
             Sales
           </button>
         </div>
-        <div class="w-full flex justify-center items-center font-[600] text-xl">
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
             (click)="selectedTab = 'history'"
@@ -84,11 +84,19 @@
             History
           </button>
         </div>
+        <div class="w-full flex justify-center items-center font-[600] text-lg">
+          <button
+            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
+            (click)="onTabChange('analysis')"
+          >
+            Analysis
+          </button>
+        </div>
       </div>
     </div>
   </form>
 
-  <!--Account Tabs-------------------------------------------------------------------------------------------------------->
+  <!--Account Tabs------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'account'"
     class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2 font-secondary"
@@ -99,7 +107,9 @@
 
     <!--First col------------------------------------------------------------->
     <div class="pt-10">
-      <div class="flex flex-col px-10 my-5 gap-5 border-r-1 border-dashed">
+      <div
+        class="flex flex-col px-10 my-5 gap-5 border-r-2 border-dashed border-orange-300"
+      >
         <div class="flex flex-col gap-3 relative">
           <label for="username">Username</label>
           <input
@@ -525,17 +535,17 @@
     </div>
   </form>
 
-  <!--Job Listings Tabs-------------------------------------------------------------------------------------------------------->
+  <!--Service Listings Tabs-------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'serviceListings'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
       <h1 class="font-bold text-center text-2xl">Service Listings</h1>
       <div class="flex justify-end">
         <button
-          class="bg-orange-300 rounded-lg px-3 cursor-pointer hover:bg-orange-400 ease-in-out duration-300"
+          class="text-[14px] w-fit border-1 rounded-lg px-3 cursor-pointer"
           (click)="navigateToJobs()"
         >
           Add service
@@ -557,7 +567,7 @@
       <!-- Individual Service Card -->
       <div
         *ngFor="let service of userServices"
-        class="bg-white p-6 shadow relative overflow-clip rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 flex flex-col h-full"
+        class="bg-white p-6 relative overflow-clip rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-orange-300 border-2 border-dashed hover:border-solid hover:border-orange-400 flex flex-col h-full"
       >
         <!-- Category badge -->
         <div class="absolute top-0 right-0">
@@ -652,17 +662,17 @@
     </div>
   </form>
 
-  <!--Listings Tabs-------------------------------------------------------------------------------------------------------->
+  <!--Listings Tabs------------------------------------------------------------------------------------------------------>
   <form
     *ngIf="selectedTab === 'listings'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
       <h1 class="font-bold text-center text-2xl">Item Listings</h1>
       <div class="flex justify-end">
         <button
-          class="bg-orange-300 rounded-lg px-3 cursor-pointer hover:bg-orange-400 ease-in-out duration-300"
+          class="text-[14px] w-fit border-1 rounded-lg px-3 cursor-pointer"
           (click)="navigateToMarket()"
         >
           Add item
@@ -740,10 +750,10 @@
     </div>
   </form>
 
-  <!--Sales Tabs-------------------------------------------------------------------------------------------------------->
+  <!--Sales Tabs--------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'sales'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
@@ -788,7 +798,7 @@
     <!-- Sales history list -->
     <div
       *ngIf="!isLoadingSales && filteredSalesHistory.length > 0"
-      class="overflow-auto h-[500px] px-5 py-4"
+      class="overflow-auto h-[500px] px-5 pt-1"
     >
       <!-- Sales card for each entry -->
       <div
@@ -858,10 +868,10 @@
     </div>
   </form>
 
-  <!--History Tabs-------------------------------------------------------------------------------------------------------->
+  <!--History Tabs------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'history'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)]"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
@@ -898,7 +908,7 @@
     <!-- Purchase history list -->
     <div
       *ngIf="filteredPurchaseHistory.length > 0"
-      class="overflow-auto h-[500px] px-5 py-4"
+      class="overflow-auto h-[500px] px-5 pt-1"
     >
       <!-- Order card for each purchase entry -->
       <div
@@ -981,12 +991,270 @@
       </div>
     </div>
   </form>
+
+  <!--Analysis Tabs-------------------------------------------------------------------------------------------------------->
+  <form
+    *ngIf="selectedTab === 'analysis'"
+    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+  >
+    <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
+      <div></div>
+      <h1 class="font-bold text-2xl text-center">Sales Analysis</h1>
+      <div class="flex justify-end">
+        <select
+          class="w-fit border-1 rounded-lg px-3 cursor-pointer"
+          [(ngModel)]="analysisPeriod"
+          name="analysisPeriod"
+          (change)="updateAnalytics()"
+        >
+          <option value="all">All Time</option>
+          <option value="month">This Month</option>
+          <option value="quarter">Last 3 Months</option>
+          <option value="year">This Year</option>
+        </select>
+      </div>
+    </div>
+
+    <div
+      *ngIf="isLoadingAnalysis"
+      class="flex justify-center items-center h-[500px]"
+    >
+      <div class="loader"></div>
+    </div>
+
+    <div *ngIf="!isLoadingAnalysis" class="overflow-auto h-[500px] px-5 pt-1">
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Sales Card -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400"
+        >
+          <div class="flex items-center justify-between">
+            <h3 class="text-gray-500 text-sm font-medium">Total Sales</h3>
+            <span
+              class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full"
+              >{{ analysisPeriodLabel }}</span
+            >
+          </div>
+          <div class="mt-2 flex items-end">
+            <p class="text-3xl font-bold text-gray-800">
+              {{ totalSalesCount }}
+            </p>
+            <p class="ml-2 text-sm text-gray-500">orders</p>
+          </div>
+          <div class="mt-3 flex items-center" *ngIf="salesGrowth !== 0">
+            <span
+              [ngClass]="salesGrowth > 0 ? 'text-green-600' : 'text-red-600'"
+              class="text-sm font-medium"
+            >
+              <span *ngIf="salesGrowth > 0">+</span>{{ salesGrowth }}%
+            </span>
+            <span class="ml-1 text-xs text-gray-500">from previous period</span>
+          </div>
+        </div>
+
+        <!-- Total Revenue Card -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400"
+        >
+          <div class="flex items-center justify-between">
+            <h3 class="text-gray-500 text-sm font-medium">Gross Revenue</h3>
+            <span
+              class="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full"
+              >{{ analysisPeriodLabel }}</span
+            >
+          </div>
+          <div class="mt-2 flex items-end">
+            <p class="text-3xl font-bold text-gray-800">
+              RM{{ totalRevenue | number : "1.2-2" }}
+            </p>
+          </div>
+          <div class="mt-3 flex items-center" *ngIf="revenueGrowth !== 0">
+            <span
+              [ngClass]="revenueGrowth > 0 ? 'text-green-600' : 'text-red-600'"
+              class="text-sm font-medium"
+            >
+              <span *ngIf="revenueGrowth > 0">+</span>{{ revenueGrowth }}%
+            </span>
+            <span class="ml-1 text-xs text-gray-500">from previous period</span>
+          </div>
+        </div>
+
+        <!-- Net Income Card -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400"
+        >
+          <div class="flex items-center justify-between">
+            <h3 class="text-gray-500 text-sm font-medium">Net Income</h3>
+            <span
+              class="bg-purple-100 text-purple-800 text-xs font-medium px-2 py-1 rounded-full"
+              >After 10% Commission</span
+            >
+          </div>
+          <div class="mt-2 flex items-end">
+            <p class="text-3xl font-bold text-gray-800">
+              RM{{ netIncome | number : "1.2-2" }}
+            </p>
+          </div>
+          <div class="mt-1 text-xs text-gray-500">
+            Commission paid: RM{{ commissionPaid | number : "1.2-2" }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Sales By Status -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400"
+        >
+          <h3 class="font-medium text-gray-700 mb-4">Sales by Status</h3>
+          <div class="space-y-4">
+            <!-- Completed -->
+            <div class="flex items-center">
+              <div class="w-28 text-sm text-gray-600">Completed</div>
+              <div class="flex-1">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div
+                    class="bg-green-600 h-2.5 rounded-full"
+                    [style.width]="getStatusPercentage('Completed') + '%'"
+                  ></div>
+                </div>
+              </div>
+              <div class="w-16 ml-4 text-sm text-gray-600">
+                {{ getStatusCount("Completed") }} ({{
+                  getStatusPercentage("Completed")
+                }}%)
+              </div>
+            </div>
+            <!-- Processing -->
+            <div class="flex items-center">
+              <div class="w-28 text-sm text-gray-600">Processing</div>
+              <div class="flex-1">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div
+                    class="bg-yellow-500 h-2.5 rounded-full"
+                    [style.width]="getStatusPercentage('Processing') + '%'"
+                  ></div>
+                </div>
+              </div>
+              <div class="w-16 ml-4 text-sm text-gray-600">
+                {{ getStatusCount("Processing") }} ({{
+                  getStatusPercentage("Processing")
+                }}%)
+              </div>
+            </div>
+            <!-- Cancelled -->
+            <div class="flex items-center">
+              <div class="w-28 text-sm text-gray-600">Cancelled</div>
+              <div class="flex-1">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div
+                    class="bg-red-600 h-2.5 rounded-full"
+                    [style.width]="getStatusPercentage('Cancelled') + '%'"
+                  ></div>
+                </div>
+              </div>
+              <div class="w-16 ml-4 text-sm text-gray-600">
+                {{ getStatusCount("Cancelled") }} ({{
+                  getStatusPercentage("Cancelled")
+                }}%)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Products -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400 overflow-auto h-[180px]"
+        >
+          <h3 class="font-medium text-gray-700 mb-4">Top Selling Products</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead>
+                <tr>
+                  <th
+                    class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider py-2"
+                  >
+                    Product
+                  </th>
+                  <th
+                    class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider py-2"
+                  >
+                    Units Sold
+                  </th>
+                  <th
+                    class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider py-2"
+                  >
+                    Revenue
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let product of topProducts; let i = index"
+                  class="border-b border-gray-100"
+                >
+                  <td
+                    class="py-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]"
+                  >
+                    {{ product.title }}
+                  </td>
+                  <td class="py-2">{{ product.unitsSold }}</td>
+                  <td class="py-2">
+                    RM{{ product.revenue | number : "1.2-2" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            *ngIf="topProducts.length === 0"
+            class="text-center py-4 text-gray-500"
+          >
+            No products sold yet
+          </div>
+        </div>
+      </div>
+
+      <!-- Extra Analytics -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Average Order Value -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-medium text-gray-700">Average Order Value</h3>
+          </div>
+          <div class="text-3xl font-bold text-gray-800 mb-1">
+            RM{{ averageOrderValue | number : "1.2-2" }}
+          </div>
+          <p class="text-sm text-gray-500">Average amount spent per order</p>
+        </div>
+
+        <!-- Inventory Value -->
+        <div
+          class="bg-white p-5 rounded-lg border-2 shadow-md border-orange-300 border-dashed hover:border-solid hover:border-orange-400"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-medium text-gray-700">Current Inventory Value</h3>
+          </div>
+          <div class="text-3xl font-bold text-gray-800 mb-1">
+            RM{{ inventoryValue | number : "1.2-2" }}
+          </div>
+          <p class="text-sm text-gray-500">
+            Products in stock: {{ totalInventoryItems }} items
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
 </section>
 
 <!-- Change Password Modal -->
 <div
   *ngIf="showChangePasswordModal"
-  class="fixed inset-0 flex items-center justify-center bg-gray-700/40"
+  class="fixed inset-0 flex items-center justify-center bg-gray-700/40 font-secondary"
 >
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-xl font-bold text-center mb-4">Change Password</h2>

@@ -81,7 +81,9 @@
             accessories.
           </p>
           <div class="grid grid-cols-2 gap-4 mt-6">
-            <div class="bg-blue-50 p-4 rounded-lg">
+            <div
+              class="bg-blue-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+            >
               <div class="text-blue-500 text-2xl mb-2">
                 <i class="fas fa-paw"></i>
               </div>
@@ -90,7 +92,9 @@
                 Professional pet sitting and walking services
               </p>
             </div>
-            <div class="bg-green-50 p-4 rounded-lg">
+            <div
+              class="bg-green-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+            >
               <div class="text-green-500 text-2xl mb-2">
                 <i class="fas fa-exchange-alt"></i>
               </div>
@@ -99,7 +103,9 @@
                 Buy and sell secondhand pet accessories
               </p>
             </div>
-            <div class="bg-yellow-50 p-4 rounded-lg">
+            <div
+              class="bg-yellow-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+            >
               <div class="text-yellow-500 text-2xl mb-2">
                 <i class="fas fa-shopping-bag"></i>
               </div>
@@ -108,7 +114,9 @@
                 Quality products for your pets
               </p>
             </div>
-            <div class="bg-purple-50 p-4 rounded-lg">
+            <div
+              class="bg-purple-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+            >
               <div class="text-purple-500 text-2xl mb-2">
                 <i class="fas fa-users"></i>
               </div>
@@ -121,7 +129,7 @@
           <img
             src="assets/images/about-pets.jpg"
             alt="Happy pets with owners"
-            class="rounded-lg shadow-lg w-full h-64 md:h-122 object-cover"
+            class="rounded-lg shadow-lg w-full h-64 md:h-122 object-cover transform hover:scale-[1.02] transition-transform duration-300"
             onerror="this.src='https://images.unsplash.com/photo-1560807707-8cc77767d783?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8MHx8fHx8&auto=format&fit=crop&w=1050&q=80'"
           />
         </div>
@@ -395,7 +403,7 @@
             <button
               *ngIf="item.userEmail === userEmail"
               (click)="editMarketItem(item, $event)"
-              class="w-full text-center bg-blue-500 text-white py-2.5 px-4 rounded-xl hover:bg-blue-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              class="w-full text-center bg-blue-500 text-white py-2.5 px-4 rounded-xl hover:bg-blue-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -417,7 +425,7 @@
             <button
               *ngIf="item.userEmail !== userEmail"
               (click)="addMarketItemToCart(item, $event)"
-              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -540,7 +548,7 @@
 
           <div class="p-5 pt-0 mt-auto">
             <button
-              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
               (click)="addToCart(product, $event)"
             >
               <svg
@@ -603,7 +611,7 @@
         <div class="flex flex-wrap justify-center gap-6">
           <a
             (click)="handleSignupClick($event)"
-            class="bg-white text-orange-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            class="bg-white text-orange-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer"
           >
             Sign Up Now
           </a>
