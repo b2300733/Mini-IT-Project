@@ -1,19 +1,43 @@
 <app-banner></app-banner>
 
-<div class="bg-gray-100 min-h-screen">
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="bg-white rounded-lg shadow mb-6">
-      <div class="p-4 border-b">
-        <div class="flex justify-between items-center gap-4">
+<div class="bg-gradient-to-b from-gray-50 to-white min-h-screen py-6 sm:py-10">
+  <div class="max-w-5xl mx-auto px-4">
+    <!-- Header with improved design -->
+    <div class="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+      <div class="p-6 border-b border-gray-100">
+        <div class="flex flex-col sm:flex-row items-center gap-4 justify-between">
           <!-- Back button in detail view -->
-          <div *ngIf="isDetailView" class="flex items-center">
+          <div *ngIf="isDetailView" class="w-full sm:w-auto">
             <button
               (click)="backToListing()"
               class="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
             >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              <span>Back to posts</span>
+            </button>
+          </div>
+
+          <!-- Page Title - Only in listing view -->
+          <h1 *ngIf="!isDetailView" class="text-2xl font-bold text-gray-800 flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+            </svg>
+            Pet Community Forum
+          </h1>
+
+          <!-- Search Bar (only in listing view) with improved style -->
+          <div *ngIf="!isDetailView" class="w-full sm:w-auto sm:flex-1 max-w-xl relative">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Search posts..."
+                (input)="searchPosts($event)"
+                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-0 focus:border-red-400 focus:shadow-[0_0_0_1px_rgba(244,63,94,0.5)] focus:outline-none bg-gray-50 transition-all duration-200"
+              />
               <svg
-                class="w-5 h-5"
+                class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -22,121 +46,104 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                ></path>
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
               </svg>
-              <span>Back to posts</span>
-            </button>
-          </div>
-
-          <!-- Search Bar (only in listing view) -->
-          <div *ngIf="!isDetailView" class="flex-1 max-w-xl relative">
-            <input
-              type="text"
-              placeholder="Search posts..."
-              (input)="searchPosts($event)"
-              class="w-full pl-10 pr-4 py-2 border rounded-lg"
-            />
-            <svg
-              class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            </div>
           </div>
 
           <!-- Create Post Button (only in listing view) -->
           <button
             *ngIf="!isDetailView"
             (click)="toggleNewPost()"
-            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
+            class="w-full sm:w-auto bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors shadow-md"
           >
-            Create Post
+            <span class="flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Create Post
+            </span>
           </button>
         </div>
       </div>
 
-      <!-- Categories Section -->
-      <div *ngIf="!isDetailView" class="flex p-4 space-x-2 overflow-x-auto">
+      <!-- Categories Section with pills design -->
+      <div *ngIf="!isDetailView" class="flex p-4 space-x-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         <button
           *ngFor="let category of filterCategories"
           (click)="filterByCategory(category)"
           [ngClass]="{
-            'bg-red-100 text-red-600': activeCategory === category,
-            'hover:bg-gray-100': activeCategory !== category
+            'bg-red-100 text-red-600 border-red-200': activeCategory === category,
+            'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100': activeCategory !== category
           }"
-          class="px-4 py-2 rounded-full text-sm font-medium transition-colors"
+          class="px-5 py-2 rounded-full text-sm font-medium transition-colors border whitespace-nowrap"
         >
-          {{ category }}
+          <span class="flex items-center">
+            <span *ngIf="category === 'Dog'" class="mr-1">🐶</span>
+            <span *ngIf="category === 'Cat'" class="mr-1">🐱</span>
+            <span *ngIf="category === 'Other'" class="mr-1">🐾</span>
+            <span *ngIf="category === 'All'" class="mr-1">📋</span>
+            {{ category }}
+          </span>
         </button>
       </div>
 
-      <!-- New Post Form (only in listing view) -->
+      <!-- New Post Form with improved visuals -->
       <div
         *ngIf="showNewPostForm && !isDetailView"
-        class="bg-white rounded-lg shadow mb-6 p-4"
+        class="bg-white rounded-lg shadow-md mb-6 p-6"
       >
+        <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Create New Post
+        </h2>
+        
         <form
           [formGroup]="postForm"
           (ngSubmit)="submitPost()"
-          class="space-y-4"
+          class="space-y-5"
         >
           <div>
             <input
               type="text"
               formControlName="title"
               placeholder="Title"
-              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-red-400 bg-gray-50"
             />
             <div
-              *ngIf="
-                postForm.get('title')?.touched && postForm.get('title')?.invalid
-              "
+              *ngIf="postForm.get('title')?.touched && postForm.get('title')?.invalid"
               class="text-red-500 text-sm mt-1"
-            ></div>
+            >Please enter a title for your post</div>
           </div>
 
           <div>
             <textarea
               formControlName="content"
-              rows="4"
+              rows="5"
               placeholder="What's on your mind?"
-              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-red-400 bg-gray-50 resize-none"
             ></textarea>
             <div
-              *ngIf="
-                postForm.get('content')?.touched &&
-                postForm.get('content')?.invalid
-              "
+              *ngIf="postForm.get('content')?.touched && postForm.get('content')?.invalid"
               class="text-red-500 text-sm mt-1"
-            ></div>
+            >Please enter some content for your post</div>
           </div>
 
           <div>
             <select
               formControlName="category"
-              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-red-400 bg-gray-50"
             >
               <option value="" disabled selected>Select category</option>
-              <option
-                *ngFor="let category of postCategories"
-                [value]="category"
-              >
+              <option *ngFor="let category of postCategories" [value]="category">
                 {{ category }}
               </option>
             </select>
             <div
-              *ngIf="
-                postForm.get('category')?.touched &&
-                postForm.get('category')?.invalid
-              "
+              *ngIf="postForm.get('category')?.touched && postForm.get('category')?.invalid"
               class="text-red-500 text-sm mt-1"
             >
               <span *ngIf="postForm.get('category')?.errors?.['required']">
@@ -145,18 +152,18 @@
             </div>
           </div>
 
-          <div class="flex justify-end space-x-2">
+          <div class="flex justify-end space-x-3">
             <button
               type="button"
               (click)="toggleNewPost()"
-              class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              class="px-5 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
               [disabled]="!postForm.valid"
-              class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
+              class="px-5 py-2.5 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
               Post
             </button>
@@ -164,46 +171,47 @@
         </form>
       </div>
 
-      <!-- Post Listing (only when not in detail view) -->
-      <div *ngIf="!isDetailView" class="space-y-4">
+      <!-- Post Listing with cards design -->
+      <div *ngIf="!isDetailView" class="space-y-6 p-4">
         <div
           *ngFor="let post of posts"
-          class="bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer"
+          class="bg-white rounded-xl border border-gray-100 hover:border-red-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
           (click)="viewPost(post)"
         >
-          <div class="p-4 flex-1">
-            <div class="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-              <span class="bg-gray-100 px-2 py-1 rounded">{{
-                post.category
-              }}</span>
-              <div class="flex-shrink-0 w-8 h-8">
+          <div class="p-6">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="flex-shrink-0 w-10 h-10">
                 <img
                   [src]="post.userAvatar || '/profilePics/unnamed.png'"
                   [alt]="post.userName"
-                  class="w-full h-full rounded-full object-cover"
+                  class="w-full h-full rounded-full object-cover border-2 border-gray-100"
                   onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
                 />
               </div>
-              <span>Posted by {{ post.userName }}</span>
-              <span>{{ calculateTimeAgo(post.timestamp) }}</span>
+              <div>
+                <h3 class="font-medium text-gray-900">{{ post.userName }}</h3>
+                <p class="text-xs text-gray-500">{{ calculateTimeAgo(post.timestamp) }}</p>
+              </div>
+              
+              <!-- Category badge - positioned to the right -->
+              <div class="ml-auto">
+                <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-full font-medium">
+                  {{ post.category }}
+                </span>
+              </div>
             </div>
-            <h2 class="text-lg font-semibold mb-2">{{ post.title }}</h2>
-            <p class="text-gray-600 mb-4">{{ post.content }}</p>
-            <div class="flex items-center text-gray-500 text-sm space-x-4">
+            
+            <h2 class="text-xl font-bold mb-2 text-gray-800 line-clamp-2">{{ post.title }}</h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">{{ post.content }}</p>
+            
+            <div class="flex flex-wrap items-center text-gray-500 text-sm space-x-6 border-t pt-4">
               <div class="flex items-center space-x-2">
                 <button
                   (click)="upvotePost(post, $event)"
-                  [ngClass]="{
-                    'text-red-500': post.upvotedBy.includes(userEmail)
-                  }"
-                  class="hover:text-red-500"
+                  [ngClass]="{'text-red-500': post.upvotedBy.includes(userEmail)}"
+                  class="hover:text-red-500 p-1"
                 >
-                  <svg
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -215,34 +223,23 @@
                 <span>{{ post.upvotes }}</span>
                 <button
                   (click)="downvotePost(post, $event)"
-                  [ngClass]="{
-                    'text-blue-500': post.downvotedBy.includes(userEmail)
-                  }"
-                  class="hover:text-blue-500"
+                  [ngClass]="{'text-blue-500': post.downvotedBy.includes(userEmail)}"
+                  class="hover:text-blue-500 p-1"
                 >
-                  <svg
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2.5"
+                      d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608 2.006L17 13V4m-7 10h2m5 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2.5"
                     />
                   </svg>
                 </button>
                 <span>{{ post.downvotes }}</span>
               </div>
+              
               <div class="flex items-center space-x-1">
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -255,137 +252,146 @@
             </div>
           </div>
         </div>
+        
+        <!-- Empty state when no posts are found -->
+        <div *ngIf="posts.length === 0" class="text-center py-12 bg-gray-50 rounded-xl">
+          <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+          </svg>
+          <h3 class="text-xl font-medium text-gray-600 mb-1">No posts found</h3>
+          <p class="text-gray-500 mb-4">Be the first to start a conversation!</p>
+          <button
+            (click)="toggleNewPost()"
+            class="bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-red-600 hover:to-orange-600 transition-colors shadow-sm"
+          >
+            Create New Post
+          </button>
+        </div>
       </div>
 
-      <!-- Post Detail View -->
-      <div *ngIf="isDetailView && selectedPost" class="space-y-4">
-        <!-- Post Detail -->
-        <div class="bg-white rounded-lg shadow p-4">
-          <div class="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-            <span class="bg-gray-100 px-2 py-1 rounded">{{
-              selectedPost.category
-            }}</span>
-            <div class="flex-shrink-0 w-8 h-8">
-              <img
-                [src]="selectedPost.userAvatar || '/profilePics/unnamed.png'"
-                [alt]="selectedPost.userName"
-                class="w-full h-full rounded-full object-cover"
-                onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
-              />
-            </div>
-            <span>Posted by {{ selectedPost.userName }}</span>
-            <span>{{ calculateTimeAgo(selectedPost.timestamp) }}</span>
-          </div>
-          <h1 class="text-2xl font-bold mb-4">{{ selectedPost.title }}</h1>
-          <p class="text-gray-700 mb-6">{{ selectedPost.content }}</p>
-          <div
-            class="flex items-center text-gray-500 text-sm space-x-4 border-t pt-4"
-          >
-            <div class="flex items-center space-x-2">
-              <button
-                (click)="upvotePost(selectedPost, $event)"
-                [ngClass]="{
-                  'text-red-500': selectedPost.upvotedBy.includes(userEmail)
-                }"
-                class="hover:text-red-500"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                  />
-                </svg>
-              </button>
-              <span>{{ selectedPost.upvotes }}</span>
-              <button
-                (click)="downvotePost(selectedPost, $event)"
-                [ngClass]="{
-                  'text-blue-500': selectedPost.downvotedBy.includes(userEmail)
-                }"
-                class="hover:text-blue-500"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2.5"
-                  />
-                </svg>
-              </button>
-              <span>{{ selectedPost.downvotes }}</span>
-            </div>
-            <button
-              *ngIf="selectedPost && userEmail === selectedPost.userEmail"
-              (click)="confirmDeletePost()"
-              class="ml-auto flex items-center space-x-1 text-red-500 hover:text-red-700"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      <!-- Post Detail View with enhanced visual design -->
+      <div *ngIf="isDetailView && selectedPost" class="p-6 space-y-6">
+        <!-- Post Header -->
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <div class="p-6">
+            <div class="flex items-center space-x-3 mb-6">
+              <div class="flex-shrink-0 w-12 h-12">
+                <img
+                  [src]="selectedPost.userAvatar || '/profilePics/unnamed.png'"
+                  [alt]="selectedPost.userName"
+                  class="w-full h-full rounded-full object-cover border-2 border-gray-100"
+                  onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
                 />
-              </svg>
-              <span>Delete Post</span>
-            </button>
-
-            <div class="flex items-center space-x-1">
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              </div>
+              <div>
+                <h3 class="font-medium text-gray-900">{{ selectedPost.userName }}</h3>
+                <p class="text-xs text-gray-500">{{ calculateTimeAgo(selectedPost.timestamp) }}</p>
+              </div>
+              
+              <!-- Category badge -->
+              <div class="ml-auto">
+                <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-full font-medium">
+                  {{ selectedPost.category }}
+                </span>
+              </div>
+            </div>
+            
+            <h1 class="text-2xl font-bold mb-4 text-gray-800">{{ selectedPost.title }}</h1>
+            
+            <div class="prose prose-red max-w-none mb-6">
+              <p class="text-gray-700 whitespace-pre-line">{{ selectedPost.content }}</p>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-between text-gray-500 text-sm space-x-4 border-t pt-4">
+              <div class="flex items-center space-x-2">
+                <button
+                  (click)="upvotePost(selectedPost, $event)"
+                  [ngClass]="{'text-red-500': selectedPost.upvotedBy.includes(userEmail)}"
+                  class="hover:text-red-500 p-1"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                    />
+                  </svg>
+                </button>
+                <span class="font-medium">{{ selectedPost.upvotes }}</span>
+                <button
+                  (click)="downvotePost(selectedPost, $event)"
+                  [ngClass]="{'text-blue-500': selectedPost.downvotedBy.includes(userEmail)}"
+                  class="hover:text-blue-500 p-1"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211 1.412.608 2.006L17 13V4m-7 10h2m5 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2.5"
+                    />
+                  </svg>
+                </button>
+                <span class="font-medium">{{ selectedPost.downvotes }}</span>
+              </div>
+              
+              <div class="flex items-center space-x-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  ></path>
+                </svg>
+                <span>{{ selectedPost.commentCount }} comments</span>
+              </div>
+              
+              <!-- Delete button - only for post owner -->
+              <button
+                *ngIf="selectedPost && userEmail === selectedPost.userEmail"
+                (click)="confirmDeletePost()"
+                class="ml-auto flex items-center space-x-1 text-red-500 hover:text-red-700 transition-colors"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                ></path>
-              </svg>
-              <span>{{ selectedPost.commentCount }} comments</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                <span>Delete Post</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Comment Form -->
-        <div class="bg-white rounded-lg shadow p-4">
-          <h3 class="font-medium mb-2">Add a comment</h3>
+        <!-- Comment Form with enhanced design -->
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+          <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+            </svg>
+            Add a comment
+          </h3>
           <form
             [formGroup]="commentForm"
             (ngSubmit)="submitComment()"
-            class="space-y-3"
+            class="space-y-4"
           >
             <textarea
               formControlName="content"
               rows="3"
               placeholder="What are your thoughts?"
-              class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-red-400 bg-gray-50 resize-none"
             ></textarea>
             <div class="flex justify-end">
               <button
                 type="submit"
                 [disabled]="!commentForm.valid"
-                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
+                class="px-5 py-2.5 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
               >
                 Comment
               </button>
@@ -393,72 +399,79 @@
           </form>
         </div>
 
-        <!-- Comments Section -->
-        <div class="bg-white rounded-lg shadow p-4">
-          <h3 class="font-medium mb-4">
+        <!-- Comments Section with enhanced visual hierarchy -->
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+          <h3 class="font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+            </svg>
             Comments ({{ selectedPost.commentCount }})
           </h3>
 
-          <div class="space-y-4">
+          <div class="space-y-6">
+            <!-- Empty state when no comments -->
+            <div *ngIf="selectedPost.comments.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+              <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <p class="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
+            </div>
+            
             <!-- Individual Comments -->
             <div
               *ngFor="let comment of selectedPost.comments"
-              class="border-b pb-4 last:border-0"
+              class="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
             >
-              <div class="flex items-start space-x-2 mb-2">
-                <div class="flex-shrink-0 w-8 h-8">
+              <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0 w-10 h-10">
                   <img
-                    [src]="
-                      comment.userAvatar || 'assets/images/default_user.png'
-                    "
+                    [src]="comment.userAvatar || 'assets/images/default_user.png'"
                     [alt]="comment.userName"
-                    class="w-full h-full rounded-full object-cover"
+                    class="w-full h-full rounded-full object-cover border-2 border-gray-100"
                     onerror="this.src='assets/images/default_user.png'"
                   />
                 </div>
                 <div class="flex-1 min-w-0">
-                  <!-- Added min-w-0 to allow text wrapping -->
                   <div class="flex items-center space-x-2 flex-wrap">
-                    <span class="font-medium break-all">{{
-                      comment.userName
-                    }}</span>
-                    <span class="text-xs text-gray-500">{{
-                      calculateTimeAgo(comment.timestamp)
-                    }}</span>
+                    <span class="font-medium text-gray-900 break-all">{{ comment.userName }}</span>
+                    <span class="text-xs text-gray-500">{{ calculateTimeAgo(comment.timestamp) }}</span>
                   </div>
-                  <p class="text-gray-700 mt-1 break-words">
+                  <div class="mt-2 text-gray-700 bg-gray-50 rounded-lg p-3 break-words whitespace-pre-line">
                     {{ comment.content }}
-                  </p>
+                  </div>
 
-                  <!-- Reply section -->
+                  <!-- Reply button -->
                   <button
                     (click)="toggleReplyForm(comment)"
-                    class="text-xs text-gray-500 hover:text-red-500 mt-1"
+                    class="mt-2 text-sm text-gray-600 hover:text-red-500 transition-colors flex items-center gap-1"
                   >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                    </svg>
                     Reply
                   </button>
 
-                  <!-- Reply Form -->
-                  <div *ngIf="comment.isReplying" class="mt-2">
-                    <div class="space-y-2">
+                  <!-- Reply Form with improved UI -->
+                  <div *ngIf="comment.isReplying" class="mt-3 bg-gray-50 p-4 rounded-lg">
+                    <div class="space-y-3">
                       <textarea
                         [(ngModel)]="comment.replyContent"
                         rows="2"
                         placeholder="Write a reply..."
-                        class="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                        class="w-full p-3 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-400 focus:border-red-400 bg-white resize-none"
                       ></textarea>
                       <div class="flex justify-end space-x-2">
                         <button
                           type="button"
                           (click)="toggleReplyForm(comment)"
-                          class="px-3 py-1 text-xs text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                          class="px-4 py-2 text-xs text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 shadow-sm"
                         >
                           Cancel
                         </button>
                         <button
                           (click)="submitReply(comment)"
                           [disabled]="!comment.replyContent?.trim()"
-                          class="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
+                          class="px-4 py-2 text-xs bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                         >
                           Reply
                         </button>
@@ -466,42 +479,30 @@
                     </div>
                   </div>
 
-                  <!-- Nested Replies with word wrap -->
+                  <!-- Nested Replies with improved design -->
                   <div
                     *ngIf="comment.replies.length > 0"
-                    class="ml-6 mt-3 space-y-3"
+                    class="ml-6 mt-4 space-y-4"
                   >
                     <div
                       *ngFor="let reply of comment.replies"
-                      class="border-l-2 border-gray-200 pl-3"
+                      class="bg-gray-50 rounded-lg p-3 border-l-2 border-red-200"
                     >
                       <div class="flex items-start space-x-2">
-                        <div
-                          class="bg-gray-200 rounded-full w-6 h-6 flex-shrink-0 flex items-center justify-center"
-                        >
-                          <div class="flex-shrink-0 w-6 h-6">
-                            <img
-                              [src]="
-                                reply.userAvatar ||
-                                'assets/images/default_user.png'
-                              "
-                              [alt]="reply.userName"
-                              class="w-full h-full rounded-full object-cover"
-                              onerror="this.src='assets/images/default_user.png'"
-                            />
-                          </div>
+                        <div class="flex-shrink-0 w-8 h-8">
+                          <img
+                            [src]="reply.userAvatar || 'assets/images/default_user.png'"
+                            [alt]="reply.userName"
+                            class="w-full h-full rounded-full object-cover border-2 border-gray-100"
+                            onerror="this.src='assets/images/default_user.png'"
+                          />
                         </div>
                         <div class="flex-1 min-w-0">
-                          <!-- Added min-w-0 to allow text wrapping -->
                           <div class="flex items-center space-x-2 flex-wrap">
-                            <span class="font-medium text-sm break-all">{{
-                              reply.userName
-                            }}</span>
-                            <span class="text-xs text-gray-500">{{
-                              calculateTimeAgo(reply.timestamp)
-                            }}</span>
+                            <span class="font-medium text-sm text-gray-900 break-all">{{ reply.userName }}</span>
+                            <span class="text-xs text-gray-500">{{ calculateTimeAgo(reply.timestamp) }}</span>
                           </div>
-                          <p class="text-gray-700 text-sm mt-1 break-words">
+                          <p class="text-gray-700 text-sm mt-1 break-words whitespace-pre-line">
                             {{ reply.content }}
                           </p>
                         </div>
