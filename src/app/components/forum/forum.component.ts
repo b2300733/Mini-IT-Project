@@ -142,6 +142,41 @@ export class ForumComponent implements OnInit {
     return !!(localStorage.getItem('email') || sessionStorage.getItem('email'));
   }
 
+  handleCreatePostClick(event: Event): void {
+    if (!this.isLoggedIn()) {
+      event.preventDefault();
+      event.stopPropagation();
+      // Show login prompt
+      alert('Please log in to create a post');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.toggleNewPost();
+  }
+
+  handleCommentSubmit(): void {
+    if (!this.isLoggedIn()) {
+      alert('Please log in to comment');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.submitComment();
+  }
+
+  handleReplyClick(comment: Comment, event: Event): void {
+    if (!this.isLoggedIn()) {
+      event.preventDefault();
+      event.stopPropagation();
+      alert('Please log in to reply');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.toggleReplyForm(comment);
+  }
+
   submitPost() {
     if (!this.isLoggedIn()) {
       alert('Please login first to create a post');
@@ -302,6 +337,12 @@ export class ForumComponent implements OnInit {
   }
 
   submitReply(parentComment: Comment) {
+    if (!this.isLoggedIn()) {
+      alert('Please log in to reply');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     if (!this.selectedPost || !parentComment.replyContent?.trim()) {
       console.log('Invalid reply attempt:', {
         hasSelectedPost: !!this.selectedPost,

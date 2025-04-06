@@ -345,7 +345,7 @@ export class ShopproductpageComponent implements OnInit {
   addToCart(): void {
     if (!this.isLoggedIn()) {
       // Redirect to login page if not logged in
-      alert('Please login first to sell items');
+      alert('Please login first to add items to cart');
       this.router.navigate(['/login']);
       return;
     }

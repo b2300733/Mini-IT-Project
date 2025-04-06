@@ -425,7 +425,11 @@
             <button
               *ngIf="item.userEmail !== userEmail"
               (click)="addMarketItemToCart(item, $event)"
-              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              [ngClass]="{
+                'hover:bg-red-600 cursor-pointer': isLoggedIn(),
+                'opacity-50 cursor-not-allowed': !isLoggedIn()
+              }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -548,8 +552,12 @@
 
           <div class="p-5 pt-0 mt-auto">
             <button
-              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
               (click)="addToCart(product, $event)"
+              [ngClass]="{
+                'hover:bg-red-600 cursor-pointer': isLoggedIn(),
+                'opacity-50 cursor-not-allowed': !isLoggedIn()
+              }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
