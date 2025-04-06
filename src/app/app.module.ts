@@ -11,6 +11,8 @@ import {
   Camera,
   Plus,
   Trash2,
+  X,
+  Menu,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -76,6 +78,8 @@ import { TacComponent } from './components/tac/tac.component';
       Camera,
       Plus,
       Trash2,
+      X,
+      Menu,
     }),
     ReactiveFormsModule,
     FormsModule,

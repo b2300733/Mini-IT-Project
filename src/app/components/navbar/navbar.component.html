@@ -1,103 +1,123 @@
 <nav
-  class="bg-orange-300 h-12 border-t-2 flex items-center justify-between relative"
+  class="bg-orange-300 h-auto py-5 border-t-2 flex justify-between relative z-10"
 >
-  <ul
-    class="flex gap-4 text-lg font-[600] leading-none absolute left-1/2 transform -translate-x-1/2"
-  >
-    <li>
-      <a
-        routerLink="/home"
-        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
-        >Home</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/jobs"
-        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
-        >Jobs/Services</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/market"
-        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
-        >Community Market</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/products"
-        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
-        >Products</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/forum"
-        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
-        >Forum</a
-      >
-    </li>
-    <!-- <lucide-icon name="search" class="cursor-pointer"></lucide-icon> -->
-  </ul>
-  <div class="flex gap-3 flex-1 justify-end pr-3">
-    <div class="flex">
-      <a href="/cart"
-        ><lucide-icon
-          name="shopping-cart"
-          class="cursor-pointer hover:text-red-500 hover:scale-125 transition-transform duration-200"
-        ></lucide-icon
-      ></a>
+  <div class="flex md:items-center">
+    <button
+      (click)="toggleMobileMenu()"
+      class="md:hidden absolute flex left-3 top-2 z-20"
+    >
+      <lucide-icon
+        [name]="isMobileMenuOpen ? 'x' : 'menu'"
+        class="hover:text-red-500 hover:scale-110 transition-transform duration-200 cursor-pointer"
+      ></lucide-icon>
+    </button>
 
-      <span *ngIf="getTotalItems() > 0" class="pl-1">{{
-        getTotalItems()
-      }}</span>
-    </div>
-    <div class="relative dropdown-menu" (click)="toggleDropdown($event)">
-      <ng-container *ngIf="isLoggedIn(); else loginIcon">
-        <img
-          [src]="avatar"
-          alt="{{ username }}"
-          class="cursor-pointer w-6 h-6 rounded-full text-sm hover:scale-125 transition-transform duration-200"
-          onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
-        />
-      </ng-container>
-      <ng-template #loginIcon>
-        <lucide-icon
-          name="circle-user-round"
-          routerLink="/login"
-          class="cursor-pointer w-6 h-6 hover:text-red-500 hover:scale-125 transition-transform duration-200"
-        ></lucide-icon>
-      </ng-template>
-      <div
-        *ngIf="dropdownOpen"
-        class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-100"
-      >
-        <ul>
-          <li>
-            <span class="border-b-1 block px-4 py-1 text-gray-800 text-center"
-              >Welcome, {{ username }}</span
-            >
-          </li>
-          <li>
-            <a
-              routerLink="/profile"
-              class="block px-4 py-2 text-gray-800 hover:bg-orange-200 ease-in-out duration-200"
-              >Profile</a
-            >
-          </li>
-          <li>
-            <button
-              class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-orange-200 cursor-pointer ease-in-out duration-200"
-              (click)="logout()"
-              [disabled]="!isUserInfoComplete()"
-              [class.bg-gray-200]="!isUserInfoComplete()"
-            >
-              Logout
-            </button>
-          </li>
-        </ul>
+    <ul
+      [ngClass]="{
+        'h-auto opacity-100 visible': isMobileMenuOpen,
+        'h-auto opacity-0 invisible md:visible md:opacity-100':
+          !isMobileMenuOpen
+      }"
+      class="absolute flex md:flex-row flex-col md:gap-4 gap-7 text-lg font-[600] leading-none justify-center w-full md:pl-0 pl-13 md:pb-0 pb-3 bg-orange-300 top-3 transition-all duration-300 ease-in-out md:h-auto"
+    >
+      <li>
+        <a
+          routerLink="/home"
+          class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/jobs"
+          class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+          >Jobs/Services</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/market"
+          class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+          >Community Market</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/products"
+          class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+          >Products</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/forum"
+          class="hover:text-red-500 hover:scale-110 transition-transform duration-200 inline-block"
+          >Forum</a
+        >
+      </li>
+      <!-- <lucide-icon name="search" class="cursor-pointer"></lucide-icon> -->
+    </ul>
+  </div>
+
+  <div class="flex items-center">
+    <div class="absolute right-0 flex gap-3 flex-1 justify-end pr-3">
+      <div class="flex">
+        <a href="/cart"
+          ><lucide-icon
+            name="shopping-cart"
+            class="cursor-pointer hover:text-red-500 hover:scale-125 transition-transform duration-200"
+          ></lucide-icon
+        ></a>
+
+        <span *ngIf="getTotalItems() > 0" class="pl-1">{{
+          getTotalItems()
+        }}</span>
+      </div>
+      <div class="relative dropdown-menu" (click)="toggleDropdown($event)">
+        <ng-container *ngIf="isLoggedIn(); else loginIcon">
+          <img
+            [src]="avatar"
+            alt="{{ username }}"
+            class="cursor-pointer w-6 h-6 rounded-full text-sm hover:scale-125 transition-transform duration-200"
+            onerror="this.onerror=null; this.src='/profilePics/unnamed.png';"
+          />
+        </ng-container>
+        <ng-template #loginIcon>
+          <lucide-icon
+            name="circle-user-round"
+            routerLink="/login"
+            class="cursor-pointer w-6 h-6 hover:text-red-500 hover:scale-125 transition-transform duration-200"
+          ></lucide-icon>
+        </ng-template>
+        <div
+          *ngIf="dropdownOpen"
+          class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-100"
+        >
+          <ul>
+            <li>
+              <span class="border-b-1 block px-4 py-1 text-gray-800 text-center"
+                >Welcome, {{ username }}</span
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/profile"
+                class="block px-4 py-2 text-gray-800 hover:bg-orange-200 ease-in-out duration-200"
+                >Profile</a
+              >
+            </li>
+            <li>
+              <button
+                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-orange-200 cursor-pointer ease-in-out duration-200"
+                (click)="logout()"
+                [disabled]="!isUserInfoComplete()"
+                [class.bg-gray-200]="!isUserInfoComplete()"
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

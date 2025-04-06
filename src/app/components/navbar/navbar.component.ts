@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import {
   CartService,
   CartItem,
@@ -13,6 +14,7 @@ import {
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   dropdownOpen = false;
+  isMobileMenuOpen = false;
   username =
     localStorage.getItem('username') || sessionStorage.getItem('username');
   avatar = localStorage.getItem('avatar') || sessionStorage.getItem('avatar');
@@ -30,6 +32,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     localStorage.getItem('country') || sessionStorage.getItem('country');
   zip = localStorage.getItem('zip') || sessionStorage.getItem('zip');
 
+  private routerSubscription: Subscription | undefined;
+
   constructor(private router: Router, private cartService: CartService) {}
   cartItems: CartItem[] = [];
 
@@ -46,10 +50,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (email) {
       this.cartService.setUserEmail(email);
     }
+
+    this.routerSubscription = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.isMobileMenuOpen = false;
+        this.dropdownOpen = false;
+      });
   }
 
   ngOnDestroy() {
     document.removeEventListener('click', this.handleClickOutside.bind(this));
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   toggleDropdown(event: MouseEvent) {
@@ -63,6 +81,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLElement;
     if (!target.closest('.dropdown-menu')) {
       this.dropdownOpen = false;
+    }
+
+    if (
+      this.isMobileMenuOpen &&
+      !target.closest('button') &&
+      window.innerWidth < 768
+    ) {
+      if (!target.closest('ul')) {
+        this.isMobileMenuOpen = false;
+      }
     }
   }
 
