@@ -51,6 +51,8 @@ export class JobsComponent implements OnInit {
   displayLimit: number = 6;
   hasMoreListings: boolean = false;
 
+  noResultsMessage: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private jobsService: JobsService,
@@ -277,6 +279,16 @@ export class JobsComponent implements OnInit {
           listing.address.toLowerCase().includes(this.searchLocation);
         return matchesCategory && matchesLocation;
       });
+    }
+
+    if (
+      filteredList.length === 0 &&
+      (this.selectedCategory || this.searchLocation)
+    ) {
+      this.noResultsMessage =
+        'No services found matching your search criteria.';
+    } else {
+      this.noResultsMessage = null;
     }
 
     // Check if there are more listings beyond the display limit

@@ -175,6 +175,7 @@ export class ShoppageComponent {
     this.activeCategories = [];
     this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+    this.searchQuery = '';
     this.loadInitialProducts();
   }
 

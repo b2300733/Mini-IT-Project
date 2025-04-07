@@ -229,6 +229,7 @@ export class CommunitymarketComponent {
     this.activeCategories = [];
     this.activeSubcategories = [];
     this.products = [...this.originalProducts];
+    this.searchQuery = '';
     this.loadInitialProducts();
   }
 
@@ -606,6 +607,7 @@ export class CommunitymarketComponent {
         return matchesSearch;
       });
     }
+
     this.loadInitialProducts();
   }
 

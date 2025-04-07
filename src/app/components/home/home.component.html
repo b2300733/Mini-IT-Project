@@ -129,7 +129,7 @@
           <img
             src="assets/images/about-pets.jpg"
             alt="Happy pets with owners"
-            class="rounded-lg shadow-lg w-full h-64 md:h-122 object-cover transform hover:scale-[1.02] transition-transform duration-300"
+            class="rounded-lg shadow-lg w-full h-122 object-cover transform hover:scale-[1.02] transition-transform duration-300"
             onerror="this.src='https://images.unsplash.com/photo-1560807707-8cc77767d783?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8MHx8fHx8&auto=format&fit=crop&w=1050&q=80'"
           />
         </div>
@@ -181,7 +181,7 @@
 
       <div
         *ngIf="!isServicesLoading && !serviceError"
-        class="grid grid-cols-1 md:grid-cols-3 gap-6"
+        class="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
         <div
           *ngFor="let service of featuredServices"
@@ -314,7 +314,7 @@
 
       <div
         *ngIf="!isMarketLoading && !marketError"
-        class="grid grid-cols-2 md:grid-cols-4 gap-6"
+        class="grid grid-cols-2 lg:grid-cols-4 gap-6"
       >
         <div
           *ngFor="let item of featuredMarketItems"
@@ -497,7 +497,7 @@
 
       <div
         *ngIf="!isShopLoading && !shopError"
-        class="grid grid-cols-2 md:grid-cols-4 gap-6"
+        class="grid grid-cols-2 lg:grid-cols-4 gap-6"
       >
         <div
           *ngFor="let product of featuredShopItems"
