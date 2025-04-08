@@ -1179,7 +1179,11 @@ export class ProfileComponent {
   }
 
   navigateToJobs(): void {
-    this.router.navigate(['/jobs']);
+    this.router.navigate(['/jobs'], {
+      queryParams: {
+        openForm: 'true',
+      },
+    });
   }
 
   editService(service: any): void {
