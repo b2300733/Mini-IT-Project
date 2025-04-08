@@ -428,4 +428,17 @@ export class CheckoutComponent {
       }
     }
   }
+
+  getSubtotal(): number {
+    return this.cartItems.reduce((total, item) => total + item.price, 0);
+  }
+
+  getShippingCost(): number {
+    // You can implement shipping cost logic based on location, weight, etc.
+    return this.cartItems.length > 0 ? 10 : 0; // Example: RM10 flat shipping
+  }
+
+  getTotal(): number {
+    return this.getSubtotal() + this.getShippingCost();
+  }
 }

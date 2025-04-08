@@ -1,0 +1,67 @@
+.product-title {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+.product-title:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 50;
+  width: auto;
+  max-width: 300px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.75rem;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Ensure cart items have proper spacing */
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.cart-item-details {
+  flex: 1;
+  min-width: 0; /* Important for text-overflow to work */
+}
+
+.cart-item-price {
+  font-weight: 600;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .product-title {
+    max-width: 150px;
+  }
+
+  .cart-item-image {
+    width: 50px;
+    height: 50px;
+  }
+}

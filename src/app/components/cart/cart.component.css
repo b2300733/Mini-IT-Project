@@ -1,0 +1,46 @@
+/* Enhanced tooltip for truncated product names */
+.truncate {
+  position: relative;
+}
+
+.truncate:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 10;
+  width: auto;
+  max-width: 250px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.75rem;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.break-words {
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+  hyphens: auto;
+}
+
+@media (max-width: 640px) {
+  .truncate:hover::after {
+    max-width: 200px;
+  }
+
+  .flex-grow {
+    flex-grow: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .truncate:hover::after {
+    max-width: 80vw;
+    left: -40px;
+  }
+}
