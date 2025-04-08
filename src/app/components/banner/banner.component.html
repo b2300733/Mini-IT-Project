@@ -16,7 +16,7 @@
   <!-- Navigation Arrows - Hidden on small screens, visible on medium and up -->
   <button
     (click)="previousSlide()"
-    class="absolute left-2 top-1/2 -translate-y-1/2 p-1 md:p-2 bg-black/30 hover:bg-black/50 text-white rounded-full hidden sm:block"
+    class="absolute left-2 top-1/2 -translate-y-1/2 p-1 md:p-2 bg-black/30 hover:bg-black/50 text-white rounded-full hidden sm:block hide-on-xs"
   >
     <svg
       class="w-4 h-4 md:w-6 md:h-6"
@@ -34,7 +34,7 @@
   </button>
   <button
     (click)="nextSlide()"
-    class="absolute right-2 top-1/2 -translate-y-1/2 p-1 md:p-2 bg-black/30 hover:bg-black/50 text-white rounded-full hidden sm:block"
+    class="absolute right-2 top-1/2 -translate-y-1/2 p-1 md:p-2 bg-black/30 hover:bg-black/50 text-white rounded-full hidden sm:block hide-on-xs"
   >
     <svg
       class="w-4 h-4 md:w-6 md:h-6"
@@ -52,11 +52,11 @@
   </button>
 
   <!-- Indicator Dots for Mobile -->
-  <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
+  <div class="absolute bottom-1 left-0 right-0 flex justify-center gap-1">
     <button
       *ngFor="let ad of ads; let i = index"
       (click)="goToSlide(i)"
-      class="w-2 h-2 rounded-full transition-all"
+      class="w-1.5 h-1.5 rounded-full transition-all"
       [ngClass]="activeSlide === i ? 'bg-red-500 scale-125' : 'bg-gray-300'"
       [attr.aria-label]="'Go to slide ' + (i + 1)"
     ></button>
