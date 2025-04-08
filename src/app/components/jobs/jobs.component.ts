@@ -228,6 +228,10 @@ export class JobsComponent implements OnInit {
           },
         });
       }
+
+      if (params['openForm'] === 'true') {
+        this.showListingForm = true;
+      }
     });
   }
 
