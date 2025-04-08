@@ -14,9 +14,16 @@
 
 .brand-item {
   flex: 0 0 auto;
-  width: 200px;
-  padding: 0 20px;
+  width: 150px; /* Reduced from 200px for smaller screens */
+  padding: 0 15px;
   transition: transform 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .brand-item {
+    width: 200px;
+    padding: 0 20px;
+  }
 }
 
 .brand-item:hover {
@@ -29,6 +36,29 @@
   }
   100% {
     /* This should be adjusted based on the total width of your items */
-    transform: translateX(-1200px); /* Width of 6 brand items (200px × 6) */
+    transform: translateX(-900px); /* Adjusted for smaller items (150px × 6) */
+  }
+}
+
+/* Extra small device fixes */
+@media (max-width: 350px) {
+  .xs-text-center {
+    text-align: center;
+  }
+
+  .xs-w-full {
+    width: 100%;
+  }
+
+  .xs-p-2 {
+    padding: 0.5rem;
+  }
+
+  .xs-text-sm {
+    font-size: 0.875rem;
+  }
+
+  .xs-hidden {
+    display: none;
   }
 }

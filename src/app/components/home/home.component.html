@@ -1,9 +1,9 @@
 <app-banner></app-banner>
 
-<div class="min-h-screen p-5">
+<div class="min-h-screen p-1 xs-p-2 sm:p-5">
   <!-- Hero Section with Enhanced Grid and Visual Appeal -->
   <div
-    class="bg-gradient-to-r from-blue-50 to-yellow-50 py-20 relative overflow-hidden"
+    class="bg-gradient-to-r from-blue-50 to-yellow-50 py-8 md:py-20 relative overflow-hidden"
   >
     <!-- Background pattern -->
     <div class="absolute inset-0 opacity-10">
@@ -18,27 +18,29 @@
       ></div>
     </div>
 
-    <div class="container mx-auto px-6 relative z-10">
-      <div class="flex flex-col lg:flex-row items-center gap-12">
-        <div class="w-full lg:w-1/2 space-y-6">
+    <div class="container mx-auto px-2 sm:px-6 relative z-10">
+      <div class="flex flex-col lg:flex-row items-center gap-4 sm:gap-12">
+        <div class="w-full lg:w-1/2 space-y-3 sm:space-y-6 xs-text-center">
           <h1
-            class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight"
+            class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight"
           >
             Welcome to <span class="text-orange-500">L&B Pet Service</span>
           </h1>
-          <p class="text-xl text-gray-600 max-w-lg">
+          <p class="text-base sm:text-xl text-gray-600 max-w-lg">
             Your one-stop solution for all pet care needs in Malaysia
           </p>
-          <div class="flex flex-wrap gap-4 pt-4">
+          <div
+            class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4 pt-2 sm:pt-4"
+          >
             <a
               routerLink="/jobs"
-              class="bg-red-500 text-white px-8 py-4 rounded-xl hover:bg-red-600 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              class="bg-red-500 text-white px-3 sm:px-8 py-2 sm:py-4 rounded-xl hover:bg-red-600 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-sm sm:text-base"
             >
               Find Services
             </a>
             <a
               routerLink="/market"
-              class="bg-blue-500 text-white px-8 py-4 rounded-xl hover:bg-blue-600 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              class="bg-blue-500 text-white px-3 sm:px-8 py-2 sm:py-4 rounded-xl hover:bg-blue-600 transition-all font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-sm sm:text-base"
             >
               Community Market
             </a>
@@ -57,15 +59,17 @@
   </div>
 
   <!-- About Us Section -->
-  <section id="about" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+  <section id="about" class="py-8 sm:py-16 bg-white">
+    <div class="container mx-auto px-2 sm:px-4">
+      <h2
+        class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-12 text-gray-800"
+      >
         About Us
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 items-center">
         <div>
-          <h3 class="text-2xl font-semibold mb-4 text-gray-800">
+          <h3 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800">
             L&B Pet Service
           </h3>
           <p class="text-gray-600 mb-4">
@@ -80,48 +84,50 @@
             care services and creates a marketplace for new and secondhand pet
             accessories.
           </p>
-          <div class="grid grid-cols-2 gap-4 mt-6">
+          <div class="grid grid-cols-2 gap-2 sm:gap-4 mt-4 sm:mt-6">
             <div
-              class="bg-blue-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+              class="bg-blue-50 p-2 sm:p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
             >
-              <div class="text-blue-500 text-2xl mb-2">
+              <div class="text-blue-500 text-xl sm:text-2xl mb-2">
                 <i class="fas fa-paw"></i>
               </div>
-              <h4 class="font-medium text-lg">Pet Sitting</h4>
-              <p class="text-sm text-gray-600">
+              <h4 class="font-medium text-base sm:text-lg">Pet Sitting</h4>
+              <p class="text-xs sm:text-sm text-gray-600">
                 Professional pet sitting and walking services
               </p>
             </div>
             <div
-              class="bg-green-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+              class="bg-green-50 p-2 sm:p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
             >
-              <div class="text-green-500 text-2xl mb-2">
+              <div class="text-green-500 text-xl sm:text-2xl mb-2">
                 <i class="fas fa-exchange-alt"></i>
               </div>
-              <h4 class="font-medium text-lg">Marketplace</h4>
-              <p class="text-sm text-gray-600">
+              <h4 class="font-medium text-base sm:text-lg">Marketplace</h4>
+              <p class="text-xs sm:text-sm text-gray-600">
                 Buy and sell secondhand pet accessories
               </p>
             </div>
             <div
-              class="bg-yellow-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+              class="bg-yellow-50 p-2 sm:p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
             >
-              <div class="text-yellow-500 text-2xl mb-2">
+              <div class="text-yellow-500 text-xl sm:text-2xl mb-2">
                 <i class="fas fa-shopping-bag"></i>
               </div>
-              <h4 class="font-medium text-lg">Pet Shop</h4>
-              <p class="text-sm text-gray-600">
+              <h4 class="font-medium text-base sm:text-lg">Pet Shop</h4>
+              <p class="text-xs sm:text-sm text-gray-600">
                 Quality products for your pets
               </p>
             </div>
             <div
-              class="bg-purple-50 p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
+              class="bg-purple-50 p-2 sm:p-4 rounded-lg transform hover:scale-[1.02] transition-transform duration-300"
             >
-              <div class="text-purple-500 text-2xl mb-2">
+              <div class="text-purple-500 text-xl sm:text-2xl mb-2">
                 <i class="fas fa-users"></i>
               </div>
-              <h4 class="font-medium text-lg">Community</h4>
-              <p class="text-sm text-gray-600">Connect with other pet lovers</p>
+              <h4 class="font-medium text-base sm:text-lg">Community</h4>
+              <p class="text-xs sm:text-sm text-gray-600">
+                Connect with other pet lovers
+              </p>
             </div>
           </div>
         </div>
@@ -181,7 +187,7 @@
 
       <div
         *ngIf="!isServicesLoading && !serviceError"
-        class="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"
       >
         <div
           *ngFor="let service of featuredServices"
@@ -253,14 +259,14 @@
             <a
               *ngIf="service.userEmail !== userEmail"
               href="https://wa.me/{{ service.phoneNumber }}"
-              class="block text-center bg-red-500 text-white py-3 px-4 rounded-xl hover:bg-red-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              class="block text-center bg-red-500 text-white py-1.5 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-red-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-xs sm:text-base"
             >
               Contact Pet Owner
             </a>
             <a
               *ngIf="service.userEmail === userEmail"
               (click)="navigateToProfileServiceListings($event)"
-              class="block text-center bg-blue-500 text-white py-3 px-4 rounded-xl hover:bg-blue-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer"
+              class="block text-center bg-blue-500 text-white py-1.5 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-blue-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer text-xs sm:text-base"
             >
               Manage Your Listings
             </a>
@@ -314,7 +320,7 @@
 
       <div
         *ngIf="!isMarketLoading && !marketError"
-        class="grid grid-cols-2 lg:grid-cols-4 gap-6"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"
       >
         <div
           *ngFor="let item of featuredMarketItems"
@@ -403,7 +409,7 @@
             <button
               *ngIf="item.userEmail === userEmail"
               (click)="editMarketItem(item, $event)"
-              class="w-full text-center bg-blue-500 text-white py-2.5 px-4 rounded-xl hover:bg-blue-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full text-center bg-blue-500 text-white py-1.5 sm:py-2.5 px-2 sm:px-4 rounded-xl hover:bg-blue-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -416,7 +422,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a7 7 0 00-7-7z"
                 />
               </svg>
               Edit Item
@@ -425,7 +431,7 @@
             <button
               *ngIf="item.userEmail !== userEmail"
               (click)="addMarketItemToCart(item, $event)"
-              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              class="w-full text-center bg-red-500 text-white py-1.5 sm:py-2.5 px-2 sm:px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
               [ngClass]="{
                 'hover:bg-red-600 cursor-pointer': isLoggedIn(),
                 'opacity-50 cursor-not-allowed': !isLoggedIn()
@@ -497,7 +503,7 @@
 
       <div
         *ngIf="!isShopLoading && !shopError"
-        class="grid grid-cols-2 lg:grid-cols-4 gap-6"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"
       >
         <div
           *ngFor="let product of featuredShopItems"
@@ -552,7 +558,7 @@
 
           <div class="p-5 pt-0 mt-auto">
             <button
-              class="w-full text-center bg-red-500 text-white py-2.5 px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              class="w-full text-center bg-red-500 text-white py-1.5 sm:py-2.5 px-2 sm:px-4 rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
               (click)="addToCart(product, $event)"
               [ngClass]="{
                 'hover:bg-red-600 cursor-pointer': isLoggedIn(),

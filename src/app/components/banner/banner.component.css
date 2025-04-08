@@ -5,6 +5,13 @@
   max-height: 180px;
 }
 
+/* Extra small devices */
+@media (min-width: 300px) {
+  .banner-image {
+    max-height: 140px;
+  }
+}
+
 /* Small devices */
 @media (min-width: 640px) {
   .banner-image {
@@ -30,5 +37,12 @@
 @media (min-width: 1280px) {
   .banner-image {
     max-height: 350px;
+  }
+}
+
+/* Hide navigation arrows on extremely small screens */
+@media (max-width: 350px) {
+  .hide-on-xs {
+    display: none !important;
   }
 }
