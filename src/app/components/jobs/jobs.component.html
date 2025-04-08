@@ -15,7 +15,7 @@
     *ngIf="!showListingForm"
   >
     <!-- Category Selector Section -->
-    <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
+    <div class="w-full lg:w-1/4 bg-white rounded-lg p-6 shadow-sm">
       <h2 class="text-lg font-semibold mb-4">Service Category</h2>
       <select
         class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Location Search Section -->
-    <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
+    <div class="w-full lg:w-1/4 bg-white rounded-lg p-6 shadow-sm">
       <h2 class="text-lg font-semibold mb-4">Location</h2>
       <div class="relative">
         <input
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Request Service Section -->
-    <div class="w-full md:w-1/4 bg-white rounded-lg p-6 shadow-sm">
+    <div class="w-full lg:w-1/4 bg-white rounded-lg p-6 shadow-sm">
       <h2 class="text-lg font-semibold mb-4">Request Service</h2>
       <button
         (click)="toggleListingForm()"
@@ -293,7 +293,7 @@
     </div>
 
     <!-- Listings Container -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <!-- Individual Listing -->
       <div
         *ngFor="let listing of listings"

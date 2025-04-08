@@ -13,7 +13,7 @@
         <!-- Dog Category - Enhanced -->
         <div class="relative group">
           <button
-            class="flex items-center bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium cursor-pointer"
+            class="flex items-center bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 md:px-6 sm:px-4 px-2 py-3 rounded-lg shadow-md transition-all duration-300 font-medium cursor-pointer"
             (click)="toggleCategory('dog')"
           >
             <span class="flex items-center">
@@ -73,7 +73,7 @@
         <!-- Cat Category - Enhanced -->
         <div class="relative group">
           <button
-            class="flex items-center bg-gradient-to-r from-purple-100 to-purple-200 hover:from-purple-200 hover:to-purple-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium cursor-pointer"
+            class="flex items-center bg-gradient-to-r from-purple-100 to-purple-200 hover:from-purple-200 hover:to-purple-300 md:px-6 sm:px-4 px-2 py-3 rounded-lg shadow-md transition-all duration-300 font-medium cursor-pointer"
             (click)="toggleCategory('cat')"
           >
             <span class="flex items-center">
@@ -133,7 +133,7 @@
         <!-- Other Category - Enhanced -->
         <div class="relative group">
           <button
-            class="flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 px-6 py-3 rounded-lg shadow-md transition-all duration-300 font-medium cursor-pointer"
+            class="flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 md:px-6 sm:px-4 px-2 py-3 rounded-lg shadow-md transition-all duration-300 font-medium cursor-pointer"
             (click)="toggleCategory('other')"
           >
             <span class="flex items-center">
@@ -268,8 +268,8 @@
 
   <!-- Recommend, search and sell Section -->
   <div class="container mx-auto" *ngIf="!isContentHidden">
-    <div class="flex items-center justify-between mb-4">
-      <p class="text-left pl-6 text-lg font-semibold">Recommended For You</p>
+    <div class="flex md:flex-row flex-col items-center md:justify-between mb-4">
+      <p class="text-left md:pl-6 text-lg font-semibold">Recommended For You</p>
       <div class="flex space-x-2">
         <!-- Search Container -->
         <div class="relative flex-grow">
