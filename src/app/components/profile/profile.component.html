@@ -1,7 +1,9 @@
-<section class="flex flex-row gap-10 justify-center items-start pt-20 pb-31.5">
+<section
+  class="container mx-auto flex lg:flex-row flex-col gap-10 justify-center items-start pt-20 pb-31.5"
+>
   <!--Side Profile-------------------------------------------------------------------------------------------------------->
   <form
-    class="border-1 border-gray-400 h-140 w-65 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 lg:h-140 h-auto lg:w-65 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <h1 class="text-3xl font-bold py-3 text-center">Profile</h1>
     <div>
@@ -35,7 +37,9 @@
           Welcome, <span class="font-semibold text-1xl">{{ username }}</span>
         </h1>
       </div>
-      <div class="flex flex-col justify-center items-center border-t-1">
+      <div
+        class="md:flex lg:flex-col md:flex-row grid grid-cols-3 grid-rows-2 justify-center items-center border-t-1"
+      >
         <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
             class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
@@ -52,21 +56,34 @@
             My Pet
           </button>
         </div>
-        <div class="w-full flex justify-center items-center font-[600] text-lg">
+        <div
+          class="w-full flex justify-center items-center font-[600] text-lg relative listings-dropdown"
+        >
           <button
-            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
-            (click)="selectedTab = 'serviceListings'"
+            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300 flex items-center justify-center gap-1"
+            (click)="toggleListingsDropdown($event)"
           >
-            Service Listings
+            Listings
+            <lucide-icon name="chevron-down" class="w-4 h-4"></lucide-icon>
           </button>
-        </div>
-        <div class="w-full flex justify-center items-center font-[600] text-lg">
-          <button
-            class="h-10 w-full cursor-pointer hover:bg-orange-200 ease-in-out duration-300"
-            (click)="selectedTab = 'listings'"
+          <!-- Dropdown menu -->
+          <div
+            *ngIf="showListingsDropdown"
+            class="absolute top-full left-0 w-full bg-gray-100 shadow-lg z-10 border border-gray-200 transition-all duration-200 ease-in-out"
           >
-            Item Listings
-          </button>
+            <button
+              class="text-center h-10 w-full px-4 hover:bg-orange-200 ease-in-out duration-300 cursor-pointer"
+              (click)="selectListingTab('serviceListings')"
+            >
+              Services
+            </button>
+            <button
+              class="text-center h-10 w-full px-4 hover:bg-orange-200 ease-in-out duration-300 cursor-pointer"
+              (click)="selectListingTab('listings')"
+            >
+              Items
+            </button>
+          </div>
         </div>
         <div class="w-full flex justify-center items-center font-[600] text-lg">
           <button
@@ -99,7 +116,7 @@
   <!--Account Tabs------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'account'"
-    class="relative border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2 font-secondary"
+    class="relative border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2 font-secondary"
   >
     <div class="absolute w-full text-center">
       <h1 class="font-bold text-2xl pt-3">Account</h1>
@@ -141,11 +158,11 @@
             disabled=""
           />
         </div>
-        <div class="flex flex-row gap-5">
-          <div class="flex flex-col gap-3 w-50 relative">
+        <div class="grid grid-cols-2 gap-2">
+          <div class="flex flex-col gap-3 relative">
             <label for="gender">Gender</label>
             <select
-              class="border-1 rounded-sm h-10 px-3 cursor-pointer hover-selection"
+              class="w-full border-1 rounded-sm h-10 px-3 cursor-pointer hover-selection"
               name="gender"
               required
               [(ngModel)]="gender"
@@ -162,10 +179,11 @@
               >Gender is required</span
             >
           </div>
+
           <div class="flex flex-col gap-3 relative">
             <label for="contactNo">Contact No</label>
             <input
-              class="border-1 rounded-sm h-10 px-3 w-50 hover-selection"
+              class="w-full border-1 rounded-sm h-10 px-3 hover-selection"
               type="text"
               id="contactNo"
               name="contactNo"
@@ -259,11 +277,11 @@
             required
           />
         </div>
-        <div class="flex flex-row gap-5">
+        <div class="grid grid-cols-2 gap-2">
           <div class="flex flex-col gap-3 relative">
             <label for="city">City</label>
             <select
-              class="border-1 rounded-sm h-10 px-3 hover-selection w-50"
+              class="w-full border-1 rounded-sm h-10 px-3 hover-selection"
               type="text"
               id="city"
               name="city"
@@ -290,7 +308,7 @@
           <div class="flex flex-col gap-3 relative">
             <label for="state">State</label>
             <select
-              class="border-1 rounded-sm h-10 px-3 hover-selection w-50"
+              class="w-full border-1 rounded-sm h-10 px-3 hover-selection"
               type="text"
               id="state"
               name="state"
@@ -315,12 +333,12 @@
             >
           </div>
         </div>
-        <div class="flex flex-row gap-5">
+        <div class="grid grid-cols-2 gap-2">
           <div class="flex flex-col">
             <div class="flex flex-col gap-3 relative">
               <label for="country">Country</label>
               <select
-                class="border-1 rounded-sm h-10 px-3 hover-selection w-50 cursor-pointer"
+                class="w-full border-1 rounded-sm h-10 px-3 hover-selection cursor-pointer"
                 name="country"
                 [(ngModel)]="country"
                 [ngClass]="{ 'border-red-500': isFieldInvalid('country') }"
@@ -348,7 +366,7 @@
           <div class="flex flex-col gap-3 relative">
             <label for="zip">ZIP/Postcode</label>
             <input
-              class="border-1 rounded-sm h-10 px-3 hover-selection w-50"
+              class="w-full border-1 rounded-sm h-10 px-3 hover-selection"
               type="text"
               id="zip"
               name="zip"
@@ -406,7 +424,7 @@
   <!--My Pet Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'myPet'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="w-full text-center">
       <h1 class="font-bold text-2xl pt-3">My Pet</h1>
@@ -538,7 +556,7 @@
   <!--Service Listings Tabs-------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'serviceListings'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
@@ -665,7 +683,7 @@
   <!--Listings Tabs------------------------------------------------------------------------------------------------------>
   <form
     *ngIf="selectedTab === 'listings'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
@@ -753,7 +771,7 @@
   <!--Sales Tabs--------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'sales'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
@@ -871,7 +889,7 @@
   <!--History Tabs------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'history'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
       <div></div>
@@ -956,7 +974,7 @@
               />
             </div>
             <div class="flex-grow">
-              <h4 class="font-medium w-180">{{ item.productTitle }}</h4>
+              <h4 class="font-medium">{{ item.productTitle }}</h4>
               <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
             </div>
             <div class="text-right font-medium">RM{{ item.price }}</div>
@@ -995,7 +1013,7 @@
   <!--Analysis Tabs-------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'analysis'"
-    class="border-1 border-gray-400 h-140 w-250 rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
+    class="border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] font-secondary"
   >
     <div class="w-full grid grid-cols-3 items-center mt-3 px-7">
       <div></div>

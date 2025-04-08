@@ -30,6 +30,18 @@
     focus:border-red-500
      focus:outline-hidden;
   }
+
+  .dropdown-transition {
+    @apply transition-all duration-200 ease-in-out transform origin-top;
+  }
+
+  .dropdown-enter {
+    @apply opacity-0 -translate-y-1;
+  }
+
+  .dropdown-enter-active {
+    @apply opacity-100 translate-y-0;
+  }
 }
 
 @layer utilities {

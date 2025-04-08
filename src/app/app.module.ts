@@ -13,6 +13,7 @@ import {
   Trash2,
   X,
   Menu,
+  ChevronDown,
 } from 'lucide-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -80,6 +81,7 @@ import { TacComponent } from './components/tac/tac.component';
       Trash2,
       X,
       Menu,
+      ChevronDown,
     }),
     ReactiveFormsModule,
     FormsModule,

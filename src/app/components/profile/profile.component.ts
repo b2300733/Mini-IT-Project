@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../../../backend/services/profile.service';
 
@@ -332,6 +332,7 @@ export class ProfileComponent {
   averageOrderValue: number = 0;
   inventoryValue: number = 0;
   totalInventoryItems: number = 0;
+  showListingsDropdown = false;
 
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
@@ -377,6 +378,30 @@ export class ProfileComponent {
       }
     });
     this.authToken = this.authToken === 'undefined' ? null : this.authToken;
+  }
+
+  toggleListingsDropdown(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.showListingsDropdown = !this.showListingsDropdown;
+  }
+
+  selectListingTab(tab: string): void {
+    this.selectedTab = tab;
+    this.showListingsDropdown = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event): void {
+    if (this.showListingsDropdown) {
+      const target = event.target as HTMLElement;
+      const dropdownElement = document.querySelector('.listings-dropdown');
+
+      if (dropdownElement && !dropdownElement.contains(target)) {
+        this.showListingsDropdown = false;
+      }
+    }
   }
 
   ngOnInit(): void {
