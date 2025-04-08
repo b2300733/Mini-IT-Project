@@ -4,11 +4,11 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-banner',
   standalone: false,
   templateUrl: './banner.component.html',
-  styleUrl: './banner.component.css'
+  styleUrl: './banner.component.css',
 })
 export class BannerComponent {
   activeSlide = 0;
-  ads = Array(8).fill('https://picsum.photos/1200/400?random=').map((url, index) => url + index);
+  ads = ['./1.png', './2.png', './3.png', './4.png'];
 
   ngOnInit() {
     console.log('Ads:', this.ads); // Debugging line
@@ -17,11 +17,13 @@ export class BannerComponent {
   }
 
   previousSlide() {
-    this.activeSlide = this.activeSlide === 0 ? this.ads.length - 1 : this.activeSlide - 1;
+    this.activeSlide =
+      this.activeSlide === 0 ? this.ads.length - 1 : this.activeSlide - 1;
   }
 
   nextSlide() {
-    this.activeSlide = this.activeSlide === this.ads.length - 1 ? 0 : this.activeSlide + 1;
+    this.activeSlide =
+      this.activeSlide === this.ads.length - 1 ? 0 : this.activeSlide + 1;
   }
 
   goToSlide(index: number) {

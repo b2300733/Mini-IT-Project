@@ -1,0 +1,34 @@
+/* Banner responsive styles */
+.banner-image {
+  height: auto;
+  /* Default height for mobile */
+  max-height: 180px;
+}
+
+/* Small devices */
+@media (min-width: 640px) {
+  .banner-image {
+    max-height: 220px;
+  }
+}
+
+/* Medium devices */
+@media (min-width: 768px) {
+  .banner-image {
+    max-height: 280px;
+  }
+}
+
+/* Large devices */
+@media (min-width: 1024px) {
+  .banner-image {
+    max-height: 320px;
+  }
+}
+
+/* Extra large devices */
+@media (min-width: 1280px) {
+  .banner-image {
+    max-height: 350px;
+  }
+}

@@ -1,0 +1,34 @@
+/* Brand slider styles */
+.brand-slider-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.brand-slider {
+  display: flex;
+  align-items: center;
+  animation: scroll 30s linear infinite;
+  width: fit-content;
+}
+
+.brand-item {
+  flex: 0 0 auto;
+  width: 200px;
+  padding: 0 20px;
+  transition: transform 0.3s ease;
+}
+
+.brand-item:hover {
+  transform: scale(1.1);
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* This should be adjusted based on the total width of your items */
+    transform: translateX(-1200px); /* Width of 6 brand items (200px × 6) */
+  }
+}
