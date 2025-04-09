@@ -800,14 +800,7 @@
     </div>
 
     <div
-      *ngIf="isLoadingSales"
-      class="flex justify-center items-center h-[500px]"
-    >
-      <div class="loader"></div>
-    </div>
-
-    <div
-      *ngIf="!isLoadingSales && filteredSalesHistory.length === 0"
+      *ngIf="filteredSalesHistory.length === 0"
       class="col-span-full text-center text-gray-500 mt-10"
     >
       No sales history found.
@@ -1034,13 +1027,9 @@
     </div>
 
     <div
-      *ngIf="isLoadingAnalysis"
-      class="flex justify-center items-center h-[500px]"
+      *ngIf="!isLoadingAnalysis || isLoadingAnalysis"
+      class="overflow-auto h-[500px] px-5 pt-1"
     >
-      <div class="loader"></div>
-    </div>
-
-    <div *ngIf="!isLoadingAnalysis" class="overflow-auto h-[500px] px-5 pt-1">
       <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Total Sales Card -->
