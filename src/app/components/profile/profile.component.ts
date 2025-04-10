@@ -1,6 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../../../backend/services/profile.service';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 interface Product {
   _id: string;
@@ -334,6 +336,15 @@ export class ProfileComponent {
   totalInventoryItems: number = 0;
   showListingsDropdown = false;
 
+  monthlyNetIncome: { month: string; income: number }[] = [];
+  yearlyNetIncome: { year: string; income: number }[] = [];
+  salesStatusChart: Chart | null = null;
+  monthlyIncomeChart: Chart | null = null;
+  yearlyIncomeChart: Chart | null = null;
+  incomeChartPeriod: 'monthly' | 'yearly' = 'monthly';
+  incomeChart: Chart | null = null;
+  currentYear: number = new Date().getFullYear();
+
   username =
     (localStorage.getItem('username') || sessionStorage.getItem('username')) ??
     '';
@@ -429,6 +440,15 @@ export class ProfileComponent {
 
     if (this.selectedTab === 'analysis') {
       this.updateAnalytics();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.salesStatusChart) {
+      this.salesStatusChart.destroy();
+    }
+    if (this.incomeChart) {
+      this.incomeChart.destroy();
     }
   }
 
@@ -1235,8 +1255,19 @@ export class ProfileComponent {
     this.calculateStatusMetrics(filteredSales);
     this.calculateTopProducts(filteredSales);
     this.calculateInventoryValue();
+    this.calculateMonthlyNetIncome();
+    this.calculateYearlyNetIncome();
 
-    this.isLoadingAnalysis = false;
+    setTimeout(() => {
+      this.renderAllCharts();
+      this.isLoadingAnalysis = false;
+    }, 200);
+  }
+
+  renderAllCharts(): void {
+    console.log('Rendering all charts...');
+    this.renderSalesStatusChart();
+    this.renderIncomeChart();
   }
 
   filterSalesByPeriod(sales: any[], period: string): any[] {
@@ -1334,9 +1365,13 @@ export class ProfileComponent {
       }
     });
 
-    // Convert map to array and sort by revenue
     this.topProducts = Array.from(productMap.values())
-      .sort((a, b) => b.revenue - a.revenue)
+      .sort((a, b) => {
+        if (b.unitsSold !== a.unitsSold) {
+          return b.unitsSold - a.unitsSold;
+        }
+        return b.revenue - a.revenue;
+      })
       .slice(0, 5); // Get top 5 products
   }
 
@@ -1348,6 +1383,241 @@ export class ProfileComponent {
     this.totalInventoryItems = this.userProducts.reduce((total, product) => {
       return total + product.productQuantity;
     }, 0);
+  }
+
+  toggleIncomeChartPeriod(period: 'monthly' | 'yearly'): void {
+    if (this.incomeChartPeriod !== period) {
+      this.incomeChartPeriod = period;
+      this.renderIncomeChart();
+    }
+  }
+
+  renderSalesStatusChart(): void {
+    const ctx = document.getElementById(
+      'salesStatusChart'
+    ) as HTMLCanvasElement;
+    if (!ctx) {
+      console.error('Sales status chart canvas not found');
+      return;
+    }
+
+    // Destroy existing chart if it exists
+    if (this.salesStatusChart) {
+      this.salesStatusChart.destroy();
+    }
+
+    this.salesStatusChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Completed', 'Processing', 'Cancelled'],
+        datasets: [
+          {
+            data: [
+              this.getStatusCount('Completed'),
+              this.getStatusCount('Cancelled'),
+            ],
+            backgroundColor: [
+              'rgb(22, 163, 74)', // green-600
+              'rgb(220, 38, 38)', // red-600
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    });
+    console.log('Sales status chart created');
+  }
+
+  calculateMonthlyNetIncome(): void {
+    // Create a map to store income by month
+    const monthlyData = new Map<string, number>();
+
+    // Get current year
+    const currentYear = new Date().getFullYear();
+
+    // Process all sales to calculate monthly net income
+    this.salesHistory.forEach((sale) => {
+      const saleDate = new Date(sale.purchaseDate);
+
+      // Only include sales from current year
+      if (saleDate.getFullYear() === currentYear) {
+        const monthIndex = saleDate.getMonth();
+        const monthKey = new Date(0, monthIndex).toLocaleString('default', {
+          month: 'short',
+        });
+
+        // Calculate net income (after 10% commission)
+        const saleNetIncome = sale.price * sale.quantity * 0.9;
+
+        // Add to monthly total
+        const currentTotal = monthlyData.get(monthKey) || 0;
+        monthlyData.set(monthKey, currentTotal + saleNetIncome);
+      }
+    });
+
+    // Define all months in order
+    const allMonths = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    // Create the final array with all months (even if no data)
+    this.monthlyNetIncome = allMonths.map((month) => ({
+      month: month,
+      income: monthlyData.get(month) || 0,
+    }));
+  }
+
+  calculateYearlyNetIncome(): void {
+    // Create a map to store income by year
+    const yearlyData = new Map<string, number>();
+
+    // Get range of years from sales data
+    let minYear = new Date().getFullYear();
+    let maxYear = minYear;
+
+    if (this.salesHistory.length > 0) {
+      this.salesHistory.forEach((sale) => {
+        const year = new Date(sale.purchaseDate).getFullYear();
+        minYear = Math.min(minYear, year);
+        maxYear = Math.max(maxYear, year);
+
+        // Calculate net income (after 10% commission)
+        const saleNetIncome = sale.price * sale.quantity * 0.9;
+
+        // Add to yearly total
+        const yearKey = year.toString();
+        const currentTotal = yearlyData.get(yearKey) || 0;
+        yearlyData.set(yearKey, currentTotal + saleNetIncome);
+      });
+    }
+
+    // Create array with all years in range
+    this.yearlyNetIncome = [];
+    for (let y = minYear; y <= maxYear; y++) {
+      this.yearlyNetIncome.push({
+        year: y.toString(),
+        income: yearlyData.get(y.toString()) || 0,
+      });
+    }
+  }
+
+  renderIncomeChart(): void {
+    const ctx = document.getElementById('incomeChart') as HTMLCanvasElement;
+    if (!ctx) {
+      console.error('Income chart canvas not found');
+      return;
+    }
+
+    // Destroy existing chart if it exists
+    if (this.incomeChart) {
+      this.incomeChart.destroy();
+    }
+
+    // Choose data and settings based on selected period
+    if (this.incomeChartPeriod === 'monthly') {
+      const chartData = this.monthlyNetIncome;
+      const chartLabel = 'Monthly Net Income (RM)';
+      const chartColor = 'rgba(59, 130, 246, 0.7)';
+      const xAxisTitle = 'Month';
+
+      this.incomeChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.map((item) => item.month),
+          datasets: [
+            {
+              label: chartLabel,
+              data: chartData.map((item) => item.income),
+              backgroundColor: chartColor,
+              borderColor: 'rgb(37, 99, 235)',
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Amount (RM)',
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: xAxisTitle,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      // yearly
+      const chartData = this.yearlyNetIncome;
+      const chartLabel = 'Yearly Net Income (RM)';
+      const chartColor = 'rgba(16, 185, 129, 0.7)'; // green
+      const xAxisTitle = 'Year';
+
+      this.incomeChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.map((item) => item.year),
+          datasets: [
+            {
+              label: chartLabel,
+              data: chartData.map((item) => item.income),
+              backgroundColor: chartColor,
+              borderColor: 'rgb(5, 150, 105)',
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Amount (RM)',
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: xAxisTitle,
+              },
+            },
+          },
+        },
+      });
+    }
+
+    console.log(`${this.incomeChartPeriod} income chart created`);
   }
 
   onTabChange(tab: string): void {
