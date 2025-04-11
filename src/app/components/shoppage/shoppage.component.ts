@@ -62,7 +62,7 @@ export class ShoppageComponent {
     { value: 'accessories', label: 'Accessories' },
     { value: 'toys', label: 'Toys' },
     { value: 'clothes', label: 'Clothes' },
-    { value: 'food', label: 'Food' },
+    { value: 'food', label: 'Foods' },
   ];
 
   private originalProducts: ShopProduct[] = [];
@@ -390,7 +390,7 @@ export class ShoppageComponent {
           // Reset and close the form
           this.toggleContent();
           // Show a success message (in a real app, this would be a more sophisticated notification)
-          alert('Your item has been listed successfully!');
+          alert('Product has been listed successfully!');
           window.location.reload();
         },
         (error) => {
