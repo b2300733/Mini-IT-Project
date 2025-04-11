@@ -1117,7 +1117,13 @@
         >
           <h3 class="font-medium text-gray-700 mb-4">Sales by Status</h3>
           <div class="h-[200px] w-full flex justify-center">
-            <canvas id="salesStatusChart"></canvas>
+            <div
+              *ngIf="totalSalesCount === 0"
+              class="flex items-center justify-center h-full w-full text-gray-500"
+            >
+              No products sold yet
+            </div>
+            <canvas *ngIf="totalSalesCount > 0" id="salesStatusChart"></canvas>
           </div>
           <!-- Legend for the pie chart -->
           <div class="flex justify-center mt-4 text-sm space-x-4">
@@ -1183,7 +1189,7 @@
           </div>
           <div
             *ngIf="topProducts.length === 0"
-            class="text-center py-4 text-gray-500"
+            class="text-center py-14 text-gray-500"
           >
             No products sold yet
           </div>
@@ -1234,7 +1240,13 @@
 
         <!-- Chart container -->
         <div class="h-[280px] w-full">
-          <canvas id="incomeChart"></canvas>
+          <div
+            *ngIf="salesHistory.length === 0"
+            class="flex items-center justify-center h-full w-full text-gray-500"
+          >
+            No sales data available
+          </div>
+          <canvas *ngIf="salesHistory.length > 0" id="incomeChart"></canvas>
         </div>
       </div>
 
