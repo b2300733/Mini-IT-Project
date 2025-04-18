@@ -116,7 +116,7 @@
   <!--Account Tabs------------------------------------------------------------------------------------------------------->
   <form
     *ngIf="selectedTab === 'account'"
-    class="relative border-1 border-gray-400 h-140 lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] grid grid-cols-2 font-secondary"
+    class="relative border-1 border-gray-400 md:h-140 h-auto lg:w-250 w-full rounded-xl shadow-[0_0px_35px_rgba(0,0,0,0.25)] md:grid md:grid-cols-2 flex flex-col font-secondary"
   >
     <div class="absolute w-full text-center">
       <h1 class="font-bold text-2xl pt-3">Account</h1>
@@ -125,7 +125,7 @@
     <!--First col------------------------------------------------------------->
     <div class="pt-10">
       <div
-        class="flex flex-col px-10 my-5 gap-5 border-r-2 border-dashed border-orange-300"
+        class="flex flex-col px-10 my-5 gap-5 md:border-r-2 md:border-dashed md:border-orange-300"
       >
         <div class="flex flex-col gap-3 relative">
           <label for="username">Username</label>
@@ -242,7 +242,7 @@
     </div>
 
     <!--Second col------------------------------------------------------------>
-    <div class="pt-10">
+    <div class="md:pt-10">
       <div class="flex flex-col px-10 my-5 gap-5">
         <div class="flex flex-col gap-3 relative">
           <label for="address1">Address line 1</label>
@@ -396,7 +396,9 @@
     </div>
 
     <!--Third col------------------------------------------------------------>
-    <div class="col-span-2 flex flex-col justify-center items-center gap-2">
+    <div
+      class="col-span-2 flex flex-col justify-center items-center gap-2 md:pb-0 pb-2"
+    >
       <button
         *ngIf="!accountSaved || accountHasChanges"
         class="w-30 h-10 cursor-pointer rounded-sm text-gray-100 ease-in-out duration-300"
@@ -580,7 +582,7 @@
 
     <div
       *ngIf="userServices.length > 0"
-      class="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-auto h-[500px] px-5 pt-1"
+      class="grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-auto md:h-[500px] h-[480px] px-5 pt-1"
     >
       <!-- Individual Service Card -->
       <div
@@ -704,7 +706,7 @@
       No products found.
     </div>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 overflow-auto h-[500px] px-5 pt-1"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 overflow-auto md:h-[500px] h-[480px] px-5 pt-1"
     >
       <div
         *ngFor="let product of userProducts"
@@ -809,7 +811,7 @@
     <!-- Sales history list -->
     <div
       *ngIf="!isLoadingSales && filteredSalesHistory.length > 0"
-      class="overflow-auto h-[500px] px-5 pt-1"
+      class="overflow-auto md:h-[500px] h-[480px] px-5 pt-1"
     >
       <!-- Sales card for each entry -->
       <div
@@ -919,7 +921,7 @@
     <!-- Purchase history list -->
     <div
       *ngIf="filteredPurchaseHistory.length > 0"
-      class="overflow-auto h-[500px] px-5 pt-1"
+      class="overflow-auto md:h-[500px] h-[480px] px-5 pt-1"
     >
       <!-- Order card for each purchase entry -->
       <div
@@ -984,7 +986,7 @@
 
         <!-- Shipping Details-->
         <div
-          class="flex justify-between items-center border-t border-gray-200 mt-2"
+          class="flex justify-between flex-wrap items-center border-t border-gray-200 mt-2"
         >
           <div class="flex gap-2 pt-3">
             <span class="font-medium">Shipping Address:</span>
@@ -1028,7 +1030,7 @@
 
     <div
       *ngIf="!isLoadingAnalysis || isLoadingAnalysis"
-      class="overflow-auto h-[500px] px-5 pt-1"
+      class="overflow-auto md:h-[500px] h-[480px] px-5 pt-1"
     >
       <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
