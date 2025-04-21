@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import {
   CartService,
   CartItem,
@@ -64,7 +65,8 @@ export class ProductpageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -98,6 +100,24 @@ export class ProductpageComponent implements OnInit {
       const currentUserEmail =
         localStorage.getItem('email') || sessionStorage.getItem('email');
       this.isCurrentUserSeller = currentUserEmail === this.seller.email;
+
+      // Check if we need to scroll to the back button
+      if (params['scrollToImage'] === 'true') {
+        setTimeout(() => {
+          // Target the back button instead of the image section
+          const backButton =
+            document.querySelector('button[class*="back-button"]') ||
+            document.querySelector('button:has(svg)') ||
+            document.querySelector('.max-w-7xl > button');
+
+          if (backButton) {
+            backButton.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            // Fallback to scroll to top of page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 100);
+      }
     });
   }
 
@@ -265,5 +285,9 @@ export class ProductpageComponent implements OnInit {
       this.message =
         'You have reached the maximum quantity available for this item';
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

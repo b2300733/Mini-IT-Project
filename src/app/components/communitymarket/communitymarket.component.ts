@@ -157,7 +157,10 @@ export class CommunitymarketComponent {
   }
 
   // Navigation methods
-  navigateToProduct(product: Product) {
+  navigateToProduct(product: Product): void {
+    // Scroll to top before navigation
+    window.scrollTo(0, 0);
+
     this.router.navigate(['/product'], {
       queryParams: {
         _id: product._id,

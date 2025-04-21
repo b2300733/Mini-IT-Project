@@ -1,9 +1,31 @@
 <app-banner></app-banner>
 
 <div class="max-w-7xl mx-auto px-4 py-8 min-h-screen">
+  <!-- Back Button -->
+  <button
+    (click)="goBack()"
+    class="flex items-center mb-4 text-gray-600 hover:text-red-500 transition-colors back-button"
+  >
+    <svg
+      class="w-5 h-5 mr-1"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+      ></path>
+    </svg>
+    Back to Community Market
+  </button>
+
   <div class="flex flex-col lg:flex-row gap-8">
     <!-- Left Column - Product Image -->
-    <div class="lg:w-1/2">
+    <div class="lg:w-1/2 product-image-section">
       <div class="bg-white rounded-lg overflow-hidden shadow-sm relative">
         <!-- Image -->
         <img

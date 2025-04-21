@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
 import {
   CartService,
   CartItem,
@@ -86,7 +87,8 @@ export class ShopproductpageComponent implements OnInit {
     private http: HttpClient,
     private cartService: CartService,
     private fb: FormBuilder,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private location: Location
   ) {
     // Initialize form
     this.productForm = this.fb.group({
@@ -441,5 +443,9 @@ export class ShopproductpageComponent implements OnInit {
     if (this.currentImageIndex < this.product.images.length - 1) {
       this.currentImageIndex++;
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
