@@ -113,6 +113,13 @@ export class ForumComponent implements OnInit {
   }
 
   toggleNewPost() {
+    if (!this.isLoggedIn()) {
+      // Redirect to login page if not logged in
+      alert('Please login first to create a post');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.showNewPostForm = !this.showNewPostForm;
     if (this.showNewPostForm) {
       this.currentStep = 1;
@@ -410,6 +417,15 @@ export class ForumComponent implements OnInit {
   }
 
   upvotePost(post: ForumPost, event: Event) {
+    if (!this.isLoggedIn()) {
+      event.preventDefault();
+      event.stopPropagation();
+      // Show login prompt
+      alert('Please log in to upvote post');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     event.stopPropagation();
 
     if (!post._id) {
@@ -444,6 +460,15 @@ export class ForumComponent implements OnInit {
   }
 
   downvotePost(post: ForumPost, event: Event) {
+    if (!this.isLoggedIn()) {
+      event.preventDefault();
+      event.stopPropagation();
+      // Show login prompt
+      alert('Please log in to downvote post');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     event.stopPropagation();
 
     if (!post._id) {

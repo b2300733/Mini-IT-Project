@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   JobsService,
   JobsListing,
@@ -57,7 +57,8 @@ export class JobsComponent implements OnInit {
     private fb: FormBuilder,
     private jobsService: JobsService,
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     // Get user data from storage
     this.userEmail =
@@ -345,7 +346,25 @@ export class JobsComponent implements OnInit {
   editingListingId: string | null = null;
   isEditing: boolean = false;
 
+  apply(): void {
+    if (!this.isLoggedIn()) {
+      // Redirect to login page if not logged in
+      alert('Please login first to apply job');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    window.open('https://wa.me/60167313801', '_blank');
+  }
+
   toggleListingForm(): void {
+    if (!this.isLoggedIn()) {
+      // Redirect to login page if not logged in
+      alert('Please login first to add service');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.showListingForm = !this.showListingForm;
 
     if (this.showListingForm) {
@@ -506,5 +525,12 @@ export class JobsComponent implements OnInit {
         },
       });
     }
+  }
+
+  isLoggedIn(): boolean {
+    return (
+      !!localStorage.getItem('authToken') ||
+      !!sessionStorage.getItem('authToken')
+    );
   }
 }

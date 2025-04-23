@@ -393,6 +393,10 @@
           <button
             (click)="toggleNewPost()"
             class="bg-red-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors shadow-sm cursor-pointer"
+            [ngClass]="{
+              'hover:bg-red-600 cursor-pointer': isLoggedIn(),
+              'opacity-50 cursor-not-allowed': !isLoggedIn()
+            }"
           >
             Create New Post
           </button>
@@ -453,7 +457,7 @@
                   [ngClass]="{
                     'text-red-500': selectedPost.upvotedBy.includes(userEmail)
                   }"
-                  class="hover:text-red-500 p-1"
+                  class="hover:text-red-500 p-1 cursor-pointer"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -480,7 +484,7 @@
                     'text-blue-500':
                       selectedPost.downvotedBy.includes(userEmail)
                   }"
-                  class="hover:text-blue-500 p-1"
+                  class="hover:text-blue-500 p-1 cursor-pointer"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

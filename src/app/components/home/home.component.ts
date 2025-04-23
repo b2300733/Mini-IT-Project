@@ -314,4 +314,15 @@ export class HomeComponent implements OnInit {
       queryParams: { tab: 'serviceListings' },
     });
   }
+
+  apply(): void {
+    if (!this.isLoggedIn()) {
+      // Redirect to login page if not logged in
+      alert('Please login first to apply job');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    window.open('https://wa.me/60167313801', '_blank');
+  }
 }

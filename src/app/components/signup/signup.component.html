@@ -61,6 +61,11 @@
           class="text-red-500 text-xs leading-0"
           >Email is required</span
         >
+        <span
+          *ngIf="invalidEmailFormat && !isFieldInvalid('email')"
+          class="text-red-500 text-xs leading-0"
+          >Please enter a valid email address.</span
+        >
         <span *ngIf="emailExists" class="text-red-500 text-xs leading-0"
           >Email already exists. Please use a different email address.</span
         >

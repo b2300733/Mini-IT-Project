@@ -29,6 +29,8 @@ export class SignupComponent {
   invalidFields: Set<string> = new Set();
   passwordMismatch = false;
   emailExists = false;
+  emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  invalidEmailFormat = false;
 
   malaysiaStates: string[] = [
     'Johor',
@@ -247,12 +249,15 @@ export class SignupComponent {
 
   checkFirstFormFields() {
     this.invalidFields.clear();
+    this.invalidEmailFormat = false;
 
     if (!this.username) {
       this.invalidFields.add('username');
     }
     if (!this.email) {
       this.invalidFields.add('email');
+    } else if (!this.emailPattern.test(this.email)) {
+      this.invalidEmailFormat = true;
     }
     if (!this.password) {
       this.invalidFields.add('password');
@@ -308,6 +313,10 @@ export class SignupComponent {
       !this.confirmPassword
     ) {
       this.errorMessage = 'Please fill in all the fields.';
+      return false;
+    }
+    if (this.invalidEmailFormat) {
+      this.errorMessage = 'Please enter a valid email address.';
       return false;
     }
     if (this.password !== this.confirmPassword) {
